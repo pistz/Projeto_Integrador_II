@@ -1,0 +1,35 @@
+# Projeto Integrador II
+
+
+## Tema Norteador
+- "Desenvolver um software com framework web que utilize banco de dados, inclua script web (Javascript), nuvem, uso de API, acessibilidade, controle de versão e teste. Opcionalmente incluir análises de dados".
+
+## Reuniões com a orientadora
+- Toda terça-feira: das 19h30 às 20h00
+
+## Cronograma de Entregas
+
+- Quinzena 1: *Sem atividade*
+  - **início:** `12/08/2024` // **fim** `25/08/2024`
+- Quinzena 2: ***Entrega do Plano de ação***
+   - **início:** `26/08/2024` // **fim** `08/09/2024`
+- Quinzena 3: *Sem atividade*
+   - **início:** `09/09/2024` // **fim** `22/09/2024`
+- Quinzena 4: ***Entrega do Relatório Parcial***
+   - **início:** `23/09/2024` // **fim** `06/10/2024`
+- Quinzena 5: *Sem atividade*
+   - **início:** `07/10/2024` // **fim** `20/10/2024`
+- Quinzena 6: *Sem atividade*
+   - **início:** `21/10/2024` // **fim** `03/11/2024`
+- Quinzena 7: ***Entrega do Relatório Final + Avaliação Colaborativa e Vídeo com aplicação completa***
+  -   **início:** `04/11/2024` **fim** `17/11/2024`
+
+
+## Informações Adicionais
+
+-  **Entregas fora da data fim terão desconto de nota**
+-  **A data de carência é até 5 dias depois da data fim**
+-  **Entregas posteriores à data de carência não serão aceitas e haverá nota zero (0,00)**
+
+## Ideia do projeto
+- Status: *Aguardando*
