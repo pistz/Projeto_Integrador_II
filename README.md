@@ -37,7 +37,7 @@
 
 *Descrição do Projeto*
 -   O Albergue Noturno de Sertãozinho acolhe moradores de rua e transeuntes que não têm moradia ou condições de hospedar-se de maneira digna.
-  -   O projeto entregará um protótipo de sistema que fará inicialmente o cadastrmento e gerenciamento dos acolhidos.
+  -   O projeto entregará um protótipo de sistema que fará inicialmente o cadastramento e gerenciamento dos acolhidos.
     
 *Funcionalidades*
   - Cadastro de Acolhido
