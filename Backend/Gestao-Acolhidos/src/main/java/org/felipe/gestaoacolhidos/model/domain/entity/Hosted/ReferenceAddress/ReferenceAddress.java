@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @Entity
-@Table(name = "db_endereco_referencia")
+@Table(name = "hosted_endereco_referencia")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

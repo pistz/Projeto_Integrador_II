@@ -12,7 +12,7 @@ import org.felipe.gestaoacolhidos.model.domain.enums.maritalStatus.MaritalStatus
 import java.util.UUID;
 
 @Entity
-@Table(name = "tabela_familiar")
+@Table(name = "hosted_tabela_familiar")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

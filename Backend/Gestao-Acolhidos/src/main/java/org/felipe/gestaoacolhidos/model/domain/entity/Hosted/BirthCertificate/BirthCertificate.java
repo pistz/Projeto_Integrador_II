@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @Entity
-@Table(name = "db_certidao_nascimento")
+@Table(name = "hosted_certidao_nascimento")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data

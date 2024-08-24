@@ -3,12 +3,12 @@ package org.felipe.gestaoacolhidos.model.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.spec.SecretKeySpec;
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Component
@@ -17,15 +17,18 @@ public class JwtUtil {
     @Value("${api.private.key}")
     private String jwtSecret;  // Ler o segredo do arquivo de propriedades
 
-    @Value("${jwt.issuer}")
+    @Value("${api.issuer.name}")
     private String jwtIssuer;  // Ler o emissor do arquivo de propriedades
 
     private long EXPIRADE_TIME = 86400000;// 24 hours
 
-    private Key getJwtSecretKey() {
-        return new SecretKeySpec(jwtSecret.getBytes(), SignatureAlgorithm.HS512.getJcaName());
+    private SecretKey getJwtSecretKey() {
+        // Create a secure key using the base64-encoded key
+        if (jwtSecret == null || jwtSecret.isEmpty()) {
+            throw new IllegalStateException("JWT secret key is not configured");
+        }
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
-
     public String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)

@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "db_plano_personalizado")
+@Table(name = "hosted_plano_personalizado")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data

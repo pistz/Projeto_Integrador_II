@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "db_composicao_familiar")
+@Table(name = "hosted_composicao_familiar")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

@@ -11,7 +11,7 @@ import org.felipe.gestaoacolhidos.model.domain.enums.migrant.Migrant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "db_situacao_de_risco")
+@Table(name = "hosted_situacao_de_risco")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

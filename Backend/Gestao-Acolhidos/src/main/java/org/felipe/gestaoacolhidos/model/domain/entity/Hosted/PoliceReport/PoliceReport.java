@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "db_boletim_ocorrencia")
+@Table(name = "hosted_boletim_ocorrencia")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "db_documents")
+@Table(name = "hosted_documents")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
