@@ -25,7 +25,6 @@ public class FamilyComposition {
     @Column(nullable = false, name = "possui_vinculo_familiar")
     private boolean hasFamilyBond;
 
-    @Column(nullable = false, name = "tabela_familiar")
     @OneToMany(cascade = CascadeType.ALL)
     private List<FamilyTable> familyTable;
 }

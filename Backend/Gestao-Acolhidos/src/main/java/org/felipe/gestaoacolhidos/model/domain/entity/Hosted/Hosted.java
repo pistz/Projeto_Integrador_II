@@ -63,34 +63,27 @@ public class Hosted {
 
     //Relacionamentos tabelas Adjacentes
 
-    @Column(name = "db_documentos")
     @OneToOne(cascade = CascadeType.ALL)
     private Documents documents;
 
-    @Column(name = "db_boletim_ocorrencia")
     @OneToMany(cascade = CascadeType.ALL)
     private List<PoliceReport> policeReport;
 
-    @Column(name = "db_endereco_referencia")
     @OneToOne(cascade = CascadeType.ALL)
     private ReferenceAddress referenceAddress;
 
-    @Column(name = "db_modalidade_situacao_risco")
     @OneToOne(cascade = CascadeType.ALL)
     private SituationalRisk situationalRisk;
 
-    @Column(name = "db_programas_sociais")
     @OneToOne(cascade = CascadeType.ALL)
     private SocialPrograms socialPrograms;
 
-    @Column(name = "db_queixas_saude")
     @OneToMany(cascade = CascadeType.ALL)
     private List<MedicalRecord> medicalRecord;
 
-    @Column(name = "db_historico_procedimentos")
     @OneToMany(cascade = CascadeType.ALL)
     private List<CustomTreatments> customTreatments;
-    
+
     //Informativos
 
     @Column(nullable = false, name = "created_at")

@@ -36,7 +36,6 @@ public class Documents {
     @Column(name = "CNH")
     private String driversLicenseNumber;
 
-    @Column(nullable = false, name = "db_certidao_nascimento")
     @OneToOne(cascade = CascadeType.ALL)
     private BirthCertificate birthCertificate;
 

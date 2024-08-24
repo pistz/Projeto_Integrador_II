@@ -14,7 +14,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "db_programas_sociais")
 @AllArgsConstructor
-@NoArgsConstructor
 @Data
 public class SocialPrograms {
 
