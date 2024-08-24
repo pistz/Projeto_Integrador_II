@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
-@Table(name = "db_programas_sociais")
+@Table(name = "hosted_programas_sociais")
 @AllArgsConstructor
 @Data
 public class SocialPrograms {

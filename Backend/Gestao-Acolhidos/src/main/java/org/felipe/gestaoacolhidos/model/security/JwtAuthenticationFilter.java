@@ -28,8 +28,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = jwtUtil.resolveToken(request);
         if (token != null && jwtUtil.validateToken(token)) {
-            String username = jwtUtil.getEmailFromToken(token);
-            UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
+            String email = jwtUtil.getEmailFromToken(token);
+            UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(email);
             if (userDetails != null) {
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());

@@ -2,9 +2,7 @@ package org.felipe.gestaoacolhidos.model.domain.entity.Hosted;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.CustomTreatments.CustomTreatments;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Documents.Documents;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.MedicalRecord.MedicalRecord;
@@ -24,9 +22,10 @@ import java.util.UUID;
  * */
 @Entity
 @Table(name = "db_hosted")
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Hosted {
 
     @Id
