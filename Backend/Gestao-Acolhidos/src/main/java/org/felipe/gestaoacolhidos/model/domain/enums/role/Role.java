@@ -1,6 +1,8 @@
 package org.felipe.gestaoacolhidos.model.domain.enums.role;
 
-public enum Role {
+import org.springframework.security.core.GrantedAuthority;
+
+public enum Role implements GrantedAuthority {
     ADMIN("ADMIN"),
     BOARD("BOARD"),
     SECRETARY("SECRETARY");
@@ -9,5 +11,10 @@ public enum Role {
 
     Role(String role) {
         this.role = role;
+    }
+
+    @Override
+    public String getAuthority() {
+        return name();
     }
 }

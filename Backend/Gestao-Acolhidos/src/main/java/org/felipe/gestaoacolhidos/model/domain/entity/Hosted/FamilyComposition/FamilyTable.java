@@ -1,10 +1,7 @@
 package org.felipe.gestaoacolhidos.model.domain.entity.Hosted.FamilyComposition;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,12 +28,15 @@ public class FamilyTable {
     private int age;
 
     @Column(name = "genero_familiar")
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     @Column(name = "estado_civil")
+    @Enumerated(EnumType.STRING)
     private MaritalStatus maritalStatus;
 
     @Column(name = "escolaridade")
+    @Enumerated(EnumType.STRING)
     private Education education;
 
     @Column(name = "ocupacao_profissional")
