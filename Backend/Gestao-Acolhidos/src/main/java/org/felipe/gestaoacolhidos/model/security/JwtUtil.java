@@ -31,10 +31,10 @@ public class JwtUtil {
     }
     public String generateToken(String username) {
         return Jwts.builder()
-                .setSubject(username)
-                .setIssuer(jwtIssuer)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRADE_TIME))
+                .subject(username)
+                .issuer(jwtIssuer)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + EXPIRADE_TIME))
                 .signWith(SignatureAlgorithm.HS512, getJwtSecretKey())
                 .compact();
     }

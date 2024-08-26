@@ -3,6 +3,7 @@ package org.felipe.gestaoacolhidos.model.controller.Auth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.felipe.gestaoacolhidos.model.dto.User.UserLoginDTO;
 import org.felipe.gestaoacolhidos.model.service.Auth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Endpoint de Autenticação")
 public class AuthController {
 
     @Autowired

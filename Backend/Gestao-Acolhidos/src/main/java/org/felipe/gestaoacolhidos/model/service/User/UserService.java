@@ -14,5 +14,4 @@ public interface UserService {
     UserDeletedDTO deleteUser(UUID userId);
     List<UserResponseDTO> findAll();
     UserResponseDTO findById(UUID id);
-
 }

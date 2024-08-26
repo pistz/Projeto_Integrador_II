@@ -1,5 +1,6 @@
 package org.felipe.gestaoacolhidos.model.config;
 
+import org.felipe.gestaoacolhidos.model.domain.enums.role.Role;
 import org.felipe.gestaoacolhidos.model.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -43,8 +44,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(authorize -> authorize
                         .requestMatchers(SWAGGER).permitAll()
-                        .requestMatchers("/user/register").permitAll()
                         .requestMatchers("/auth").permitAll()
+                        .requestMatchers("/user/register").hasAnyAuthority(String.valueOf(Role.ADMIN), String.valueOf(Role.SECRETARY))
+                        .requestMatchers("/user/all").hasAnyAuthority(String.valueOf(Role.ADMIN), String.valueOf(Role.BOARD))
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())

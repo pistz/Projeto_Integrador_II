@@ -1,8 +1,11 @@
 package org.felipe.gestaoacolhidos.model.controller.User;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.felipe.gestaoacolhidos.model.dto.User.UserCreateDTO;
 import org.felipe.gestaoacolhidos.model.dto.User.UserCreatedResponseDTO;
 import org.felipe.gestaoacolhidos.model.dto.User.UserResponseDTO;
@@ -17,6 +20,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
+@Tag(name = "Endpoints de Usuário")
 public class UserController {
 
     @Autowired
@@ -33,8 +37,8 @@ public class UserController {
     @GetMapping("/{id}")
     @Operation(description = "Retorna um usuário pelo ID", method = "GET")
     @ApiResponse(responseCode = "200", description = "Usuário com ID, email e role")
-    public ResponseEntity<UserResponseDTO> getById(UUID id){
-        UserResponseDTO user = userService.findById(id);
+    public ResponseEntity<UserResponseDTO> getById(@PathVariable("id") String id){
+        UserResponseDTO user = userService.findById(UUID.fromString(id));
         return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(user);
     }
 
@@ -52,8 +56,8 @@ public class UserController {
     @DeleteMapping("/{id}")
     @Operation(description = "Deleta um usuário", method = "DELETE")
     @ApiResponse(responseCode = "200", description = "Usuário deletado")
-    public ResponseEntity deleteUser(@PathVariable UUID id){
-        userService.deleteUser(id);
+    public ResponseEntity deleteUser(@PathVariable("id") String id){
+        userService.deleteUser(UUID.fromString(id));
         return ResponseEntity.status(200).body("usuário: " + id + " deletado com sucesso!");
     }
 }
