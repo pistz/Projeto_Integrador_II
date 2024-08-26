@@ -26,7 +26,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/all")
+    @GetMapping("/find/all")
     @Operation(description = "Retorna uma lista com todos os usuários cadastrados", method = "GET")
     @ApiResponse(responseCode = "200", description = "Uma lista com os usuários cadastrados")
     public ResponseEntity<List<UserResponseDTO>> getAll(){
@@ -34,7 +34,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(all);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/find/{id}")
     @Operation(description = "Retorna um usuário pelo ID", method = "GET")
     @ApiResponse(responseCode = "200", description = "Usuário com ID, email e role")
     public ResponseEntity<UserResponseDTO> getById(@PathVariable("id") String id){
@@ -53,7 +53,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(created);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     @Operation(description = "Deleta um usuário", method = "DELETE")
     @ApiResponse(responseCode = "200", description = "Usuário deletado")
     public ResponseEntity deleteUser(@PathVariable("id") String id){

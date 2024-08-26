@@ -22,7 +22,7 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @PostMapping
+    @PostMapping("/login")
     @Operation(description = "Realiza a autenticação para login", method = "POST")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Autenticação bem sucedida"),
