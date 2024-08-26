@@ -5,11 +5,17 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
+import org.felipe.gestaoacolhidos.model.domain.enums.role.Role;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.io.InputStream;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtUtil {
@@ -29,9 +35,10 @@ public class JwtUtil {
         }
         return Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
-    public String generateToken(String username) {
+    public String generateToken(String username, Role role) {
         return Jwts.builder()
                 .subject(username)
+                .claim("roles", role)
                 .issuer(jwtIssuer)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + EXPIRADE_TIME))

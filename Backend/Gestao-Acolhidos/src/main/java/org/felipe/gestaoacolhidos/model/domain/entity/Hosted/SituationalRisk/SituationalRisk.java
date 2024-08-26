@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import org.felipe.gestaoacolhidos.model.domain.enums.homeless.Homeless;
 import org.felipe.gestaoacolhidos.model.domain.enums.lookup.LookUp;
 import org.felipe.gestaoacolhidos.model.domain.enums.migrant.Migrant;
+import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -31,4 +33,8 @@ public class SituationalRisk {
     @Column(nullable = false, name = "populacao_rua")
     @Enumerated(EnumType.STRING)
     private Homeless homeless;
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDate updatedAt;
 }

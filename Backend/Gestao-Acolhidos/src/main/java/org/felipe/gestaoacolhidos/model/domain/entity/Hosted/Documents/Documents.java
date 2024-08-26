@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.BirthCertificate.BirthCertificate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -26,9 +27,6 @@ public class Documents {
     @Column(name = "data_emissao_rg")
     private LocalDate dateOfIssueRG;
 
-    @Column(nullable = false, unique = true, name = "CPF")
-    private String socialSecurityNumber;
-
     @Column(nullable = false, name = "possui_carteira_CNH")
     private boolean hasLicense;
 
@@ -37,5 +35,9 @@ public class Documents {
 
     @OneToOne(cascade = CascadeType.ALL)
     private BirthCertificate birthCertificate;
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDate updatedAt;
 
 }

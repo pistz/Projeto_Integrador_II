@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 import org.felipe.gestaoacolhidos.model.domain.enums.education.Education;
 import org.felipe.gestaoacolhidos.model.domain.enums.gender.Gender;
 import org.felipe.gestaoacolhidos.model.domain.enums.maritalStatus.MaritalStatus;
+import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -41,4 +43,8 @@ public class FamilyTable {
 
     @Column(name = "ocupacao_profissional")
     private String ocupation;
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDate updatedAt;
 }

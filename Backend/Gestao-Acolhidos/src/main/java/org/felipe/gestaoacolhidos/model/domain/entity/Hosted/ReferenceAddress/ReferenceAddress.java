@@ -8,7 +8,9 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -38,5 +40,9 @@ public class ReferenceAddress {
 
     @Column(name = "telefone_referencia")
     private int phoneNumber;
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDate updatedAt;
 
 }

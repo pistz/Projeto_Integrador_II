@@ -2,7 +2,6 @@ package org.felipe.gestaoacolhidos.model.repository.hosted;
 
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Hosted;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +17,5 @@ public interface HostedRepository extends JpaRepository<Hosted, UUID> {
 
     List<Optional<Hosted>> findByFirstNameAndLastName(String firstName, String lastName);
 
-    @Query("SELECT h.firstName, h.lastName, d.socialSecurityNumber FROM Hosted h JOIN h.documents d WHERE d.socialSecurityNumber = :cpf")
-    Optional<Hosted> findByDocumentCpf(String cpf);
+    Optional<Hosted> findBySocialSecurityNumber(String CPF);
 }

@@ -24,7 +24,7 @@ public class AuthService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         if (passwordEncoder.matches(password, user.getPassword())) {
-            return jwtUtil.generateToken(email);
+            return jwtUtil.generateToken(email, user.getRoles());
         } else {
             throw new IllegalArgumentException("Invalid credentials");
         }

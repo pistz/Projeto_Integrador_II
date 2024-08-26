@@ -10,6 +10,8 @@ import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.PoliceReport.Police
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.ReferenceAddress.ReferenceAddress;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.SituationalRisk.SituationalRisk;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.SocialPrograms.SocialPrograms;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -43,6 +45,9 @@ public class Hosted {
     @Column(nullable = false, name = "last_name")
     private String lastName;
 
+    @Column(nullable = false, unique = true, name = "CPF")
+    private String socialSecurityNumber;
+
     @Column(name = "aniversario")
     private LocalDate birthDay;
 
@@ -64,7 +69,7 @@ public class Hosted {
     //Relacionamentos tabelas Adjacentes
 
     @OneToOne(cascade = CascadeType.ALL)
-    private Documents documents;
+    private Documents otherDocuments;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<PoliceReport> policeReport;
@@ -89,8 +94,13 @@ public class Hosted {
     @Column(nullable = false, name = "created_at")
     private LocalDate createdAt;
 
+    @LastModifiedDate
     @Column(nullable = false, name = "updated_at")
     private LocalDate updatedAt;
+
+    @Column(name = "updated_by")
+    @LastModifiedBy
+    private String updatedBy;
 
     public int getAge() {
         if(birthDay == null) {

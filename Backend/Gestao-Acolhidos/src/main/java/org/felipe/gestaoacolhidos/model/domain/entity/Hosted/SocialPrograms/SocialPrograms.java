@@ -7,8 +7,10 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -56,5 +58,9 @@ public class SocialPrograms {
     public SocialPrograms(){
         this.wage = BigDecimal.ZERO;
     }
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDate updatedAt;
 
 }

@@ -26,12 +26,11 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    //TODO - para uso quando houver a API em nuvem
-    @Value("${api.path}")
-    private String API_PATH;
+//    //TODO - para uso quando houver a API em nuvem
+//    @Value("${api.path}")
+//    private String API_PATH;
 
     private static final String[] SWAGGER = {
             "/swagger-ui/**",
@@ -39,34 +38,33 @@ public class SecurityConfig {
             "/swagger-ui.html"
     };
 
+    private static final String[] ADMIN_PATHS = {
+            "/user/**"
+    };
+
+    private static final String[] BOARD_PATHS = {
+
+    };
+
+    private static final String[] SECRETARY_PATHS = {
+
+    };
+
 
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
-    public static final String[] ADMIN_AUTHORIZED_PATHS = {
-            "/user/**"
-    };
-
-    public static final String[] SECRETARY_AUTHORIZED_PATHS = {
-            "/user/register"
-    };
-
-    public static final String[] BOARD_AUTHORIZED_PATHS = {
-            "/user/**"
-    };
 
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .authorizeRequests(authorize -> authorize
-                        .requestMatchers(SWAGGER).permitAll()
+                .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/login").permitAll()
-                        .requestMatchers(ADMIN_AUTHORIZED_PATHS).hasAuthority(String.valueOf(Role.ADMIN))
-                        .requestMatchers(BOARD_AUTHORIZED_PATHS).hasAuthority(String.valueOf(Role.BOARD))
-                        .requestMatchers(SECRETARY_AUTHORIZED_PATHS).hasAuthority(String.valueOf(Role.SECRETARY))
+                        .requestMatchers(SWAGGER).permitAll()
+                        .requestMatchers(ADMIN_PATHS).hasAuthority(Role.ADMIN.name())
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
@@ -86,17 +84,17 @@ public class SecurityConfig {
     }
 
     //TODO - importante editar quando houver front-end
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost"));
-        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        corsConfiguration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-        corsConfiguration.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", corsConfiguration);
-
-        return source;
-    }
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration corsConfiguration = new CorsConfiguration();
+//        corsConfiguration.setAllowedOrigins(List.of("http://localhost"));
+//        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+//        corsConfiguration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+//        corsConfiguration.setAllowCredentials(true);
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", corsConfiguration);
+//
+//        return source;
+//    }
 }
