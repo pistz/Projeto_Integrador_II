@@ -18,6 +18,7 @@ import java.util.UUID;
 
 /**
  * Classe referente à ficha de cadastro do acolhido
+ * Um acolhido é o nome que se dá ao usuário do Albergue
  * @Author Felipe
  * */
 @Entity

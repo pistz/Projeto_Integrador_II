@@ -44,15 +44,29 @@ public class SecurityConfig {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
+    public static final String[] ADMIN_AUTHORIZED_PATHS = {
+            "/user/**"
+    };
+
+    public static final String[] SECRETARY_AUTHORIZED_PATHS = {
+            "/user/register"
+    };
+
+    public static final String[] BOARD_AUTHORIZED_PATHS = {
+            "/user/**"
+    };
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(authorize -> authorize
                         .requestMatchers(SWAGGER).permitAll()
-                        .requestMatchers("/auth").permitAll()
-                        .requestMatchers("/user/register").hasAnyAuthority(String.valueOf(Role.ADMIN), String.valueOf(Role.SECRETARY))
-                        .requestMatchers("/user/all").hasAnyAuthority(String.valueOf(Role.ADMIN), String.valueOf(Role.BOARD))
+                        .requestMatchers("/auth/login").permitAll()
+                        .requestMatchers(ADMIN_AUTHORIZED_PATHS).hasAuthority(String.valueOf(Role.ADMIN))
+                        .requestMatchers(BOARD_AUTHORIZED_PATHS).hasAuthority(String.valueOf(Role.BOARD))
+                        .requestMatchers(SECRETARY_AUTHORIZED_PATHS).hasAuthority(String.valueOf(Role.SECRETARY))
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
@@ -71,6 +85,7 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    //TODO - importante editar quando houver front-end
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
