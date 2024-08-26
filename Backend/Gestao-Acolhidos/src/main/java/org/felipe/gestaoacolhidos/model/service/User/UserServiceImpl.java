@@ -2,6 +2,7 @@ package org.felipe.gestaoacolhidos.model.service.User;
 
 import org.felipe.gestaoacolhidos.model.domain.entity.User.User;
 import org.felipe.gestaoacolhidos.model.domain.enums.role.Role;
+import org.felipe.gestaoacolhidos.model.dto.User.UserDeletedDTO;
 import org.felipe.gestaoacolhidos.model.exceptions.UserAlreadyExistsException;
 import org.felipe.gestaoacolhidos.model.dto.User.UserCreateDTO;
 import org.felipe.gestaoacolhidos.model.dto.User.UserCreatedResponseDTO;
@@ -11,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -43,12 +41,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(UUID userId) {
-
+    public UserDeletedDTO deleteUser(UUID userId) {
+        if(userId == null){
+            throw new IllegalArgumentException("No user selected");
+        }
+        userRepository.deleteById(userId);
+        return new UserDeletedDTO("User deleted: " + userId);
     }
 
     @Override
     public List<UserResponseDTO> findAll() {
-        return List.of();
+        List<UserResponseDTO> users = new ArrayList<>();
+        userRepository.findAll().forEach(user -> {
+            UserResponseDTO userToAdd = new UserResponseDTO(user.getId(), user.getEmail(), user.getRoles());
+            users.add(userToAdd);
+        });
+        return users;
+    }
+
+    @Override
+    public UserResponseDTO findById(UUID id) {
+        var exists = userRepository.findById(id);
+        if(exists.isEmpty()) {
+            throw new IllegalArgumentException("Not found user with id: " + id);
+        }
+        return new UserResponseDTO(exists.get().getId(), exists.get().getEmail(), exists.get().getRoles());
     }
 }

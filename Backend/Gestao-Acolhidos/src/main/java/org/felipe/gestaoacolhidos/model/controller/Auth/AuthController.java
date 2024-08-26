@@ -1,5 +1,8 @@
 package org.felipe.gestaoacolhidos.model.controller.Auth;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.felipe.gestaoacolhidos.model.dto.User.UserLoginDTO;
 import org.felipe.gestaoacolhidos.model.service.Auth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,12 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping
+    @Operation(description = "Realiza a autenticação para login", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Autenticação bem sucedida"),
+            @ApiResponse(responseCode = "401", description = "Não autorizado"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    })
     public ResponseEntity<String> login(@RequestBody UserLoginDTO dto) {
             var auth = authService.authenticateUser(dto.email(), dto.password());
             return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(auth.toString());

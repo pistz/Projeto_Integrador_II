@@ -14,10 +14,10 @@ public interface HostedRepository extends JpaRepository<Hosted, UUID> {
 
     Optional<Hosted> findById(UUID id);
 
-    Optional<Hosted> findByPaperTrail(String paperTrail);
+    Optional<Hosted> findByPaperTrail(long paperTrail);
 
     List<Optional<Hosted>> findByFirstNameAndLastName(String firstName, String lastName);
 
-    @Query("SELECT h FROM Hosted h JOIN h.documents d WHERE d.socialSecurityNumber = :cpf")
+    @Query("SELECT h.firstName, h.lastName, d.socialSecurityNumber FROM Hosted h JOIN h.documents d WHERE d.socialSecurityNumber = :cpf")
     Optional<Hosted> findByDocumentCpf(String cpf);
 }
