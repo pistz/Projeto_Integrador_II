@@ -4,11 +4,11 @@ import org.felipe.gestaoacolhidos.model.dto.Hosted.*;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.Documents.DocumentsUpdateDTO;
 import org.felipe.gestaoacolhidos.model.exceptions.HostedAlreadyRegisteredException;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Hosted;
+import org.felipe.gestaoacolhidos.model.logs.UserLoggingInterceptor;
 import org.felipe.gestaoacolhidos.model.repository.hosted.HostedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -20,6 +20,9 @@ public class HostedServiceImpl implements HostedService {
 
     @Autowired
     private HostedRepository hostedRepository;
+
+    @Autowired
+    private UserLoggingInterceptor interceptor;
 
     @Override
     public HostedResponseCreatedDTO create(HostedCreateNewDTO hosted) {
@@ -76,10 +79,11 @@ public class HostedServiceImpl implements HostedService {
         }
 
         Hosted updateHost = registeredHosted.get();
-
+        if(validateCPF(hosted.socialSecurityNumber())){
+            updateHost.setSocialSecurityNumber(hosted.socialSecurityNumber());
+        }
         updateHost.setFirstName(hosted.firstName());
         updateHost.setLastName(hosted.lastName());
-        updateHost.setSocialSecurityNumber(hosted.socialSecurityNumber());
         updateHost.setPaperTrail(hosted.paperTrail());
         updateHost.setBirthDay(hosted.birthDay());
         updateHost.setMothersName(hosted.mothersName());
@@ -87,6 +91,9 @@ public class HostedServiceImpl implements HostedService {
         updateHost.setOccupation(hosted.occupation());
         updateHost.setCityOrigin(hosted.cityOrigin());
         updateHost.setStateOrigin(hosted.stateOrigin());
+
+        updateHost.setUpdatedAt(LocalDate.now());
+        updateHost.setUpdatedBy(interceptor.getRegisteredUser());
 
         hostedRepository.save(updateHost);
 
@@ -137,4 +144,5 @@ public class HostedServiceImpl implements HostedService {
         Pattern pattern = Pattern.compile("^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$");
         return pattern.matcher(cpf).matches();
     }
+
 }

@@ -12,6 +12,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 public class UserLoggingInterceptor implements HandlerInterceptor {
 
+    private String registeredUser;
+
     private static final Logger logger = LoggerFactory.getLogger(UserLoggingInterceptor.class);
 
     @Override
@@ -19,10 +21,19 @@ public class UserLoggingInterceptor implements HandlerInterceptor {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) principal;
+            registerUser(userDetails.getUsername());
             logger.info("User: {} is making a request to {}", userDetails.getUsername(), request.getRequestURI());
         } else {
             logger.info("Anonymous user is making a request to {}", request.getRequestURI());
         }
         return true;
+    }
+
+    private void registerUser(String username){
+        this.registeredUser = username;
+    }
+
+    public String getRegisteredUser() {
+        return registeredUser;
     }
 }
