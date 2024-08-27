@@ -39,7 +39,8 @@ public class SecurityConfig {
     };
 
     private static final String[] ADMIN_PATHS = {
-            "/user/**"
+            "/user/**",
+            "/hosted/**"
     };
 
     private static final String[] BOARD_PATHS = {

@@ -5,11 +5,13 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.CustomTreatments.CustomTreatments;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Documents.Documents;
+import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.FamilyComposition.FamilyComposition;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.MedicalRecord.MedicalRecord;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.PoliceReport.PoliceReport;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.ReferenceAddress.ReferenceAddress;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.SituationalRisk.SituationalRisk;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.SocialPrograms.SocialPrograms;
+import org.hibernate.annotations.processing.Pattern;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -54,7 +56,7 @@ public class Hosted {
     @Column(name = "nome_pai")
     private String fathersName;
 
-    @Column(nullable = false, name = "nome_mae")
+    @Column(name = "nome_mae")
     private String mothersName;
 
     @Column(name = "profissao")
@@ -89,13 +91,16 @@ public class Hosted {
     @OneToMany(cascade = CascadeType.ALL)
     private List<CustomTreatments> customTreatments;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private FamilyComposition family;
+
     //Informativos
 
     @Column(nullable = false, name = "created_at")
     private LocalDate createdAt;
 
     @LastModifiedDate
-    @Column(nullable = false, name = "updated_at")
+    @Column(name = "updated_at")
     private LocalDate updatedAt;
 
     @Column(name = "updated_by")

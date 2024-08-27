@@ -12,7 +12,6 @@ public record HostedCreateNewDTO(
         String mothersName,
         String occupation,
         String cityOrigin,
-        String stateOrigin,
-        LocalDate createdAt
+        String stateOrigin
 ) {
 }

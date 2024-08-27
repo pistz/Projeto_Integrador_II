@@ -36,7 +36,10 @@ public class UserController {
 
     @GetMapping("/find/{id}")
     @Operation(description = "Retorna um usuário pelo ID", method = "GET")
-    @ApiResponse(responseCode = "200", description = "Usuário com ID, email e role")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário com ID, email e role"),
+            @ApiResponse(responseCode = "404", description = "Id fornecido não existe")
+    })
     public ResponseEntity<UserResponseDTO> getById(@PathVariable("id") String id){
         UserResponseDTO user = userService.findById(UUID.fromString(id));
         return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(user);
@@ -46,7 +49,8 @@ public class UserController {
     @Operation(description = "Cadastra novo usuário no sistema", method = "POST")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Usuário já existe e não pode ser criado novamente")
+            @ApiResponse(responseCode = "406", description = "Usuário já existe e não pode ser criado novamente"),
+            @ApiResponse(responseCode = "400", description = "E-mail utilizado para cadastro não é válido")
     })
     public ResponseEntity<UserCreatedResponseDTO> createUser(@RequestBody UserCreateDTO dto){
         UserCreatedResponseDTO created = userService.createUser(dto);
@@ -55,7 +59,11 @@ public class UserController {
 
     @DeleteMapping("/delete/{id}")
     @Operation(description = "Deleta um usuário", method = "DELETE")
-    @ApiResponse(responseCode = "200", description = "Usuário deletado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário deletado"),
+            @ApiResponse(responseCode = "400", description = "O ID é nulo"),
+            @ApiResponse(responseCode = "404", description = "O usuário não existe pelo ID fornecido")
+    })
     public ResponseEntity deleteUser(@PathVariable("id") String id){
         userService.deleteUser(UUID.fromString(id));
         return ResponseEntity.status(200).body("usuário: " + id + " deletado com sucesso!");

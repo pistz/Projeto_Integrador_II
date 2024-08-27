@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -25,6 +26,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserCreatedResponseDTO createUser(UserCreateDTO createUserDTO) {
+        if(!validateEmail(createUserDTO.email())) {
+            throw new IllegalArgumentException("E-mail inválido");
+        }
         var user = userRepository.findByEmail(createUserDTO.email());
         if(user.isPresent()) {
             throw new UserAlreadyExistsException("Usuario já existe, não pode ser registrado novamente");
@@ -44,6 +48,10 @@ public class UserServiceImpl implements UserService {
         if(userId == null){
             throw new IllegalArgumentException("No user selected");
         }
+        var exists = userRepository.existsById(userId);
+        if(!exists){
+            throw new NoSuchElementException("User not found");
+        }
         userRepository.deleteById(userId);
         return new UserDeletedDTO("User deleted: " + userId);
     }
@@ -62,8 +70,13 @@ public class UserServiceImpl implements UserService {
     public UserResponseDTO findById(UUID id) {
         var exists = userRepository.findById(id);
         if(exists.isEmpty()) {
-            throw new IllegalArgumentException("Not found user with id: " + id);
+            throw new NoSuchElementException("Not found user with id: " + id);
         }
         return new UserResponseDTO(exists.get().getId(), exists.get().getEmail(), exists.get().getRoles());
+    }
+
+    private boolean validateEmail(String email) {
+        Pattern pattern = Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$");
+        return pattern.matcher(email).matches();
     }
 }
