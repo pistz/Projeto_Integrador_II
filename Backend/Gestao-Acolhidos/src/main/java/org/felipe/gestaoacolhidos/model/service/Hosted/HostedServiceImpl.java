@@ -102,7 +102,13 @@ public class HostedServiceImpl implements HostedService {
 
     @Override
     public HostedResponseUpdatedDTO updateDocuments(UUID hostedId, DocumentsUpdateDTO dto) {
-        return null;
+        var registeredHosted = hostedRepository.findById(hostedId);
+        if(registeredHosted.isEmpty()) {
+            throw new NoSuchElementException("Acolhido não existe");
+        }
+        //TODO - logica de atualização de documentos adicionais
+
+        return new HostedResponseUpdatedDTO("Registro atualizado");
     }
 
     @Override
