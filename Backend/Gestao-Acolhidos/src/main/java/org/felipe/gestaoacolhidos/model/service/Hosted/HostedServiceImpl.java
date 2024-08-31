@@ -1,9 +1,7 @@
 package org.felipe.gestaoacolhidos.model.service.Hosted;
 
-import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.BirthCertificate.BirthCertificate;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Documents.Documents;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.*;
-import org.felipe.gestaoacolhidos.model.dto.Hosted.Documents.DocumentsBirthCertificateDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.Documents.DocumentsUpdateDTO;
 import org.felipe.gestaoacolhidos.model.exceptions.HostedAlreadyRegisteredException;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Hosted;

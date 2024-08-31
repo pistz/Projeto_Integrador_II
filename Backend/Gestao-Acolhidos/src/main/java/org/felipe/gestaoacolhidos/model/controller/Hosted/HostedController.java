@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Hosted;
+import org.felipe.gestaoacolhidos.model.dto.Hosted.Documents.DocumentsUpdateDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.HostedCreateNewDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.HostedResponseCreatedDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.HostedResponseDeletedDTO;
@@ -78,6 +79,17 @@ public class HostedController {
     })
     public ResponseEntity<HostedResponseUpdatedDTO> updateHostedMainInformation(@PathVariable UUID id, @RequestBody HostedCreateNewDTO dto){
         var updated = hostedService.updateIdentification(id, dto);
+        return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(updated);
+    }
+
+    @PutMapping("/update-docs/{id}")
+    @Operation(description = "Atualiza os documentos do Acolhido", method = "PUT")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Registro atualizado"),
+            @ApiResponse(responseCode = "404", description = "Acolhido não existe")
+    })
+    public ResponseEntity<HostedResponseUpdatedDTO> updateHostedDocuments(@PathVariable UUID id, @RequestBody DocumentsUpdateDTO dto){
+        var updated = hostedService.updateDocuments(id, dto);
         return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(updated);
     }
 }
