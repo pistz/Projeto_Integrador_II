@@ -1,6 +1,9 @@
 package org.felipe.gestaoacolhidos.model.service.Hosted;
 
+import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.BirthCertificate.BirthCertificate;
+import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Documents.Documents;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.*;
+import org.felipe.gestaoacolhidos.model.dto.Hosted.Documents.DocumentsBirthCertificateDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.Documents.DocumentsUpdateDTO;
 import org.felipe.gestaoacolhidos.model.exceptions.HostedAlreadyRegisteredException;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Hosted;
@@ -107,7 +110,22 @@ public class HostedServiceImpl implements HostedService {
             throw new NoSuchElementException("Acolhido não existe");
         }
         //TODO - logica de atualização de documentos adicionais
+        Hosted updateHostedDocuments = registeredHosted.get();
+        Documents documents = updateHostedDocuments.getOtherDocuments();
 
+        documents.setGeneralRegisterRG(dto.generalRegisterRG());
+        documents.setDateOfIssueRG(dto.dateOfIssueRG());
+        if(dto.driversLicenseNumber() != null){
+            documents.setHasLicense(true);
+            documents.setDriversLicenseNumber(dto.driversLicenseNumber());
+        }
+        documents.getBirthCertificate().setCertificateNumber(dto.birthCertificateDTO().certificateNumber());
+        documents.getBirthCertificate().setSheets(dto.birthCertificateDTO().sheets());
+        documents.getBirthCertificate().setBook(dto.birthCertificateDTO().book());
+
+        updateHostedDocuments.setOtherDocuments(documents);
+
+        hostedRepository.save(updateHostedDocuments);
         return new HostedResponseUpdatedDTO("Registro atualizado");
     }
 
