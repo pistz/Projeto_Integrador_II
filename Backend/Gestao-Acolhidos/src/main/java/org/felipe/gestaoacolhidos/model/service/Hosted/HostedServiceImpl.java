@@ -2,8 +2,10 @@ package org.felipe.gestaoacolhidos.model.service.Hosted;
 
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.BirthCertificate.BirthCertificate;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Documents.Documents;
+import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.SituationalRisk.SituationalRisk;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.*;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.Documents.DocumentsUpdateDTO;
+import org.felipe.gestaoacolhidos.model.dto.Hosted.SituationalRisk.SituationalRiskUpdateDTO;
 import org.felipe.gestaoacolhidos.model.exceptions.HostedAlreadyRegisteredException;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Hosted;
 import org.felipe.gestaoacolhidos.model.logs.UserLoggingInterceptor;
@@ -138,9 +140,31 @@ public class HostedServiceImpl implements HostedService {
     }
 
     @Override
-    public HostedResponseUpdatedDTO updateSocialRisk(Hosted hosted) {
-        //TODO - risco social
-        return null;
+    public HostedResponseUpdatedDTO updateSituacionalRisk(UUID hostedId, SituationalRiskUpdateDTO dto) {
+        //TODO - risco situacional
+        Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
+
+        Hosted updateHostedSituacionalRisk = registeredHosted.get();
+        SituationalRisk situationalRisk;
+        if(updateHostedSituacionalRisk.getSituationalRisk() == null){
+            situationalRisk = new SituationalRisk();
+            situationalRisk.setId(UUID.randomUUID());
+            updateHostedSituacionalRisk.setSituationalRisk(situationalRisk);
+        }else{
+            situationalRisk = updateHostedSituacionalRisk.getSituationalRisk();
+        }
+        situationalRisk.setLookUp(dto.lookUp());
+        situationalRisk.setMigrant(dto.migrant());
+        situationalRisk.setHomeless(dto.homeless());
+        situationalRisk.setUpdatedAt(LocalDate.now());
+
+        updateHostedSituacionalRisk.setSituationalRisk(situationalRisk);
+        updateHostedSituacionalRisk.setUpdatedBy(interceptor.getRegisteredUser());
+        updateHostedSituacionalRisk.setUpdatedAt(LocalDate.now());
+
+        hostedRepository.save(updateHostedSituacionalRisk);
+
+        return new HostedResponseUpdatedDTO("Registro atualizado");
     }
 
     @Override

@@ -26,11 +26,11 @@ public class SituationalRisk {
     @Enumerated(EnumType.STRING)
     private LookUp lookUp;
 
-    @Column(nullable = false, name = "motivo_migrante")
+    @Column(name = "motivo_migrante")
     @Enumerated(EnumType.STRING)
     private Migrant migrant;
 
-    @Column(nullable = false, name = "populacao_rua")
+    @Column(name = "populacao_rua")
     @Enumerated(EnumType.STRING)
     private Homeless homeless;
 

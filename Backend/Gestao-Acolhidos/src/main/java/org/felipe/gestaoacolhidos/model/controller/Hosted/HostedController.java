@@ -10,6 +10,7 @@ import org.felipe.gestaoacolhidos.model.dto.Hosted.HostedCreateNewDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.HostedResponseCreatedDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.HostedResponseDeletedDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.HostedResponseUpdatedDTO;
+import org.felipe.gestaoacolhidos.model.dto.Hosted.SituationalRisk.SituationalRiskUpdateDTO;
 import org.felipe.gestaoacolhidos.model.service.Hosted.HostedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
@@ -90,6 +91,17 @@ public class HostedController {
     })
     public ResponseEntity<HostedResponseUpdatedDTO> updateHostedDocuments(@PathVariable UUID id, @RequestBody DocumentsUpdateDTO dto){
         var updated = hostedService.updateDocuments(id, dto);
+        return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(updated);
+    }
+
+    @PutMapping("/update-risk/{id}")
+    @Operation(description = "Atualiza o risco situacional do Acolhido", method = "PUT")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Registro atualizado"),
+            @ApiResponse(responseCode = "404", description = "Acolhido não existe")
+    })
+    public ResponseEntity<HostedResponseUpdatedDTO> updateHostedSituationalRisk(@PathVariable UUID id, @RequestBody SituationalRiskUpdateDTO dto){
+        var updated = hostedService.updateSituacionalRisk(id, dto);
         return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(updated);
     }
 }

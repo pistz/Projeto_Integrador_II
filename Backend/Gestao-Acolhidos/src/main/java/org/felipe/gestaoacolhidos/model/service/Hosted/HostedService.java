@@ -3,6 +3,7 @@ package org.felipe.gestaoacolhidos.model.service.Hosted;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Hosted;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.*;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.Documents.DocumentsUpdateDTO;
+import org.felipe.gestaoacolhidos.model.dto.Hosted.SituationalRisk.SituationalRiskUpdateDTO;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,7 +17,7 @@ public interface HostedService {
     List<Hosted> findAll();
 
     HostedResponseUpdatedDTO updateDocuments(UUID hostedId, DocumentsUpdateDTO documents);
-    HostedResponseUpdatedDTO updateSocialRisk(Hosted hosted);
+    HostedResponseUpdatedDTO updateSituacionalRisk(UUID hostedId, SituationalRiskUpdateDTO dto);
     HostedResponseUpdatedDTO updateFamilyComposition(Hosted hosted);
     HostedResponseUpdatedDTO updatePoliceReport(Hosted hosted);
     HostedResponseUpdatedDTO updateReferenceAddress(Hosted hosted);
