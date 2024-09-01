@@ -6,6 +6,6 @@ public record DocumentsUpdateDTO (
         String generalRegisterRG,
         LocalDate dateOfIssueRG,
         String driversLicenseNumber,
-        DocumentsBirthCertificateDTO birthCertificateDTO
+        DocumentsBirthCertificateDTO birthCertificate
 ){
 }

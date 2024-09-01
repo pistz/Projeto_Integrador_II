@@ -1,5 +1,6 @@
 package org.felipe.gestaoacolhidos.model.service.Hosted;
 
+import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.BirthCertificate.BirthCertificate;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Documents.Documents;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.*;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.Documents.DocumentsUpdateDTO;
@@ -103,17 +104,29 @@ public class HostedServiceImpl implements HostedService {
         Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
 
         Hosted updateHostedDocuments = registeredHosted.get();
-        Documents documents = updateHostedDocuments.getOtherDocuments();
-
+        Documents documents;
+        if(updateHostedDocuments.getOtherDocuments() == null){
+            documents = new Documents();
+            documents.setId(UUID.randomUUID());
+            updateHostedDocuments.setOtherDocuments(documents);
+        }else{
+            documents = updateHostedDocuments.getOtherDocuments();
+        }
         documents.setGeneralRegisterRG(dto.generalRegisterRG());
         documents.setDateOfIssueRG(dto.dateOfIssueRG());
         if(dto.driversLicenseNumber() != null){
             documents.setHasLicense(true);
             documents.setDriversLicenseNumber(dto.driversLicenseNumber());
         }
-        documents.getBirthCertificate().setCertificateNumber(dto.birthCertificateDTO().certificateNumber());
-        documents.getBirthCertificate().setSheets(dto.birthCertificateDTO().sheets());
-        documents.getBirthCertificate().setBook(dto.birthCertificateDTO().book());
+
+        if(documents.getBirthCertificate() == null){
+            BirthCertificate birthCertificate = new BirthCertificate();
+            birthCertificate.setId(UUID.randomUUID());
+            documents.setBirthCertificate(birthCertificate);
+        }
+        documents.getBirthCertificate().setCertificateNumber(dto.birthCertificate().certificateNumber());
+        documents.getBirthCertificate().setSheets(dto.birthCertificate().sheets());
+        documents.getBirthCertificate().setBook(dto.birthCertificate().book());
         documents.setUpdatedAt(LocalDate.now());
 
         updateHostedDocuments.setOtherDocuments(documents);
