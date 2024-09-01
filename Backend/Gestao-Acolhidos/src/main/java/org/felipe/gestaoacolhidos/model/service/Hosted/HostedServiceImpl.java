@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -74,11 +75,7 @@ public class HostedServiceImpl implements HostedService {
 
     @Override
     public HostedResponseUpdatedDTO updateIdentification(UUID id, HostedCreateNewDTO hosted) {
-        var registeredHosted = hostedRepository.findById(id);
-        if(registeredHosted.isEmpty()) {
-            throw new NoSuchElementException("Acolhido não existe");
-        }
-
+        Optional<Hosted> registeredHosted = checkHostedExistence(id);
         Hosted updateHost = registeredHosted.get();
         if(validateCPF(hosted.socialSecurityNumber())){
             updateHost.setSocialSecurityNumber(hosted.socialSecurityNumber());
@@ -103,11 +100,8 @@ public class HostedServiceImpl implements HostedService {
 
     @Override
     public HostedResponseUpdatedDTO updateDocuments(UUID hostedId, DocumentsUpdateDTO dto) {
-        var registeredHosted = hostedRepository.findById(hostedId);
-        if(registeredHosted.isEmpty()) {
-            throw new NoSuchElementException("Acolhido não existe");
-        }
-        //TODO - logica de atualização de documentos adicionais
+        Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
+
         Hosted updateHostedDocuments = registeredHosted.get();
         Documents documents = updateHostedDocuments.getOtherDocuments();
 
@@ -120,8 +114,11 @@ public class HostedServiceImpl implements HostedService {
         documents.getBirthCertificate().setCertificateNumber(dto.birthCertificateDTO().certificateNumber());
         documents.getBirthCertificate().setSheets(dto.birthCertificateDTO().sheets());
         documents.getBirthCertificate().setBook(dto.birthCertificateDTO().book());
+        documents.setUpdatedAt(LocalDate.now());
 
         updateHostedDocuments.setOtherDocuments(documents);
+        updateHostedDocuments.setUpdatedBy(interceptor.getRegisteredUser());
+        updateHostedDocuments.setUpdatedAt(LocalDate.now());
 
         hostedRepository.save(updateHostedDocuments);
         return new HostedResponseUpdatedDTO("Registro atualizado");
@@ -129,42 +126,57 @@ public class HostedServiceImpl implements HostedService {
 
     @Override
     public HostedResponseUpdatedDTO updateSocialRisk(Hosted hosted) {
+        //TODO - risco social
         return null;
     }
 
     @Override
     public HostedResponseUpdatedDTO updateFamilyComposition(Hosted hosted) {
+        //TODO - composição familiar
         return null;
     }
 
     @Override
     public HostedResponseUpdatedDTO updatePoliceReport(Hosted hosted) {
+        //TODO - boletim de ocorrencia
         return null;
     }
 
     @Override
     public HostedResponseUpdatedDTO updateReferenceAddress(Hosted hosted) {
+        //TODO - endereço de referencia
         return null;
     }
 
     @Override
     public HostedResponseUpdatedDTO updateSocialPrograms(Hosted hosted) {
+        //TODO - programas sociais
         return null;
     }
 
     @Override
     public HostedResponseUpdatedDTO updateMedicalRecord(Hosted hosted) {
+        //TODO - boletim de saúde
         return null;
     }
 
     @Override
     public HostedResponseUpdatedDTO updateCustomTreatments(Hosted hosted) {
+        //TODO - plano personalizado de tratamentos
         return null;
     }
 
     private boolean validateCPF(String cpf) {
         Pattern pattern = Pattern.compile("^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$");
         return pattern.matcher(cpf).matches();
+    }
+
+    private Optional<Hosted> checkHostedExistence(UUID id){
+        Optional<Hosted> registeredHosted = hostedRepository.findById(id);
+        if(registeredHosted.isEmpty()) {
+            throw new NoSuchElementException("Acolhido não existe");
+        }
+        return registeredHosted;
     }
 
 }
