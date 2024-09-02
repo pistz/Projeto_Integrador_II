@@ -3,15 +3,16 @@ package org.felipe.gestaoacolhidos.model.domain.entity.Hosted;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Attendance.Attendance;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.CustomTreatments.CustomTreatments;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Documents.Documents;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.FamilyComposition.FamilyComposition;
+import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.FamilyTable.FamilyTable;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.MedicalRecord.MedicalRecord;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.PoliceReport.PoliceReport;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.ReferenceAddress.ReferenceAddress;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.SituationalRisk.SituationalRisk;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.SocialPrograms.SocialPrograms;
-import org.hibernate.annotations.processing.Pattern;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -53,6 +54,9 @@ public class Hosted {
     @Column(name = "aniversario")
     private LocalDate birthDay;
 
+    @Column(name = "idade")
+    private int age = this.getAge();
+
     @Column(name = "nome_pai")
     private String fathersName;
 
@@ -92,7 +96,13 @@ public class Hosted {
     private List<CustomTreatments> customTreatments;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private FamilyComposition family;
+    private FamilyComposition familyComposition;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<FamilyTable> familyTable;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Attendance> attendance;
 
     //Informativos
 
@@ -107,7 +117,8 @@ public class Hosted {
     @LastModifiedBy
     private String updatedBy;
 
-    public int getAge() {
+
+    private int getAge() {
         if(birthDay == null) {
             return 0;
         }

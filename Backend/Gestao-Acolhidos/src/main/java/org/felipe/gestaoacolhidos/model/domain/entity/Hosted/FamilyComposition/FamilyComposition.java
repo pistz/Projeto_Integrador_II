@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.FamilyTable.FamilyTable;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
@@ -26,9 +27,6 @@ public class FamilyComposition {
 
     @Column(nullable = false, name = "possui_vinculo_familiar")
     private boolean hasFamilyBond;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<FamilyTable> familyTable;
 
     @LastModifiedDate
     @Column(name = "updated_at")

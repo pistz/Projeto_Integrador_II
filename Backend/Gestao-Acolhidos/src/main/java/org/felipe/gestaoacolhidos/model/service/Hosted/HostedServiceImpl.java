@@ -5,6 +5,7 @@ import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Documents.Documents
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.SituationalRisk.SituationalRisk;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.*;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.Documents.DocumentsUpdateDTO;
+import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyTableMemberDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.SituationalRisk.SituationalRiskUpdateDTO;
 import org.felipe.gestaoacolhidos.model.exceptions.HostedAlreadyRegisteredException;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Hosted;
@@ -168,8 +169,13 @@ public class HostedServiceImpl implements HostedService {
     }
 
     @Override
-    public HostedResponseUpdatedDTO updateFamilyComposition(Hosted hosted) {
+    public HostedResponseUpdatedDTO updateFamilyComposition(UUID hostedId, Hosted hosted) {
         //TODO - composição familiar
+        return null;
+    }
+
+    @Override
+    public HostedResponseUpdatedDTO updateFamilyTable(UUID id, FamilyTableMemberDTO dto) {
         return null;
     }
 

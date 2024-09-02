@@ -1,4 +1,4 @@
-package org.felipe.gestaoacolhidos.model.domain.entity.Hosted.FamilyComposition;
+package org.felipe.gestaoacolhidos.model.domain.entity.Hosted.FamilyTable;
 
 
 import jakarta.persistence.*;
@@ -42,7 +42,7 @@ public class FamilyTable {
     private Education education;
 
     @Column(name = "ocupacao_profissional")
-    private String ocupation;
+    private String occupation;
 
     @LastModifiedDate
     @Column(name = "updated_at")
