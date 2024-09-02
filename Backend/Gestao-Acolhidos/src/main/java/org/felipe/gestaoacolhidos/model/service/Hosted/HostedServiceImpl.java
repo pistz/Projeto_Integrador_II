@@ -2,9 +2,12 @@ package org.felipe.gestaoacolhidos.model.service.Hosted;
 
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.BirthCertificate.BirthCertificate;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Documents.Documents;
+import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.FamilyComposition.FamilyComposition;
+import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.FamilyTable.FamilyTable;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.SituationalRisk.SituationalRisk;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.*;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.Documents.DocumentsUpdateDTO;
+import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyCompositionDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyTableMemberDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.SituationalRisk.SituationalRiskUpdateDTO;
 import org.felipe.gestaoacolhidos.model.exceptions.HostedAlreadyRegisteredException;
@@ -15,11 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class HostedServiceImpl implements HostedService {
@@ -142,7 +143,6 @@ public class HostedServiceImpl implements HostedService {
 
     @Override
     public HostedResponseUpdatedDTO updateSituacionalRisk(UUID hostedId, SituationalRiskUpdateDTO dto) {
-        //TODO - risco situacional
         Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
 
         Hosted updateHostedSituacionalRisk = registeredHosted.get();
@@ -169,14 +169,54 @@ public class HostedServiceImpl implements HostedService {
     }
 
     @Override
-    public HostedResponseUpdatedDTO updateFamilyComposition(UUID hostedId, Hosted hosted) {
-        //TODO - composição familiar
-        return null;
+    public HostedResponseUpdatedDTO updateHasFamily(UUID hostedId, FamilyCompositionDTO dto) {
+        Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
+        Hosted updateHostedFamilyComposition = registeredHosted.get();
+        FamilyComposition familyComposition;
+        if(updateHostedFamilyComposition.getFamilyComposition() == null){
+            familyComposition = new FamilyComposition();
+            familyComposition.setId(UUID.randomUUID());
+            updateHostedFamilyComposition.setFamilyComposition(familyComposition);
+        }else{
+            familyComposition = updateHostedFamilyComposition.getFamilyComposition();
+        }
+        familyComposition.setHasFamily(dto.hasFamily());
+        familyComposition.setHasFamilyBond(dto.hasFamilyBond());
+        familyComposition.setUpdatedAt(LocalDate.now());
+
+        updateHostedFamilyComposition.setFamilyComposition(familyComposition);
+        updateHostedFamilyComposition.setUpdatedBy(interceptor.getRegisteredUser());
+        updateHostedFamilyComposition.setUpdatedAt(LocalDate.now());
+        hostedRepository.save(updateHostedFamilyComposition);
+        return new HostedResponseUpdatedDTO("Registro atualizado");
     }
 
     @Override
-    public HostedResponseUpdatedDTO updateFamilyTable(UUID id, FamilyTableMemberDTO dto) {
-        return null;
+    public HostedResponseUpdatedDTO updateFamilyTable(UUID hostedId, List<FamilyTableMemberDTO> memberListDto) {
+        Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
+        Hosted updateHostedFamilyTable = registeredHosted.get();
+        if(updateHostedFamilyTable.getFamilyComposition() == null &&
+            !updateHostedFamilyTable.getFamilyComposition().isHasFamily() &&
+                !updateHostedFamilyTable.getFamilyComposition().isHasFamilyBond()
+        ){
+            throw new NoSuchElementException("Acolhido foi marcado como sem vínculo familiar, atualize a existência de vínculo familiar");
+        }
+        List<FamilyTable> familyTableList;
+        if(updateHostedFamilyTable.getFamilyTable() == null){
+            familyTableList = new ArrayList<>();
+            updateHostedFamilyTable.setFamilyTable(familyTableList);
+        }else{
+            familyTableList = updateHostedFamilyTable.getFamilyTable();
+        }
+
+        for(FamilyTableMemberDTO member : memberListDto){
+            familyTableList.add(createFamilyTableMember(member));
+        }
+        updateHostedFamilyTable.setFamilyTable(familyTableList);
+        updateHostedFamilyTable.setUpdatedBy(interceptor.getRegisteredUser());
+        updateHostedFamilyTable.setUpdatedAt(LocalDate.now());
+        hostedRepository.save(updateHostedFamilyTable);
+        return new HostedResponseUpdatedDTO("Registro atualizado");
     }
 
     @Override
@@ -220,6 +260,19 @@ public class HostedServiceImpl implements HostedService {
             throw new NoSuchElementException("Acolhido não existe");
         }
         return registeredHosted;
+    }
+
+    private FamilyTable createFamilyTableMember(FamilyTableMemberDTO dto) {
+        FamilyTable familyTable = new FamilyTable();
+        familyTable.setId(UUID.randomUUID());
+        familyTable.setName(dto.name());
+        familyTable.setAge(dto.age());
+        familyTable.setGender(dto.gender());
+        familyTable.setMaritalStatus(dto.maritalStatus());
+        familyTable.setOccupation(dto.occupation());
+        familyTable.setEducation(dto.education());
+        familyTable.setUpdatedAt(LocalDate.now());
+        return familyTable;
     }
 
 }

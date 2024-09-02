@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Hosted;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.Documents.DocumentsUpdateDTO;
+import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyCompositionDTO;
+import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyTableMemberDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.HostedCreateNewDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.HostedResponseCreatedDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.HostedResponseDeletedDTO;
@@ -102,6 +104,29 @@ public class HostedController {
     })
     public ResponseEntity<HostedResponseUpdatedDTO> updateHostedSituationalRisk(@PathVariable UUID id, @RequestBody SituationalRiskUpdateDTO dto){
         var updated = hostedService.updateSituacionalRisk(id, dto);
+        return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(updated);
+    }
+
+    @PutMapping("/update-has-family/{id}")
+    @Operation(description = "Atualiza as informações sobre a existência de vínculo familiar do Acolhido", method = "PUT")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Registro atualizado"),
+            @ApiResponse(responseCode = "404", description = "Acolhido não existe")
+    })
+    public ResponseEntity<HostedResponseUpdatedDTO> updateHostedHasFamily(@PathVariable UUID id, @RequestBody FamilyCompositionDTO dto){
+        var updated = hostedService.updateHasFamily(id, dto);
+        return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(updated);
+    }
+
+    @PutMapping("/update-family-member/{id}")
+    @Operation(description = "Atualiza as informações sobre a existência de vínculo familiar do Acolhido", method = "PUT")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Registro atualizado"),
+            @ApiResponse(responseCode = "404", description = "Acolhido não existe"),
+            @ApiResponse(responseCode = "404", description = "Vínculo familiar não existe")
+    })
+    public ResponseEntity<HostedResponseUpdatedDTO> updateFamilyMember(@PathVariable UUID id, @RequestBody List<FamilyTableMemberDTO> dto){
+        var updated = hostedService.updateFamilyTable(id, dto);
         return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(updated);
     }
 }

@@ -35,6 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                System.out.println(SecurityContextHolder.getContext());
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }else{
                 logger.warn("User not found for email: " + email);

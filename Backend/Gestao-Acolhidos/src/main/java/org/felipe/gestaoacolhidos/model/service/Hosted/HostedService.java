@@ -3,6 +3,7 @@ package org.felipe.gestaoacolhidos.model.service.Hosted;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Hosted;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.*;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.Documents.DocumentsUpdateDTO;
+import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyCompositionDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyTableMemberDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.SituationalRisk.SituationalRiskUpdateDTO;
 
@@ -19,8 +20,8 @@ public interface HostedService {
 
     HostedResponseUpdatedDTO updateDocuments(UUID hostedId, DocumentsUpdateDTO documents);
     HostedResponseUpdatedDTO updateSituacionalRisk(UUID hostedId, SituationalRiskUpdateDTO dto);
-    HostedResponseUpdatedDTO updateFamilyComposition(UUID hostedId, Hosted hosted);
-    HostedResponseUpdatedDTO updateFamilyTable(UUID id, FamilyTableMemberDTO dto);
+    HostedResponseUpdatedDTO updateHasFamily(UUID hostedId, FamilyCompositionDTO dto);
+    HostedResponseUpdatedDTO updateFamilyTable(UUID hostedId, List<FamilyTableMemberDTO> listDto);
     HostedResponseUpdatedDTO updatePoliceReport(Hosted hosted);
     HostedResponseUpdatedDTO updateReferenceAddress(Hosted hosted);
     HostedResponseUpdatedDTO updateSocialPrograms(Hosted hosted);

@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 
 @Component
 public class UserLoggingInterceptor implements HandlerInterceptor {
@@ -27,6 +28,18 @@ public class UserLoggingInterceptor implements HandlerInterceptor {
             logger.info("Anonymous user is making a request to {}", request.getRequestURI());
         }
         return true;
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
+        var user = getRegisteredUser();
+        if (user != null) {
+            logger.info("User: {} made a successful request to {} from {}, status {}",
+                    getRegisteredUser(), request.getRequestURI(), request.getRemoteAddr(), response.getStatus());
+        }else{
+            logger.info("Anonymous user made a successful request to {}, from {}, status {}",
+                    request.getRequestURI(), request.getRemoteAddr(), response.getStatus());
+        }
     }
 
     private void registerUser(String username){

@@ -17,7 +17,7 @@ public class NightStand {
     @Column(nullable = false)
     private LocalDate eventDate;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "acolhidos_dia")
     @OneToMany
     private List<Hosted> hosteds;
 }
