@@ -5,12 +5,14 @@ import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Documents.Documents
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.FamilyComposition.FamilyComposition;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.FamilyTable.FamilyTable;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.PoliceReport.PoliceReport;
+import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.ReferenceAddress.ReferenceAddress;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.SituationalRisk.SituationalRisk;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.*;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.Documents.DocumentsUpdateDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyCompositionDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyTableMemberDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.PoliceReport.PoliceReportDTO;
+import org.felipe.gestaoacolhidos.model.dto.Hosted.ReferenceAddress.ReferenceAddressDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.SituationalRisk.SituationalRiskUpdateDTO;
 import org.felipe.gestaoacolhidos.model.exceptions.HostedAlreadyRegisteredException;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Hosted;
@@ -250,9 +252,31 @@ public class HostedServiceImpl implements HostedService {
     }
 
     @Override
-    public HostedResponseUpdatedDTO updateReferenceAddress(Hosted hosted) {
-        //TODO - endereço de referencia
-        return null;
+    public HostedResponseUpdatedDTO updateReferenceAddress(UUID hostedId, ReferenceAddressDTO dto) {
+        Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
+        Hosted updatedHostedReferenceAddress = registeredHosted.get();
+        ReferenceAddress updateReferenceAddress;
+        if(updatedHostedReferenceAddress.getReferenceAddress() == null){
+            updateReferenceAddress = new ReferenceAddress();
+            updateReferenceAddress.setId(UUID.randomUUID());
+            updatedHostedReferenceAddress.setReferenceAddress(updateReferenceAddress);
+        }else{
+            updateReferenceAddress = updatedHostedReferenceAddress.getReferenceAddress();
+        }
+        updateReferenceAddress.setStreet(dto.street());
+        updateReferenceAddress.setNeighborhood(dto.neighborhood());
+        updateReferenceAddress.setNumber(dto.number());
+        updateReferenceAddress.setCidade(dto.city());
+        updateReferenceAddress.setCep(dto.cep());
+        updateReferenceAddress.setPhoneNumber(dto.phoneNumber());
+        updateReferenceAddress.setUpdatedAt(LocalDate.now());
+
+        updatedHostedReferenceAddress.setReferenceAddress(updateReferenceAddress);
+        updatedHostedReferenceAddress.setUpdatedAt(LocalDate.now());
+        updatedHostedReferenceAddress.setUpdatedBy(interceptor.getRegisteredUser());
+
+        hostedRepository.save(updatedHostedReferenceAddress);
+        return new HostedResponseUpdatedDTO("Registro atualizado");
     }
 
     @Override

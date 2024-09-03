@@ -6,6 +6,7 @@ import org.felipe.gestaoacolhidos.model.dto.Hosted.Documents.DocumentsUpdateDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyCompositionDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyTableMemberDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.PoliceReport.PoliceReportDTO;
+import org.felipe.gestaoacolhidos.model.dto.Hosted.ReferenceAddress.ReferenceAddressDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.SituationalRisk.SituationalRiskUpdateDTO;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public interface HostedService {
     HostedResponseUpdatedDTO updateHasFamily(UUID hostedId, FamilyCompositionDTO dto);
     HostedResponseUpdatedDTO updateFamilyTable(UUID hostedId, List<FamilyTableMemberDTO> listDto);
     HostedResponseUpdatedDTO updatePoliceReport(UUID hostedId, PoliceReportDTO dto);
-    HostedResponseUpdatedDTO updateReferenceAddress(Hosted hosted);
+    HostedResponseUpdatedDTO updateReferenceAddress(UUID hostedId, ReferenceAddressDTO dto);
     HostedResponseUpdatedDTO updateSocialPrograms(Hosted hosted);
     HostedResponseUpdatedDTO updateMedicalRecord(Hosted hosted);
     HostedResponseUpdatedDTO updateCustomTreatments(Hosted hosted);

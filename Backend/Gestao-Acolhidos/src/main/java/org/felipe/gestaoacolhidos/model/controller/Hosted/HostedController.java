@@ -13,6 +13,7 @@ import org.felipe.gestaoacolhidos.model.dto.Hosted.HostedResponseCreatedDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.HostedResponseDeletedDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.HostedResponseUpdatedDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.PoliceReport.PoliceReportDTO;
+import org.felipe.gestaoacolhidos.model.dto.Hosted.ReferenceAddress.ReferenceAddressDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.SituationalRisk.SituationalRiskUpdateDTO;
 import org.felipe.gestaoacolhidos.model.service.Hosted.HostedService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -139,6 +140,17 @@ public class HostedController {
     })
     public ResponseEntity<HostedResponseUpdatedDTO> updateHostedPoliceReport(@PathVariable UUID id, @RequestBody PoliceReportDTO dto){
         var updated = hostedService.updatePoliceReport(id, dto);
+        return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(updated);
+    }
+
+    @PutMapping("/update-ref-address/{id}")
+    @Operation(description = "Atualiza ou cria endereço de referência do Acolhido", method = "PUT")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Registro atualizado"),
+            @ApiResponse(responseCode = "404", description = "Acolhido não existe")
+    })
+    public ResponseEntity<HostedResponseUpdatedDTO> updateHostedReferenceAddress(@PathVariable UUID id, @RequestBody ReferenceAddressDTO dto){
+        var updated = hostedService.updateReferenceAddress(id, dto);
         return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(updated);
     }
 }
