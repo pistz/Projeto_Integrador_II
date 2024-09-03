@@ -2,6 +2,7 @@ package org.felipe.gestaoacolhidos.model.service.Hosted;
 
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Hosted;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.*;
+import org.felipe.gestaoacolhidos.model.dto.Hosted.CustomTreatments.CustomTreatmentsDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.Documents.DocumentsUpdateDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyCompositionDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyTableMemberDTO;
@@ -30,5 +31,5 @@ public interface HostedService {
     HostedResponseUpdatedDTO updateReferenceAddress(UUID hostedId, ReferenceAddressDTO dto);
     HostedResponseUpdatedDTO updateSocialPrograms(UUID hostedId, SocialProgramsDTO dto);
     HostedResponseUpdatedDTO updateMedicalRecord(UUID hostedId, MedicalRecordDTO dto);
-    HostedResponseUpdatedDTO updateCustomTreatments(Hosted hosted);
+    HostedResponseUpdatedDTO updateCustomTreatments(UUID hostedId, CustomTreatmentsDTO dto);
 }

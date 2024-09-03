@@ -28,9 +28,4 @@ public class CustomTreatments {
 
     @Column(name = "created_at")
     private LocalDate createdAt;
-
-    @Column(name = "updated_at")
-    @LastModifiedDate
-    private LocalDate updatedAt;
-
 }

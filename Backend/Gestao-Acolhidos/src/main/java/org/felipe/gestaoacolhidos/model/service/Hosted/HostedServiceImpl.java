@@ -1,6 +1,7 @@
 package org.felipe.gestaoacolhidos.model.service.Hosted;
 
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.BirthCertificate.BirthCertificate;
+import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.CustomTreatments.CustomTreatments;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Documents.Documents;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.FamilyComposition.FamilyComposition;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.FamilyTable.FamilyTable;
@@ -10,6 +11,7 @@ import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.ReferenceAddress.Re
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.SituationalRisk.SituationalRisk;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.SocialPrograms.SocialPrograms;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.*;
+import org.felipe.gestaoacolhidos.model.dto.Hosted.CustomTreatments.CustomTreatmentsDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.Documents.DocumentsUpdateDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyCompositionDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyTableMemberDTO;
@@ -343,9 +345,28 @@ public class HostedServiceImpl implements HostedService {
     }
 
     @Override
-    public HostedResponseUpdatedDTO updateCustomTreatments(Hosted hosted) {
-        //TODO - plano personalizado de tratamentos
-        return null;
+    public HostedResponseUpdatedDTO updateCustomTreatments(UUID hostedId, CustomTreatmentsDTO dto) {
+        Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
+        Hosted updateHostedCustomProcedures = registeredHosted.get();
+        List<CustomTreatments> customTreatments;
+        if(updateHostedCustomProcedures.getCustomTreatments() == null){
+            customTreatments = new ArrayList<>();
+            updateHostedCustomProcedures.setCustomTreatments(customTreatments);
+        }
+        customTreatments = updateHostedCustomProcedures.getCustomTreatments();
+        CustomTreatments customTreatment = new CustomTreatments();
+        customTreatment.setId(UUID.randomUUID());
+        customTreatment.setCreatedAt(LocalDate.now());
+        customTreatment.setProcedure(dto.procedure());
+
+        customTreatments.add(customTreatment);
+
+        updateHostedCustomProcedures.setCustomTreatments(customTreatments);
+        updateHostedCustomProcedures.setUpdatedAt(LocalDate.now());
+        updateHostedCustomProcedures.setUpdatedBy(interceptor.getRegisteredUser());
+
+        hostedRepository.save(updateHostedCustomProcedures);
+        return new HostedResponseUpdatedDTO("Registro atualizado");
     }
 
     private boolean validateCPF(String cpf) {

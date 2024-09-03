@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Hosted;
+import org.felipe.gestaoacolhidos.model.dto.Hosted.CustomTreatments.CustomTreatmentsDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.Documents.DocumentsUpdateDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyCompositionDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyTableMemberDTO;
@@ -175,6 +176,17 @@ public class HostedController {
     })
     public ResponseEntity<HostedResponseUpdatedDTO> updateHostedMedicalRecord(@PathVariable UUID id, @RequestBody MedicalRecordDTO dto){
         var updated = hostedService.updateMedicalRecord(id, dto);
+        return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(updated);
+    }
+
+    @PutMapping("/update-treatments/{id}")
+    @Operation(description = "Atualiza ou cria histórico de tratamentos médicos ou psicológicos do Acolhido", method = "PUT")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Registro atualizado"),
+            @ApiResponse(responseCode = "404", description = "Acolhido não existe")
+    })
+    public ResponseEntity<HostedResponseUpdatedDTO> updateHostedCustomTreatments(@PathVariable UUID id, @RequestBody CustomTreatmentsDTO dto){
+        var updated = hostedService.updateCustomTreatments(id, dto);
         return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(updated);
     }
 }
