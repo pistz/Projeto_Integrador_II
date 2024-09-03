@@ -55,7 +55,7 @@ public class Hosted {
     private LocalDate birthDay;
 
     @Column(name = "idade")
-    private int age = this.getAge();
+    private int age;
 
     @Column(name = "nome_pai")
     private String fathersName;
@@ -116,7 +116,6 @@ public class Hosted {
     @Column(name = "updated_by")
     @LastModifiedBy
     private String updatedBy;
-
 
     public int getAge() {
         if(birthDay == null) {

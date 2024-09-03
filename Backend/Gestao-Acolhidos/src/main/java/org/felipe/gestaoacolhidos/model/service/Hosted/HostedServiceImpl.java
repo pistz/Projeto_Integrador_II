@@ -7,6 +7,7 @@ import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.FamilyTable.FamilyT
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.PoliceReport.PoliceReport;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.ReferenceAddress.ReferenceAddress;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.SituationalRisk.SituationalRisk;
+import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.SocialPrograms.SocialPrograms;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.*;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.Documents.DocumentsUpdateDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyCompositionDTO;
@@ -14,6 +15,7 @@ import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyTable
 import org.felipe.gestaoacolhidos.model.dto.Hosted.PoliceReport.PoliceReportDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.ReferenceAddress.ReferenceAddressDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.SituationalRisk.SituationalRiskUpdateDTO;
+import org.felipe.gestaoacolhidos.model.dto.Hosted.SocialPrograms.SocialProgramsDTO;
 import org.felipe.gestaoacolhidos.model.exceptions.HostedAlreadyRegisteredException;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Hosted;
 import org.felipe.gestaoacolhidos.model.logs.UserLoggingInterceptor;
@@ -117,9 +119,9 @@ public class HostedServiceImpl implements HostedService {
             documents = new Documents();
             documents.setId(UUID.randomUUID());
             updateHostedDocuments.setOtherDocuments(documents);
-        }else{
-            documents = updateHostedDocuments.getOtherDocuments();
         }
+        documents = updateHostedDocuments.getOtherDocuments();
+
         documents.setGeneralRegisterRG(dto.generalRegisterRG());
         documents.setDateOfIssueRG(dto.dateOfIssueRG());
         if(dto.driversLicenseNumber() != null){
@@ -155,9 +157,9 @@ public class HostedServiceImpl implements HostedService {
             situationalRisk = new SituationalRisk();
             situationalRisk.setId(UUID.randomUUID());
             updateHostedSituacionalRisk.setSituationalRisk(situationalRisk);
-        }else{
-            situationalRisk = updateHostedSituacionalRisk.getSituationalRisk();
         }
+        situationalRisk = updateHostedSituacionalRisk.getSituationalRisk();
+
         situationalRisk.setLookUp(dto.lookUp());
         situationalRisk.setMigrant(dto.migrant());
         situationalRisk.setHomeless(dto.homeless());
@@ -181,9 +183,9 @@ public class HostedServiceImpl implements HostedService {
             familyComposition = new FamilyComposition();
             familyComposition.setId(UUID.randomUUID());
             updateHostedFamilyComposition.setFamilyComposition(familyComposition);
-        }else{
-            familyComposition = updateHostedFamilyComposition.getFamilyComposition();
         }
+        familyComposition = updateHostedFamilyComposition.getFamilyComposition();
+
         familyComposition.setHasFamily(dto.hasFamily());
         familyComposition.setHasFamilyBond(dto.hasFamilyBond());
         familyComposition.setUpdatedAt(LocalDate.now());
@@ -209,9 +211,9 @@ public class HostedServiceImpl implements HostedService {
         if(updateHostedFamilyTable.getFamilyTable() == null){
             familyTableList = new ArrayList<>();
             updateHostedFamilyTable.setFamilyTable(familyTableList);
-        }else{
-            familyTableList = updateHostedFamilyTable.getFamilyTable();
         }
+        familyTableList = updateHostedFamilyTable.getFamilyTable();
+
 
         for(FamilyTableMemberDTO member : memberListDto){
             familyTableList.add(createFamilyTableMember(member));
@@ -261,9 +263,9 @@ public class HostedServiceImpl implements HostedService {
             updateReferenceAddress = new ReferenceAddress();
             updateReferenceAddress.setId(UUID.randomUUID());
             updatedHostedReferenceAddress.setReferenceAddress(updateReferenceAddress);
-        }else{
-            updateReferenceAddress = updatedHostedReferenceAddress.getReferenceAddress();
         }
+        updateReferenceAddress = updatedHostedReferenceAddress.getReferenceAddress();
+
         updateReferenceAddress.setStreet(dto.street());
         updateReferenceAddress.setNeighborhood(dto.neighborhood());
         updateReferenceAddress.setNumber(dto.number());
@@ -281,8 +283,37 @@ public class HostedServiceImpl implements HostedService {
     }
 
     @Override
-    public HostedResponseUpdatedDTO updateSocialPrograms(Hosted hosted) {
+    public HostedResponseUpdatedDTO updateSocialPrograms(UUID hostedId, SocialProgramsDTO dto) {
         //TODO - programas sociais
+        Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
+        Hosted updateHostedSocialPrograms = registeredHosted.get();
+        SocialPrograms socialPrograms;
+        if(updateHostedSocialPrograms.getSocialPrograms() == null){
+            socialPrograms = new SocialPrograms();
+            socialPrograms.setId(UUID.randomUUID());
+            updateHostedSocialPrograms.setSocialPrograms(socialPrograms);
+        }
+        socialPrograms = updateHostedSocialPrograms.getSocialPrograms();
+
+        socialPrograms.setHasPasseDeficiente(dto.hasPasseDeficiente());
+        socialPrograms.setHasPasseIdoso(dto.hasPasseIdoso());
+        socialPrograms.setHasRendaCidada(dto.hasRendaCidada());
+        socialPrograms.setHasAcaoJovem(dto.hasAcaoJovem());
+        socialPrograms.setHasVivaLeite(dto.hasVivaLeite());
+        socialPrograms.setHasBPC_LOAS(dto.hasBPC_LOAS());
+        socialPrograms.setHasBolsaFamilia(dto.hasBolsaFamilia());
+        socialPrograms.setHasPETI(dto.hasPETI());
+
+        socialPrograms.setOthers(dto.others());
+        socialPrograms.setHowLong(dto.howLong());
+        socialPrograms.setWage(dto.wage());
+        socialPrograms.setUpdatedAt(LocalDate.now());
+
+        updateHostedSocialPrograms.setSocialPrograms(socialPrograms);
+        updateHostedSocialPrograms.setUpdatedAt(LocalDate.now());
+        updateHostedSocialPrograms.setUpdatedBy(interceptor.getRegisteredUser());
+        hostedRepository.save(updateHostedSocialPrograms);
+
         return null;
     }
 
