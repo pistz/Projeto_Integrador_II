@@ -72,7 +72,8 @@ public class UserServiceImpl implements UserService {
         if(exists.isEmpty()) {
             throw new NoSuchElementException("Not found user with id: " + id);
         }
-        return new UserResponseDTO(exists.get().getId(), exists.get().getEmail(), exists.get().getRoles());
+        User found = exists.get();
+        return new UserResponseDTO(found.getId(), found.getEmail(), found.getRoles());
     }
 
     private boolean validateEmail(String email) {
