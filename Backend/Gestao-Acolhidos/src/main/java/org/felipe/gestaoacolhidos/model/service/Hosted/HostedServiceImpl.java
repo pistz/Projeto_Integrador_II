@@ -57,6 +57,7 @@ public class HostedServiceImpl implements HostedService {
                 .stateOrigin(hosted.stateOrigin())
                 .createdAt(LocalDate.now())
                 .build();
+        registerHosted.setAge(registerHosted.getAge());
         hostedRepository.save(registerHosted);
         return new HostedResponseCreatedDTO("Acolhido registrado");
     }

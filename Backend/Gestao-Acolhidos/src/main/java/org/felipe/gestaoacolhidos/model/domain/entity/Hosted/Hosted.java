@@ -118,7 +118,7 @@ public class Hosted {
     private String updatedBy;
 
 
-    private int getAge() {
+    public int getAge() {
         if(birthDay == null) {
             return 0;
         }
