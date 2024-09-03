@@ -11,7 +11,6 @@ import org.felipe.gestaoacolhidos.model.domain.enums.maritalStatus.MaritalStatus
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
-import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -48,17 +47,4 @@ public class FamilyTable {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDate updatedAt;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        FamilyTable that = (FamilyTable) o;
-        return Objects.equals(name, that.name) && gender == that.gender;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, gender);
-    }
 }

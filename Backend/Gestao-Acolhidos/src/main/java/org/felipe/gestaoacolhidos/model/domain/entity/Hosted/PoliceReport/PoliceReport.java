@@ -30,6 +30,9 @@ public class PoliceReport {
     @Column(name = "cidade_delegacia")
     private String city;
 
+    @Column(name = "informacoes_adicionais")
+    private String reportInfo;
+
     @Column(name = "created_at")
     private LocalDate createdAt;
 }

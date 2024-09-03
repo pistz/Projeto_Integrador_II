@@ -4,11 +4,13 @@ import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.BirthCertificate.Bi
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Documents.Documents;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.FamilyComposition.FamilyComposition;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.FamilyTable.FamilyTable;
+import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.PoliceReport.PoliceReport;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.SituationalRisk.SituationalRisk;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.*;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.Documents.DocumentsUpdateDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyCompositionDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyTableMemberDTO;
+import org.felipe.gestaoacolhidos.model.dto.Hosted.PoliceReport.PoliceReportDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.SituationalRisk.SituationalRiskUpdateDTO;
 import org.felipe.gestaoacolhidos.model.exceptions.HostedAlreadyRegisteredException;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Hosted;
@@ -20,7 +22,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Service
 public class HostedServiceImpl implements HostedService {
@@ -220,9 +221,32 @@ public class HostedServiceImpl implements HostedService {
     }
 
     @Override
-    public HostedResponseUpdatedDTO updatePoliceReport(Hosted hosted) {
-        //TODO - boletim de ocorrencia
-        return null;
+    public HostedResponseUpdatedDTO updatePoliceReport(UUID hostedId, PoliceReportDTO dto) {
+        Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
+        Hosted updateHostedPoliceReport = registeredHosted.get();
+        List<PoliceReport> policeReportList;
+        if(updateHostedPoliceReport.getPoliceReport() == null){
+            policeReportList = new ArrayList<>();
+            updateHostedPoliceReport.setPoliceReport(policeReportList);
+        }
+        policeReportList = updateHostedPoliceReport.getPoliceReport();
+
+        PoliceReport updatePoliceReport = new PoliceReport();
+        updatePoliceReport.setId(UUID.randomUUID());
+        updatePoliceReport.setPoliceDepartment(dto.policeDepartment());
+        updatePoliceReport.setReportProtocol(dto.reportProtocol());
+        updatePoliceReport.setCity(dto.city());
+        updatePoliceReport.setReportInfo(dto.reportInfo());
+        updatePoliceReport.setCreatedAt(LocalDate.now());
+
+        policeReportList.add(updatePoliceReport);
+
+        updateHostedPoliceReport.setPoliceReport(policeReportList);
+        updateHostedPoliceReport.setUpdatedAt(LocalDate.now());
+        updateHostedPoliceReport.setUpdatedBy(interceptor.getRegisteredUser());
+
+        hostedRepository.save(updateHostedPoliceReport);
+        return new HostedResponseUpdatedDTO("Registro atualizado");
     }
 
     @Override

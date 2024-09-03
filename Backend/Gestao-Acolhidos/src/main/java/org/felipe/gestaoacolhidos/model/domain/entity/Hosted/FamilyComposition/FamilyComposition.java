@@ -5,11 +5,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.FamilyTable.FamilyTable;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
