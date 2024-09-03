@@ -5,6 +5,7 @@ import org.felipe.gestaoacolhidos.model.dto.Hosted.*;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.Documents.DocumentsUpdateDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyCompositionDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyTableMemberDTO;
+import org.felipe.gestaoacolhidos.model.dto.Hosted.MedicalRecord.MedicalRecordDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.PoliceReport.PoliceReportDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.ReferenceAddress.ReferenceAddressDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.SituationalRisk.SituationalRiskUpdateDTO;
@@ -28,6 +29,6 @@ public interface HostedService {
     HostedResponseUpdatedDTO updatePoliceReport(UUID hostedId, PoliceReportDTO dto);
     HostedResponseUpdatedDTO updateReferenceAddress(UUID hostedId, ReferenceAddressDTO dto);
     HostedResponseUpdatedDTO updateSocialPrograms(UUID hostedId, SocialProgramsDTO dto);
-    HostedResponseUpdatedDTO updateMedicalRecord(Hosted hosted);
+    HostedResponseUpdatedDTO updateMedicalRecord(UUID hostedId, MedicalRecordDTO dto);
     HostedResponseUpdatedDTO updateCustomTreatments(Hosted hosted);
 }

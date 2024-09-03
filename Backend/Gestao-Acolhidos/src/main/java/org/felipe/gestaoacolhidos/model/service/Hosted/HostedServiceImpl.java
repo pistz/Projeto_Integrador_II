@@ -4,6 +4,7 @@ import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.BirthCertificate.Bi
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Documents.Documents;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.FamilyComposition.FamilyComposition;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.FamilyTable.FamilyTable;
+import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.MedicalRecord.MedicalRecord;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.PoliceReport.PoliceReport;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.ReferenceAddress.ReferenceAddress;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.SituationalRisk.SituationalRisk;
@@ -12,6 +13,7 @@ import org.felipe.gestaoacolhidos.model.dto.Hosted.*;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.Documents.DocumentsUpdateDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyCompositionDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.FamilyComposition.FamilyTableMemberDTO;
+import org.felipe.gestaoacolhidos.model.dto.Hosted.MedicalRecord.MedicalRecordDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.PoliceReport.PoliceReportDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.ReferenceAddress.ReferenceAddressDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.SituationalRisk.SituationalRiskUpdateDTO;
@@ -284,7 +286,6 @@ public class HostedServiceImpl implements HostedService {
 
     @Override
     public HostedResponseUpdatedDTO updateSocialPrograms(UUID hostedId, SocialProgramsDTO dto) {
-        //TODO - programas sociais
         Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
         Hosted updateHostedSocialPrograms = registeredHosted.get();
         SocialPrograms socialPrograms;
@@ -314,13 +315,31 @@ public class HostedServiceImpl implements HostedService {
         updateHostedSocialPrograms.setUpdatedBy(interceptor.getRegisteredUser());
         hostedRepository.save(updateHostedSocialPrograms);
 
-        return null;
+        return new HostedResponseUpdatedDTO("Registro atualizado");
     }
 
     @Override
-    public HostedResponseUpdatedDTO updateMedicalRecord(Hosted hosted) {
-        //TODO - boletim de saúde
-        return null;
+    public HostedResponseUpdatedDTO updateMedicalRecord(UUID hostedId, MedicalRecordDTO dto) {
+        Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
+        Hosted updateHostedMedicalRecord = registeredHosted.get();
+        List<MedicalRecord> medicalRecords;
+        if(updateHostedMedicalRecord.getMedicalRecord() == null){
+            medicalRecords = new ArrayList<>();
+            updateHostedMedicalRecord.setMedicalRecord(medicalRecords);
+        }
+        medicalRecords = updateHostedMedicalRecord.getMedicalRecord();
+        MedicalRecord medicalRecord = new MedicalRecord();
+        medicalRecord.setId(UUID.randomUUID());
+        medicalRecord.setComplaints(dto.complaints());
+        medicalRecord.setCreatedAt(LocalDate.now());
+        medicalRecords.add(medicalRecord);
+
+        updateHostedMedicalRecord.setMedicalRecord(medicalRecords);
+        updateHostedMedicalRecord.setUpdatedAt(LocalDate.now());
+        updateHostedMedicalRecord.setUpdatedBy(interceptor.getRegisteredUser());
+
+        hostedRepository.save(updateHostedMedicalRecord);
+        return new HostedResponseUpdatedDTO("Registro atualizado");
     }
 
     @Override

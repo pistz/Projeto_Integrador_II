@@ -12,9 +12,11 @@ import org.felipe.gestaoacolhidos.model.dto.Hosted.HostedCreateNewDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.HostedResponseCreatedDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.HostedResponseDeletedDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.HostedResponseUpdatedDTO;
+import org.felipe.gestaoacolhidos.model.dto.Hosted.MedicalRecord.MedicalRecordDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.PoliceReport.PoliceReportDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.ReferenceAddress.ReferenceAddressDTO;
 import org.felipe.gestaoacolhidos.model.dto.Hosted.SituationalRisk.SituationalRiskUpdateDTO;
+import org.felipe.gestaoacolhidos.model.dto.Hosted.SocialPrograms.SocialProgramsDTO;
 import org.felipe.gestaoacolhidos.model.service.Hosted.HostedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
@@ -151,6 +153,28 @@ public class HostedController {
     })
     public ResponseEntity<HostedResponseUpdatedDTO> updateHostedReferenceAddress(@PathVariable UUID id, @RequestBody ReferenceAddressDTO dto){
         var updated = hostedService.updateReferenceAddress(id, dto);
+        return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(updated);
+    }
+
+    @PutMapping("/update-socials/{id}")
+    @Operation(description = "Atualiza participação do Acolhido em programas sociais", method = "PUT")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Registro atualizado"),
+            @ApiResponse(responseCode = "404", description = "Acolhido não existe")
+    })
+    public ResponseEntity<HostedResponseUpdatedDTO> updateHostedSocialPrograms(@PathVariable UUID id, @RequestBody SocialProgramsDTO dto){
+        var updated = hostedService.updateSocialPrograms(id, dto);
+        return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(updated);
+    }
+
+    @PutMapping("/update-medical-record/{id}")
+    @Operation(description = "Atualiza ou cria prontuário médico do Acolhido", method = "PUT")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Registro atualizado"),
+            @ApiResponse(responseCode = "404", description = "Acolhido não existe")
+    })
+    public ResponseEntity<HostedResponseUpdatedDTO> updateHostedMedicalRecord(@PathVariable UUID id, @RequestBody MedicalRecordDTO dto){
+        var updated = hostedService.updateMedicalRecord(id, dto);
         return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(updated);
     }
 }

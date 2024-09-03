@@ -27,8 +27,4 @@ public class MedicalRecord {
 
     @Column(name = "created_at")
     private LocalDate createdAt;
-
-    @LastModifiedDate
-    @Column(name = "updated_at")
-    private LocalDate updatedAt;
 }
