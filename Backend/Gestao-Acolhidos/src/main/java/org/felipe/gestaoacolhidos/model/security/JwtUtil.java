@@ -1,15 +1,22 @@
 package org.felipe.gestaoacolhidos.model.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
+import com.nimbusds.jose.*;
+import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jose.crypto.MACVerifier;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.JWTParser;
+import com.nimbusds.jwt.SignedJWT;
+
 import jakarta.servlet.http.HttpServletRequest;
 import org.felipe.gestaoacolhidos.model.domain.enums.role.Role;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.text.ParseException;
+import java.time.Instant;
+import java.util.Base64;
 import java.util.Date;
 
 @Component
@@ -24,31 +31,74 @@ public class JwtUtil {
     private long EXPIRADE_TIME = 86400000;// 24 hours
 
     private SecretKey getJwtSecretKey() {
-        // Create a secure key using the base64-encoded key
         if (jwtSecret == null || jwtSecret.isEmpty()) {
             throw new IllegalStateException("JWT secret key is not configured");
         }
-        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
+
+        // Decode the Base64 encoded key
+        byte[] keyBytes = Base64.getDecoder().decode(jwtSecret);
+
+        // Create a SecretKeySpec using the decoded key bytes
+        return new SecretKeySpec(keyBytes, "HmacSHA512"); // Ensure the algorithm matches your signing algorithm
     }
-    public String generateToken(String username, Role role) {
-        return Jwts.builder()
-                .subject(username)
-                .claim("role", role)
-                .issuer(jwtIssuer)
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + EXPIRADE_TIME))
-                .signWith(SignatureAlgorithm.HS512, getJwtSecretKey())
-                .compact();
+    public String generateToken(String email, Role role) {
+        SecretKey key = getJwtSecretKey();
+        if (key == null) {
+            throw new IllegalStateException("JWT secret key is not configured");
+        }
+        try {
+            // Create the signing key
+            JWSSigner signer = new MACSigner(key.getEncoded());
+
+            // Prepare JWT with claims
+            JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
+                    .subject(email)
+                    .claim("role", role.name())
+                    .issuer(jwtIssuer)
+                    .issueTime(new Date())
+                    .expirationTime(new Date(System.currentTimeMillis() + EXPIRADE_TIME))
+                    .build();
+
+            // Create JWS object with the specified header and claims
+            SignedJWT signedJWT = new SignedJWT(
+                    new JWSHeader(JWSAlgorithm.HS512),
+                    claimsSet
+            );
+
+            // Sign the JWS object
+            signedJWT.sign(signer);
+
+            // Serialize to compact form
+            return signedJWT.serialize();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error while generating JWT", e);
+        }
     }
 
     public String getEmailFromToken(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(getJwtSecretKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            // Create the verifier
+            SecretKey key = getJwtSecretKey();
+            MACVerifier verifier = new MACVerifier(key.getEncoded());
 
-        return claims.getSubject();
+            // Parse the JWT
+            SignedJWT signedJWT = SignedJWT.parse(token);
+
+            // Verify the signature
+            if (!signedJWT.verify(verifier)) {
+                throw new IllegalArgumentException("Invalid JWT signature");
+            }
+
+            // Extract the claims
+            JWTClaimsSet claimsSet = signedJWT.getJWTClaimsSet();
+
+            // Get the subject (email)
+            return claimsSet.getSubject();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error while extracting email from JWT", e);
+        }
     }
 
     public String resolveToken(HttpServletRequest request) {
@@ -61,22 +111,33 @@ public class JwtUtil {
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(getJwtSecretKey()).build().parseClaimsJws(token);
+            // Analisar o token
+            SignedJWT signedJWT = SignedJWT.parse(token);
+
+            // Criar o verificador de assinatura
+            JWSVerifier verifier = new MACVerifier(getJwtSecretKey().getEncoded());
+
+            // Verificar a assinatura
+            if (!signedJWT.verify(verifier)) {
+                return false; // Assinatura inválida
+            }
+
+            // Obter as reivindicações (claims) do token
+            JWTClaimsSet claims = signedJWT.getJWTClaimsSet();
+            Date expiration = claims.getExpirationTime();
+            if (expiration != null && expiration.toInstant().isBefore(Instant.now())) {
+                // Token expirado
+                return false;
+            }
+
+            // Se chegou aqui, o token é válido
             return true;
-        } catch (io.jsonwebtoken.ExpiredJwtException e) {
-            // Token has expired
+
+        } catch (ParseException e) {
+            // Token não pode ser analisado
             return false;
-        } catch (io.jsonwebtoken.UnsupportedJwtException e) {
-            // Unsupported JWT
-            return false;
-        } catch (io.jsonwebtoken.MalformedJwtException e) {
-            // Malformed JWT
-            return false;
-        } catch (io.jsonwebtoken.SignatureException e) {
-            // Invalid signature
-            return false;
-        } catch (Exception e) {
-            // Other exceptions
+        } catch (JOSEException e) {
+            // Problema com a assinatura do token
             return false;
         }
     }
