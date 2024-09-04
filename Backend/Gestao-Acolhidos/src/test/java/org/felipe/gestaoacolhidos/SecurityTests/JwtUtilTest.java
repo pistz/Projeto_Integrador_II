@@ -1,7 +1,6 @@
 package org.felipe.gestaoacolhidos.SecurityTests;
 
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
+
 import jakarta.servlet.http.HttpServletRequest;
 import org.felipe.gestaoacolhidos.model.domain.enums.role.Role;
 import org.felipe.gestaoacolhidos.model.security.JwtUtil;
@@ -14,6 +13,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+
+import java.util.Base64;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -33,10 +35,17 @@ class JwtUtilTest {
 
     @BeforeEach
     void setUp() {
-        jwtSecretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+        // Configure o segredo para o teste - chave base64 genérica
+        jwtSecretKey = new SecretKeySpec(Base64
+                .getDecoder()
+                .decode("guOz4Ur76iDUV/e80Ntcj8w4MyxL2qyVeJNxMoAHF7392QZYDfGBy1MueKnveV8zR/idlHDSY2S8Zt7wkZMixA=="),
+                "HmacSHA512");
 
-        // Set the private fields using ReflectionTestUtils
-        ReflectionTestUtils.setField(jwtUtil, "jwtSecret", new String(jwtSecretKey.getEncoded()));
+        // Definir os campos privados usando ReflectionTestUtils
+        ReflectionTestUtils.setField(jwtUtil, "jwtSecret", Base64
+                .getEncoder()
+                .encodeToString(jwtSecretKey
+                        .getEncoded()));
         ReflectionTestUtils.setField(jwtUtil, "jwtIssuer", jwtIssuer);
     }
 
