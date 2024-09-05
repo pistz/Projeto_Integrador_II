@@ -45,9 +45,7 @@ public class HostedServiceImpl implements HostedService {
 
     @Override
     public HostedResponseCreatedDTO create(HostedCreateNewDTO hosted) {
-        if(!validateCPF(hosted.socialSecurityNumber())){
-            throw new IllegalArgumentException("CPF invalido");
-        }
+        validateCPF(hosted.socialSecurityNumber());
         var exists = hostedRepository.existsBySocialSecurityNumber(hosted.socialSecurityNumber());
         if(exists) {
             throw new HostedAlreadyRegisteredException("Acolhido já possui registro ativo");
@@ -95,9 +93,10 @@ public class HostedServiceImpl implements HostedService {
     public HostedResponseUpdatedDTO updateIdentification(UUID id, HostedCreateNewDTO hosted) {
         Optional<Hosted> registeredHosted = checkHostedExistence(id);
         Hosted updateHost = registeredHosted.get();
-        if(validateCPF(hosted.socialSecurityNumber())){
-            updateHost.setSocialSecurityNumber(hosted.socialSecurityNumber());
-        }
+        validateCPF(hosted.socialSecurityNumber());
+
+        updateHost.setSocialSecurityNumber(hosted.socialSecurityNumber());
+
         updateHost.setFirstName(hosted.firstName());
         updateHost.setLastName(hosted.lastName());
         updateHost.setPaperTrail(hosted.paperTrail());
@@ -155,7 +154,7 @@ public class HostedServiceImpl implements HostedService {
     }
 
     @Override
-    public HostedResponseUpdatedDTO updateSituacionalRisk(UUID hostedId, SituationalRiskUpdateDTO dto) {
+    public HostedResponseUpdatedDTO updateSituationalRisk(UUID hostedId, SituationalRiskUpdateDTO dto) {
         Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
 
         Hosted updateHostedSituacionalRisk = registeredHosted.get();
@@ -372,9 +371,11 @@ public class HostedServiceImpl implements HostedService {
         return new HostedResponseUpdatedDTO("Registro atualizado");
     }
 
-    private boolean validateCPF(String cpf) {
+    private void validateCPF(String cpf) {
         Pattern pattern = Pattern.compile("^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$");
-        return pattern.matcher(cpf).matches();
+        if(!pattern.matcher(cpf).matches()){
+            throw new IllegalArgumentException("CPF inválido");
+        }
     }
 
     private Optional<Hosted> checkHostedExistence(UUID id){

@@ -108,7 +108,7 @@ public class HostedController {
             @ApiResponse(responseCode = "404", description = "Acolhido não existe")
     })
     public ResponseEntity<HostedResponseUpdatedDTO> updateHostedSituationalRisk(@PathVariable UUID id, @RequestBody SituationalRiskUpdateDTO dto){
-        var updated = hostedService.updateSituacionalRisk(id, dto);
+        var updated = hostedService.updateSituationalRisk(id, dto);
         return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(updated);
     }
 

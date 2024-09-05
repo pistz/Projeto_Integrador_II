@@ -27,7 +27,7 @@ public interface HostedService {
     List<Hosted> findAll();
 
     HostedResponseUpdatedDTO updateDocuments(UUID hostedId, DocumentsUpdateDTO documents);
-    HostedResponseUpdatedDTO updateSituacionalRisk(UUID hostedId, SituationalRiskUpdateDTO dto);
+    HostedResponseUpdatedDTO updateSituationalRisk(UUID hostedId, SituationalRiskUpdateDTO dto);
     HostedResponseUpdatedDTO updateHasFamily(UUID hostedId, FamilyCompositionDTO dto);
     HostedResponseUpdatedDTO updateFamilyTable(UUID hostedId, List<FamilyTableMemberDTO> listDto);
     HostedResponseUpdatedDTO updatePoliceReport(UUID hostedId, PoliceReportDTO dto);
