@@ -33,7 +33,7 @@
 
 ## Ideia do projeto
 - Sistema Gerencial Administrativo para o Albergue Noturno de Sertãozinho - SP - "Octávio de Oliveira Campos"
-- Status: *Fase de escopo e detalhamento de requisitos*
+- Status: *Desenvolvimento do Back-end*
 
 *Descrição do Projeto*
 -   O Albergue Noturno de Sertãozinho acolhe moradores de rua e transeuntes que não têm moradia ou condições de hospedar-se de maneira digna.
