@@ -1,8 +1,8 @@
 package org.felipe.gestaoacolhidos.AuthTests.AuthControllerTests;
 import org.felipe.gestaoacolhidos.model.controller.Auth.AuthController;
 import org.felipe.gestaoacolhidos.model.controller.ExceptionHandler.ControllerExceptionHandler;
-import org.felipe.gestaoacolhidos.model.dto.User.UserLoginDTO;
-import org.felipe.gestaoacolhidos.model.service.Auth.AuthService;
+import org.felipe.gestaoacolhidos.model.domain.dto.User.UserLoginDTO;
+import org.felipe.gestaoacolhidos.model.domain.service.Auth.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

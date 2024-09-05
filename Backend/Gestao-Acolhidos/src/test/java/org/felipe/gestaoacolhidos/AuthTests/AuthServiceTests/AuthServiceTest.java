@@ -4,7 +4,7 @@ import org.felipe.gestaoacolhidos.model.domain.entity.User.User;
 import org.felipe.gestaoacolhidos.model.domain.enums.role.Role;
 import org.felipe.gestaoacolhidos.model.repository.user.UserRepository;
 import org.felipe.gestaoacolhidos.model.security.JwtUtil;
-import org.felipe.gestaoacolhidos.model.service.Auth.AuthService;
+import org.felipe.gestaoacolhidos.model.domain.service.Auth.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
