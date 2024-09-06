@@ -2,6 +2,8 @@ package org.felipe.gestaoacolhidos.HostedTests.HostedControllerTests;
 
 import org.felipe.gestaoacolhidos.model.controller.ExceptionHandler.ControllerExceptionHandler;
 import org.felipe.gestaoacolhidos.model.controller.Hosted.HostedController;
+import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.Documents.DocumentsBirthCertificateDTO;
+import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.Documents.DocumentsUpdateDTO;
 import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.HostedCreateNewDTO;
 import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.HostedResponseDeletedDTO;
 import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.HostedResponseUpdatedDTO;
@@ -12,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +26,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -281,5 +281,133 @@ public class HostedControllerTest {
         verify(hostedService, times(1)).updateIdentification(hostedId, dto);
     }
 
+    @Test
+    public void testeUpdateMainInfo_SuccessWithNullDTO(){
+        UUID hostedId = UUID.randomUUID();
+        HostedCreateNewDTO dto = null;
+        HostedResponseUpdatedDTO responseUpdatedDTO = new HostedResponseUpdatedDTO("Registro atualizado");
+
+        when(hostedService.updateIdentification(hostedId, dto)).thenReturn(responseUpdatedDTO);
+        ResponseEntity<HostedResponseUpdatedDTO> response = hostedController
+                .updateHostedMainInformation(hostedId, dto);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals("Registro atualizado", response.getBody().message());
+        verify(hostedService, times(1)).updateIdentification(hostedId, dto);
+    }
+
+    @Test
+    public void testeUpdateMainInfoEndpoint_Success() throws Exception {
+        UUID hostedId = UUID.randomUUID();
+        String dtoJson = "{"
+                + "\"firstName\":\"Jose\","
+                + "\"lastName\":\"Fulano\","
+                + "\"socialSecurityNumber\":\"999.999.999-99\","
+                + "\"birthDay\":\"1980-06-20\","
+                + "\"paperTrail\":1,"
+                + "\"fathersName\":\"Nome do Pai\","
+                + "\"mothersName\":\"Nome da mãe\","
+                + "\"occupation\":\"\","
+                + "\"cityOrigin\":\"\","
+                + "\"stateOrigin\":\"\""
+                + "}";
+
+        mockMvc.perform(put("/hosted/update-main-info/" + hostedId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(dtoJson))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void testeUpdateDocuments_Success(){
+        UUID hostedId = UUID.randomUUID();
+        DocumentsBirthCertificateDTO certificateDTO = new DocumentsBirthCertificateDTO(1L,"2AB",10);
+        DocumentsUpdateDTO dto = new DocumentsUpdateDTO("4444444", LocalDate.of(2001,01,01), "55555",certificateDTO);
+        HostedResponseUpdatedDTO updated = new HostedResponseUpdatedDTO("Registro atualizado");
+        when(hostedService.updateDocuments(hostedId, dto)).thenReturn(updated);
+
+        ResponseEntity<HostedResponseUpdatedDTO> response = hostedController.updateHostedDocuments(hostedId, dto);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(updated, response.getBody());
+        verify(hostedService, times(1)).updateDocuments(hostedId, dto);
+    }
+
+    @Test
+    public void testeUpdateDocuments_Fail_InvalidHostedId(){
+        UUID hostedId = UUID.randomUUID();
+        DocumentsBirthCertificateDTO certificateDTO = new DocumentsBirthCertificateDTO(1L,"2AB",10);
+        DocumentsUpdateDTO dto = new DocumentsUpdateDTO("4444444", LocalDate.of(2001,01,01), "55555",certificateDTO);
+        when(hostedService.updateDocuments(hostedId, dto)).thenThrow(NoSuchElementException.class);
+
+        assertThrows(NoSuchElementException.class, () -> hostedController.updateHostedDocuments(hostedId, dto));
+        verify(hostedService, times(1)).updateDocuments(hostedId, dto);
+    }
+
+    @Test
+    public void testeUpdateDocuments_Fail_NullHostId(){
+        UUID hostedId = null;
+        DocumentsBirthCertificateDTO certificateDTO = new DocumentsBirthCertificateDTO(1L,"2AB",10);
+        DocumentsUpdateDTO dto = new DocumentsUpdateDTO("4444444", LocalDate.of(2001,01,01), "55555",certificateDTO);
+        when(hostedService.updateDocuments(hostedId, dto)).thenThrow(IllegalArgumentException.class);
+
+        assertThrows(IllegalArgumentException.class, () -> hostedController.updateHostedDocuments(hostedId, dto));
+        verify(hostedService, times(1)).updateDocuments(hostedId, dto);
+    }
+
+    @Test
+    public void testeUpdateDocuments_Success_NullDTO(){
+        UUID hostedId = null;
+
+        DocumentsUpdateDTO dto = null;
+        HostedResponseUpdatedDTO DTOresponse = new HostedResponseUpdatedDTO("Registro vazio");
+        when(hostedService.updateDocuments(hostedId, dto)).thenReturn(DTOresponse);
+
+        ResponseEntity<HostedResponseUpdatedDTO> response = hostedController.updateHostedDocuments(hostedId, dto);
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(DTOresponse, response.getBody());
+        verify(hostedService, times(1)).updateDocuments(hostedId, dto);
+    }
+
+    @Test
+    public void testeUpdateDocumentsEndpoint_Success() throws Exception {
+        UUID hostedId = UUID.randomUUID();
+        String dtoJson = "{"
+                + "\"generalRegister\":\"444444\","
+                + "\"dateOfIssueRG\":\"1900-01-01\","
+                + "\"driversLicenseNumber\":\"555555\","
+                + "\"birthCertificate\":{"
+                + "\"certificateNumber\":1,"
+                + "\"sheets\":\"2A\","
+                + "\"book\":2"
+                + "}"
+                + "}";
+
+        mockMvc.perform(put("/hosted/update-docs/" + hostedId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(dtoJson))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void testeUpdateDocumentsEndpoint_FailsWithWrongId() throws Exception {
+        UUID hostedId = UUID.randomUUID();
+        String dtoJson = "{"
+                + "\"generalRegister\":\"444444\","
+                + "\"dateOfIssueRG\":\"1900-01-01\","
+                + "\"driversLicenseNumber\":\"555555\","
+                + "\"birthCertificate\":{"
+                + "\"certificateNumber\":1,"
+                + "\"sheets\":\"2A\","
+                + "\"book\":2"
+                + "}"
+                + "}";
+
+        when(hostedController.updateHostedDocuments(eq(hostedId),any(DocumentsUpdateDTO.class))).thenThrow(NoSuchElementException.class);
+
+        mockMvc.perform(put("/hosted/update-docs/" + hostedId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(dtoJson))
+                .andExpect(status().isNotFound());
+    }
 
 }
