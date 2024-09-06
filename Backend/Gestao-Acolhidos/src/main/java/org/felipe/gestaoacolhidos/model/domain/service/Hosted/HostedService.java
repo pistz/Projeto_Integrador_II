@@ -21,7 +21,7 @@ import java.util.UUID;
 public interface HostedService {
 
     HostedResponseCreatedDTO create(HostedCreateNewDTO hosted);
-    HostedResponseUpdatedDTO updateIdentification(UUID id, HostedCreateNewDTO hosted);
+    HostedResponseUpdatedDTO updateIdentification(UUID id, HostedCreateNewDTO dto);
     HostedResponseDeletedDTO delete(UUID id);
     Hosted findById(UUID id);
     List<Hosted> findAll();

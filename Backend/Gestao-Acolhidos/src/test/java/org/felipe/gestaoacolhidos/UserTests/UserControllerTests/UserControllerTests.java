@@ -41,9 +41,6 @@ class UserControllerTests {
     @InjectMocks
     private UserController userController;
 
-    @InjectMocks
-    private ControllerExceptionHandler userControllerAdvice;
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);

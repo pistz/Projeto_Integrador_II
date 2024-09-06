@@ -30,6 +30,7 @@ import org.felipe.gestaoacolhidos.model.repository.hosted.HostedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -90,22 +91,22 @@ public class HostedServiceImpl implements HostedService {
     }
 
     @Override
-    public HostedResponseUpdatedDTO updateIdentification(UUID id, HostedCreateNewDTO hosted) {
+    public HostedResponseUpdatedDTO updateIdentification(UUID id, HostedCreateNewDTO dto) {
         Optional<Hosted> registeredHosted = checkHostedExistence(id);
         Hosted updateHost = registeredHosted.get();
-        validateCPF(hosted.socialSecurityNumber());
+        validateCPF(dto.socialSecurityNumber());
 
-        updateHost.setSocialSecurityNumber(hosted.socialSecurityNumber());
+        updateHost.setSocialSecurityNumber(dto.socialSecurityNumber());
 
-        updateHost.setFirstName(hosted.firstName());
-        updateHost.setLastName(hosted.lastName());
-        updateHost.setPaperTrail(hosted.paperTrail());
-        updateHost.setBirthDay(hosted.birthDay());
-        updateHost.setMothersName(hosted.mothersName());
-        updateHost.setFathersName(hosted.fathersName());
-        updateHost.setOccupation(hosted.occupation());
-        updateHost.setCityOrigin(hosted.cityOrigin());
-        updateHost.setStateOrigin(hosted.stateOrigin());
+        updateHost.setFirstName(dto.firstName());
+        updateHost.setLastName(dto.lastName());
+        updateHost.setPaperTrail(dto.paperTrail());
+        updateHost.setBirthDay(dto.birthDay());
+        updateHost.setMothersName(dto.mothersName());
+        updateHost.setFathersName(dto.fathersName());
+        updateHost.setOccupation(dto.occupation());
+        updateHost.setCityOrigin(dto.cityOrigin());
+        updateHost.setStateOrigin(dto.stateOrigin());
 
         updateHost.setUpdatedAt(LocalDate.now());
         updateHost.setUpdatedBy(interceptor.getRegisteredUser());
@@ -118,8 +119,10 @@ public class HostedServiceImpl implements HostedService {
     @Override
     public HostedResponseUpdatedDTO updateDocuments(UUID hostedId, DocumentsUpdateDTO dto) {
         Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
-
         Hosted updateHostedDocuments = registeredHosted.get();
+        if(checkAllNullProperties(dto)){
+            return new HostedResponseUpdatedDTO("Registro vazio");
+        }
         Documents documents;
         if(updateHostedDocuments.getOtherDocuments() == null){
             documents = new Documents();
@@ -156,8 +159,10 @@ public class HostedServiceImpl implements HostedService {
     @Override
     public HostedResponseUpdatedDTO updateSituationalRisk(UUID hostedId, SituationalRiskUpdateDTO dto) {
         Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
-
         Hosted updateHostedSituacionalRisk = registeredHosted.get();
+        if(checkAllNullProperties(dto)){
+            return new HostedResponseUpdatedDTO("Registro vazio");
+        }
         SituationalRisk situationalRisk;
         if(updateHostedSituacionalRisk.getSituationalRisk() == null){
             situationalRisk = new SituationalRisk();
@@ -184,6 +189,9 @@ public class HostedServiceImpl implements HostedService {
     public HostedResponseUpdatedDTO updateHasFamily(UUID hostedId, FamilyCompositionDTO dto) {
         Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
         Hosted updateHostedFamilyComposition = registeredHosted.get();
+        if(checkAllNullProperties(dto)){
+            return new HostedResponseUpdatedDTO("Registro vazio");
+        }
         FamilyComposition familyComposition;
         if(updateHostedFamilyComposition.getFamilyComposition() == null){
             familyComposition = new FamilyComposition();
@@ -207,8 +215,11 @@ public class HostedServiceImpl implements HostedService {
     public HostedResponseUpdatedDTO updateFamilyTable(UUID hostedId, List<FamilyTableMemberDTO> memberListDto) {
         Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
         Hosted updateHostedFamilyTable = registeredHosted.get();
-        if(updateHostedFamilyTable.getFamilyComposition() == null &&
-            !updateHostedFamilyTable.getFamilyComposition().isHasFamily() &&
+        if(memberListDto.isEmpty()){
+            return new HostedResponseUpdatedDTO("Registro vazio");
+        }
+        if(updateHostedFamilyTable.getFamilyComposition() == null ||
+            !updateHostedFamilyTable.getFamilyComposition().isHasFamily() ||
                 !updateHostedFamilyTable.getFamilyComposition().isHasFamilyBond()
         ){
             throw new NoSuchElementException("Acolhido foi marcado como sem vínculo familiar, atualize a existência de vínculo familiar");
@@ -235,6 +246,9 @@ public class HostedServiceImpl implements HostedService {
     public HostedResponseUpdatedDTO updatePoliceReport(UUID hostedId, PoliceReportDTO dto) {
         Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
         Hosted updateHostedPoliceReport = registeredHosted.get();
+        if(checkAllNullProperties(dto)){
+            return new HostedResponseUpdatedDTO("Registro vazio");
+        }
         List<PoliceReport> policeReportList;
         if(updateHostedPoliceReport.getPoliceReport() == null){
             policeReportList = new ArrayList<>();
@@ -264,6 +278,9 @@ public class HostedServiceImpl implements HostedService {
     public HostedResponseUpdatedDTO updateReferenceAddress(UUID hostedId, ReferenceAddressDTO dto) {
         Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
         Hosted updatedHostedReferenceAddress = registeredHosted.get();
+        if(checkAllNullProperties(dto)){
+            return new HostedResponseUpdatedDTO("Registro vazio");
+        }
         ReferenceAddress updateReferenceAddress;
         if(updatedHostedReferenceAddress.getReferenceAddress() == null){
             updateReferenceAddress = new ReferenceAddress();
@@ -292,6 +309,9 @@ public class HostedServiceImpl implements HostedService {
     public HostedResponseUpdatedDTO updateSocialPrograms(UUID hostedId, SocialProgramsDTO dto) {
         Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
         Hosted updateHostedSocialPrograms = registeredHosted.get();
+        if(checkAllNullProperties(dto)){
+            return new HostedResponseUpdatedDTO("Registro vazio");
+        }
         SocialPrograms socialPrograms;
         if(updateHostedSocialPrograms.getSocialPrograms() == null){
             socialPrograms = new SocialPrograms();
@@ -326,6 +346,9 @@ public class HostedServiceImpl implements HostedService {
     public HostedResponseUpdatedDTO updateMedicalRecord(UUID hostedId, MedicalRecordDTO dto) {
         Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
         Hosted updateHostedMedicalRecord = registeredHosted.get();
+        if(checkAllNullProperties(dto)){
+            return new HostedResponseUpdatedDTO("Registro vazio");
+        }
         List<MedicalRecord> medicalRecords;
         if(updateHostedMedicalRecord.getMedicalRecord() == null){
             medicalRecords = new ArrayList<>();
@@ -350,6 +373,9 @@ public class HostedServiceImpl implements HostedService {
     public HostedResponseUpdatedDTO updateCustomTreatments(UUID hostedId, CustomTreatmentsDTO dto) {
         Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
         Hosted updateHostedCustomProcedures = registeredHosted.get();
+        if(checkAllNullProperties(dto)){
+            return new HostedResponseUpdatedDTO("Registro vazio");
+        }
         List<CustomTreatments> customTreatments;
         if(updateHostedCustomProcedures.getCustomTreatments() == null){
             customTreatments = new ArrayList<>();
@@ -397,6 +423,24 @@ public class HostedServiceImpl implements HostedService {
         familyTable.setEducation(dto.education());
         familyTable.setUpdatedAt(LocalDate.now());
         return familyTable;
+    }
+
+    private boolean checkAllNullProperties(Object object){
+        if (object == null) {
+            return true;
+        }
+        for (Field field : object.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
+
+            try {
+                 if (field.get(object) != null) {
+                    return false;
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("Erro ao acessar o campo: " + field.getName(), e);
+            }
+        }
+        return true;
     }
 
 }
