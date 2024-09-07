@@ -5,6 +5,7 @@ import org.felipe.gestaoacolhidos.model.repository.capacity.CapacityReposity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -18,12 +19,12 @@ public class CapacityServiceImpl implements CapacityService{
 
     @Override
     public int getCapacity() {
-        return capacityReposity.findCurrentMaxCapacity();
+        return capacityReposity.findCurrentMaxCapacity().get();
     }
 
     @Override
     public void updateCapacity(int capacity) {
-        Capacity currentCapacity = capacityReposity.findCurrentConfig();
+        Capacity currentCapacity = checkExists();
         if(currentCapacity == null) {
             currentCapacity = new Capacity(
                     UUID.randomUUID(),
@@ -36,5 +37,10 @@ public class CapacityServiceImpl implements CapacityService{
         currentCapacity.setMaxCapacity(capacity);
         currentCapacity.setUpdatedAt(LocalDate.now());
         capacityReposity.save(currentCapacity);
+    }
+
+    private Capacity checkExists(){
+        Optional<Capacity> currentCapacity = capacityReposity.findCurrentConfig();
+        return currentCapacity.orElse(null);
     }
 }

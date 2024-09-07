@@ -31,11 +31,12 @@ public class NightStandServiceImpl implements NightStandService {
 
     @Override
     public NightStandResponseDTO createEvent(NightStandCreateDTO dto){
+        int currentCapacity = capacityReposity.findCurrentMaxCapacity().get();
         if(dto == null){
             throw new NoSuchElementException("Dados inexistentes");
         }
         NightStand nightStand = new NightStand();
-        if(dto.hostedList().size() > capacityReposity.findCurrentMaxCapacity()){
+        if(dto.hostedList().size() > currentCapacity){
             throw new IllegalArgumentException("A quantidade de acolhidos é maior do que a capacidade do albergue");
         }
         nightStand.setId(UUID.randomUUID());

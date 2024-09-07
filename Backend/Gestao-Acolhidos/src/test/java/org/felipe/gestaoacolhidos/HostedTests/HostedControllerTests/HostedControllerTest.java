@@ -8,6 +8,7 @@ import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.Documents.DocumentsUpd
 import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.FamilyComposition.FamilyCompositionDTO;
 import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.FamilyComposition.FamilyTableMemberDTO;
 import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.HostedCreateNewDTO;
+import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.HostedResponseCreatedDTO;
 import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.HostedResponseDeletedDTO;
 import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.HostedResponseUpdatedDTO;
 import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.MedicalRecord.MedicalRecordDTO;
@@ -23,6 +24,7 @@ import org.felipe.gestaoacolhidos.model.domain.enums.lookup.LookUp;
 import org.felipe.gestaoacolhidos.model.domain.enums.maritalStatus.MaritalStatus;
 import org.felipe.gestaoacolhidos.model.domain.enums.migrant.Migrant;
 import org.felipe.gestaoacolhidos.model.domain.service.Hosted.HostedService;
+import org.felipe.gestaoacolhidos.model.exceptions.HostedAlreadyRegisteredException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -36,7 +38,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -59,6 +64,162 @@ public class HostedControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(hostedController)
                 .setControllerAdvice(new ControllerExceptionHandler())
                 .build();
+    }
+
+    @Test
+    void testCreateHosted_Success() {
+        // Given
+        HostedCreateNewDTO dto = new HostedCreateNewDTO(
+                "John", "Doe", "12345678900", LocalDate.of(1980, 1, 1),
+                123L, "Father's Name", "Mother's Name",
+                "Occupation", "City", "State"
+        );
+        HostedResponseCreatedDTO responseDto = new HostedResponseCreatedDTO("Acolhido criado com sucesso!");
+
+        when(hostedService.create(dto)).thenReturn(responseDto);
+
+        // When
+        ResponseEntity<HostedResponseCreatedDTO> response = hostedController.createHosted(dto);
+
+        // Then
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals("Acolhido criado com sucesso!", response.getBody().message());
+        verify(hostedService, times(1)).create(dto);
+    }
+
+    @Test
+    void testCreateHosted_Failure_AcolhidoAlreadyExists() {
+        // Given
+        HostedCreateNewDTO dto = new HostedCreateNewDTO(
+                "John", "Doe", "12345678900", LocalDate.of(1980, 1, 1),
+                123L, "Father's Name", "Mother's Name",
+                "Occupation", "City", "State"
+        );
+
+        when(hostedService.create(dto)).thenThrow(new HostedAlreadyRegisteredException("Acolhido já existe"));
+
+        // When & Then
+        assertThrows(HostedAlreadyRegisteredException.class, () -> hostedController.createHosted(dto));
+        verify(hostedService, times(1)).create(dto);
+    }
+
+    @Test
+    void testCreateHosted_Failure_InvalidCPF() {
+        // Given
+        HostedCreateNewDTO dto = new HostedCreateNewDTO(
+                "John", "Doe", "123", LocalDate.of(1980, 1, 1),
+                123L, "Father's Name", "Mother's Name",
+                "Occupation", "City", "State"
+        );
+
+        when(hostedService.create(dto)).thenThrow(new IllegalArgumentException("O CPF usado no cadastro é inválido"));
+
+        // When & Then
+        assertThrows(IllegalArgumentException.class, () -> hostedController.createHosted(dto));
+        verify(hostedService, times(1)).create(dto);
+    }
+
+    @Test
+    void testCreateHostedEnpoint_Success() throws Exception {
+        // Given
+        HostedCreateNewDTO dto = new HostedCreateNewDTO(
+                "John", "Doe", "12345678900", LocalDate.of(1980, 1, 1),
+                123L, "Father's Name", "Mother's Name",
+                "Occupation", "City", "State"
+        );
+        HostedResponseCreatedDTO responseDto = new HostedResponseCreatedDTO("Acolhido criado com sucesso!");
+
+        String dtoJson = """
+            {
+                "firstName": "John",
+                "lastName": "Doe",
+                "socialSecurityNumber": "12345678900",
+                "birthDay": "1980-01-01",
+                "paperTrail": 123,
+                "fathersName": "Father's Name",
+                "mothersName": "Mother's Name",
+                "occupation": "Occupation",
+                "cityOrigin": "City",
+                "stateOrigin": "State"
+            }
+        """;
+
+        when(hostedService.create(dto)).thenReturn(responseDto);
+
+        // When & Then
+        mockMvc.perform(post("/hosted/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(dtoJson))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.message").value("Acolhido criado com sucesso!"));
+    }
+
+    @Test
+    void testCreateHostedEndpoint_Failure_AcolhidoAlreadyExists() throws Exception {
+        // Given
+        HostedCreateNewDTO dto = new HostedCreateNewDTO(
+                "John", "Doe", "12345678900", LocalDate.of(1980, 1, 1),
+                123L, "Father's Name", "Mother's Name",
+                "Occupation", "City", "State"
+        );
+
+        String dtoJson = """
+        {
+            "firstName": "John",
+            "lastName": "Doe",
+            "socialSecurityNumber": "12345678900",
+            "birthDay": "1980-01-01",
+            "paperTrail": 123,
+            "fathersName": "Father's Name",
+            "mothersName": "Mother's Name",
+            "occupation": "Occupation",
+            "cityOrigin": "City",
+            "stateOrigin": "State"
+        }
+    """;
+
+        when(hostedService.create(dto)).thenThrow(new HostedAlreadyRegisteredException("Acolhido já existe"));
+
+        // When & Then
+        mockMvc.perform(post("/hosted/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(dtoJson))
+                .andExpect(status().isNotAcceptable())
+                .andExpect(content().string("Acolhido já existe"));
+    }
+
+    @Test
+    void testCreateHostedEndpoint_Failure_InvalidCPF() throws Exception {
+        // Given
+        HostedCreateNewDTO dto = new HostedCreateNewDTO(
+                "John", "Doe", "123", LocalDate.of(1980, 1, 1),
+                123L, "Father's Name", "Mother's Name",
+                "Occupation", "City", "State"
+        );
+
+        String dtoJson = """
+        {
+            "firstName": "John",
+            "lastName": "Doe",
+            "socialSecurityNumber": "123",
+            "birthDay": "1980-01-01",
+            "paperTrail": 123,
+            "fathersName": "Father's Name",
+            "mothersName": "Mother's Name",
+            "occupation": "Occupation",
+            "cityOrigin": "City",
+            "stateOrigin": "State"
+        }
+    """;
+
+        when(hostedService.create(dto)).thenThrow(new IllegalArgumentException("O CPF usado no cadastro é inválido"));
+
+        // When & Then
+        mockMvc.perform(post("/hosted/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(dtoJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("O CPF usado no cadastro é inválido"));
     }
 
     @Test
