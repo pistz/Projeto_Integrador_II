@@ -107,7 +107,9 @@ public class HostedController {
     @Operation(description = "Atualiza o risco situacional do Acolhido", method = "PUT")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Registro atualizado"),
-            @ApiResponse(responseCode = "404", description = "Acolhido não existe")
+            @ApiResponse(responseCode = "404", description = "Acolhido não existe"),
+            @ApiResponse(responseCode = "400", description = "Requisição mal formada")
+
     })
     public ResponseEntity<HostedResponseUpdatedDTO> updateHostedSituationalRisk(@PathVariable UUID id, @RequestBody SituationalRiskUpdateDTO dto){
         var updated = hostedService.updateSituationalRisk(id, dto);
