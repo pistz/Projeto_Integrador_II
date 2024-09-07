@@ -2,6 +2,7 @@ package org.felipe.gestaoacolhidos.HostedTests.HostedControllerTests;
 
 import org.felipe.gestaoacolhidos.model.controller.ExceptionHandler.ControllerExceptionHandler;
 import org.felipe.gestaoacolhidos.model.controller.Hosted.HostedController;
+import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.CustomTreatments.CustomTreatmentsDTO;
 import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.Documents.DocumentsBirthCertificateDTO;
 import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.Documents.DocumentsUpdateDTO;
 import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.FamilyComposition.FamilyCompositionDTO;
@@ -9,7 +10,11 @@ import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.FamilyComposition.Fami
 import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.HostedCreateNewDTO;
 import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.HostedResponseDeletedDTO;
 import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.HostedResponseUpdatedDTO;
+import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.MedicalRecord.MedicalRecordDTO;
+import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.PoliceReport.PoliceReportDTO;
+import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.ReferenceAddress.ReferenceAddressDTO;
 import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.SituationalRisk.SituationalRiskUpdateDTO;
+import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.SocialPrograms.SocialProgramsDTO;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Hosted;
 import org.felipe.gestaoacolhidos.model.domain.enums.education.Education;
 import org.felipe.gestaoacolhidos.model.domain.enums.gender.Gender;
@@ -29,6 +34,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -762,7 +768,450 @@ public class HostedControllerTest {
         verify(hostedService, times(1)).updateFamilyTable(hostedId, familyTable);
     }
 
+    @Test
+    public void testUpdatePoliceReport_Success() {
+        UUID hostedId = UUID.randomUUID();
+        PoliceReportDTO policeReportDTO = new PoliceReportDTO("12345", "Delegacia Central", "São Paulo", "Relato do incidente");
+        HostedResponseUpdatedDTO responseDto = new HostedResponseUpdatedDTO("Registro atualizado");
 
+        // Simula o comportamento do serviço
+        when(hostedService.updatePoliceReport(eq(hostedId), eq(policeReportDTO))).thenReturn(responseDto);
+
+        // Faz a chamada ao controlador
+        ResponseEntity<HostedResponseUpdatedDTO> response = hostedController.updateHostedPoliceReport(hostedId, policeReportDTO);
+
+        // Verifica se o status retornado é 201 Created e se a mensagem é "Registro atualizado"
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals("Registro atualizado", response.getBody().message());
+
+        // Verifica que o serviço foi chamado uma vez com os parâmetros corretos
+        verify(hostedService, times(1)).updatePoliceReport(eq(hostedId), eq(policeReportDTO));
+    }
+
+    @Test
+    public void testUpdatePoliceReport_Fail_HostedNotFound() {
+        UUID hostedId = UUID.randomUUID();
+        PoliceReportDTO policeReportDTO = new PoliceReportDTO("12345", "Delegacia Central", "São Paulo", "Relato do incidente");
+
+        // Simula o comportamento do serviço quando o acolhido não é encontrado
+        when(hostedService.updatePoliceReport(eq(hostedId), eq(policeReportDTO))).thenThrow(new NoSuchElementException("Acolhido não existe"));
+
+        // Faz a chamada ao controlador e captura a exceção
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
+            hostedController.updateHostedPoliceReport(hostedId, policeReportDTO);
+        });
+
+        // Verifica se a mensagem de erro está correta
+        assertEquals("Acolhido não existe", exception.getMessage());
+
+        // Verifica que o serviço foi chamado uma vez
+        verify(hostedService, times(1)).updatePoliceReport(eq(hostedId), eq(policeReportDTO));
+    }
+
+    @Test
+    public void testUpdatePoliceReportEndpoint_Success() throws Exception {
+        UUID hostedId = UUID.randomUUID();
+        String jsonDto = "{"
+                + "\"reportProtocol\":\"12345\","
+                + "\"policeDepartment\":\"Delegacia Central\","
+                + "\"city\":\"São Paulo\","
+                + "\"reportInfo\":\"Relato do incidente\""
+                + "}";
+
+        HostedResponseUpdatedDTO responseDto = new HostedResponseUpdatedDTO("Registro atualizado");
+
+        // Simula o comportamento do serviço
+        when(hostedService.updatePoliceReport(eq(hostedId), any(PoliceReportDTO.class))).thenReturn(responseDto);
+
+        // Faz a requisição PUT para o endpoint e valida o status e o corpo da resposta
+        mockMvc.perform(put("/hosted/update-police-report/" + hostedId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonDto))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.message").value("Registro atualizado"));
+
+        // Verifica que o serviço foi chamado corretamente
+        verify(hostedService, times(1)).updatePoliceReport(eq(hostedId), any(PoliceReportDTO.class));
+    }
+
+    @Test
+    public void testUpdatePoliceReportEndpoint_HostedNotFound() throws Exception {
+        UUID hostedId = UUID.randomUUID();
+        String jsonDto = "{"
+                + "\"reportProtocol\":\"12345\","
+                + "\"policeDepartment\":\"Delegacia Central\","
+                + "\"city\":\"São Paulo\","
+                + "\"reportInfo\":\"Relato do incidente\""
+                + "}";
+
+        // Simula a exceção lançada pelo serviço
+        when(hostedService.updatePoliceReport(eq(hostedId), any(PoliceReportDTO.class)))
+                .thenThrow(new NoSuchElementException("Acolhido não existe"));
+
+        // Faz a requisição PUT para o endpoint e valida o status e o corpo da resposta
+        mockMvc.perform(put("/hosted/update-police-report/" + hostedId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonDto))
+                .andExpect(status().isNotFound());
+        // Verifica que o serviço foi chamado corretamente
+        verify(hostedService, times(1)).updatePoliceReport(eq(hostedId), any(PoliceReportDTO.class));
+    }
+
+    @Test
+    public void testUpdateReferenceAddress_Success() {
+        UUID hostedId = UUID.randomUUID();
+        ReferenceAddressDTO referenceAddressDTO = new ReferenceAddressDTO("Rua A", "São Paulo", "Centro", 123, "12345-678", 987654321);
+        HostedResponseUpdatedDTO responseDto = new HostedResponseUpdatedDTO("Registro atualizado");
+
+        // Simula o comportamento do serviço
+        when(hostedService.updateReferenceAddress(eq(hostedId), eq(referenceAddressDTO))).thenReturn(responseDto);
+
+        // Faz a chamada ao controlador
+        ResponseEntity<HostedResponseUpdatedDTO> response = hostedController.updateHostedReferenceAddress(hostedId, referenceAddressDTO);
+
+        // Verifica se o status retornado é 201 Created e se a mensagem é "Registro atualizado"
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals("Registro atualizado", response.getBody().message());
+
+        // Verifica que o serviço foi chamado uma vez com os parâmetros corretos
+        verify(hostedService, times(1)).updateReferenceAddress(eq(hostedId), eq(referenceAddressDTO));
+    }
+
+
+    @Test
+    public void testUpdateReferenceAddress_Fail_HostedNotFound() {
+        UUID hostedId = UUID.randomUUID();
+        ReferenceAddressDTO referenceAddressDTO = new ReferenceAddressDTO("Rua A", "São Paulo", "Centro", 123, "12345-678", 987654321);
+
+        // Simula o comportamento do serviço quando o acolhido não é encontrado
+        when(hostedService.updateReferenceAddress(eq(hostedId), eq(referenceAddressDTO))).thenThrow(new NoSuchElementException("Acolhido não existe"));
+
+        // Faz a chamada ao controlador e captura a exceção
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
+            hostedController.updateHostedReferenceAddress(hostedId, referenceAddressDTO);
+        });
+
+        // Verifica se a mensagem de erro está correta
+        assertEquals("Acolhido não existe", exception.getMessage());
+
+        // Verifica que o serviço foi chamado uma vez
+        verify(hostedService, times(1)).updateReferenceAddress(eq(hostedId), eq(referenceAddressDTO));
+    }
+
+    @Test
+    public void testUpdateReferenceAddressEndpoint_Success() throws Exception {
+        UUID hostedId = UUID.randomUUID();
+        String jsonDto = "{"
+                + "\"street\":\"Rua A\","
+                + "\"city\":\"São Paulo\","
+                + "\"neighborhood\":\"Centro\","
+                + "\"number\":123,"
+                + "\"cep\":\"12345-678\","
+                + "\"phoneNumber\":987654321"
+                + "}";
+
+        HostedResponseUpdatedDTO responseDto = new HostedResponseUpdatedDTO("Registro atualizado");
+
+        // Simula o comportamento do serviço
+        when(hostedService.updateReferenceAddress(eq(hostedId), any(ReferenceAddressDTO.class))).thenReturn(responseDto);
+
+        // Faz a requisição PUT para o endpoint e valida o status e o corpo da resposta
+        mockMvc.perform(put("/hosted/update-ref-address/" + hostedId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonDto))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.message").value("Registro atualizado"));
+
+        // Verifica que o serviço foi chamado corretamente
+        verify(hostedService, times(1)).updateReferenceAddress(eq(hostedId), any(ReferenceAddressDTO.class));
+    }
+
+    @Test
+    public void testUpdateReferenceAddressEndpoint_HostedNotFound() throws Exception {
+        UUID hostedId = UUID.randomUUID();
+        String jsonDto = "{"
+                + "\"street\":\"Rua A\","
+                + "\"city\":\"São Paulo\","
+                + "\"neighborhood\":\"Centro\","
+                + "\"number\":123,"
+                + "\"cep\":\"12345-678\","
+                + "\"phoneNumber\":987654321"
+                + "}";
+
+        // Simula a exceção lançada pelo serviço
+        when(hostedService.updateReferenceAddress(eq(hostedId), any(ReferenceAddressDTO.class)))
+                .thenThrow(new NoSuchElementException("Acolhido não existe"));
+
+        // Faz a requisição PUT para o endpoint e valida o status e o corpo da resposta
+        mockMvc.perform(put("/hosted/update-ref-address/" + hostedId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonDto))
+                .andExpect(status().isNotFound());
+        // Verifica que o serviço foi chamado corretamente
+        verify(hostedService, times(1)).updateReferenceAddress(eq(hostedId), any(ReferenceAddressDTO.class));
+    }
+
+    @Test
+    public void testUpdateSocialPrograms_Success() {
+        UUID hostedId = UUID.randomUUID();
+        SocialProgramsDTO socialProgramsDTO = new SocialProgramsDTO(
+                true, false, true, false, true, false, true, false, "Nenhum", 5, new BigDecimal("1000.00")
+        );
+        HostedResponseUpdatedDTO responseDto = new HostedResponseUpdatedDTO("Registro atualizado");
+
+        // Simula o comportamento do serviço
+        when(hostedService.updateSocialPrograms(eq(hostedId), eq(socialProgramsDTO))).thenReturn(responseDto);
+
+        // Faz a chamada ao controlador
+        ResponseEntity<HostedResponseUpdatedDTO> response = hostedController.updateHostedSocialPrograms(hostedId, socialProgramsDTO);
+
+        // Verifica se o status retornado é 201 Created e se a mensagem é "Registro atualizado"
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals("Registro atualizado", response.getBody().message());
+
+        // Verifica que o serviço foi chamado uma vez com os parâmetros corretos
+        verify(hostedService, times(1)).updateSocialPrograms(eq(hostedId), eq(socialProgramsDTO));
+    }
+
+    @Test
+    public void testUpdateSocialPrograms_Fail_HostedNotFound() {
+        UUID hostedId = UUID.randomUUID();
+        SocialProgramsDTO socialProgramsDTO = new SocialProgramsDTO(
+                true, false, true, false, true, false, true, false, "Nenhum", 5, new BigDecimal("1000.00")
+        );
+
+        // Simula o comportamento do serviço quando o acolhido não é encontrado
+        when(hostedService.updateSocialPrograms(eq(hostedId), eq(socialProgramsDTO))).thenThrow(new NoSuchElementException("Acolhido não existe"));
+
+        // Faz a chamada ao controlador e captura a exceção
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
+            hostedController.updateHostedSocialPrograms(hostedId, socialProgramsDTO);
+        });
+
+        // Verifica se a mensagem de erro está correta
+        assertEquals("Acolhido não existe", exception.getMessage());
+
+        // Verifica que o serviço foi chamado uma vez
+        verify(hostedService, times(1)).updateSocialPrograms(eq(hostedId), eq(socialProgramsDTO));
+    }
+
+    @Test
+    public void testUpdateSocialProgramsEndpoint_Success() throws Exception {
+        UUID hostedId = UUID.randomUUID();
+        String jsonDto = "{"
+                + "\"hasPasseDeficiente\":true,"
+                + "\"hasPasseIdoso\":false,"
+                + "\"hasRendaCidada\":true,"
+                + "\"hasAcaoJovem\":false,"
+                + "\"hasVivaLeite\":true,"
+                + "\"hasBPC_LOAS\":false,"
+                + "\"hasBolsaFamilia\":true,"
+                + "\"hasPETI\":false,"
+                + "\"others\":\"Nenhum\","
+                + "\"howLong\":5,"
+                + "\"wage\":1000.00"
+                + "}";
+
+        HostedResponseUpdatedDTO responseDto = new HostedResponseUpdatedDTO("Registro atualizado");
+
+        // Simula o comportamento do serviço
+        when(hostedService.updateSocialPrograms(eq(hostedId), any(SocialProgramsDTO.class))).thenReturn(responseDto);
+
+        // Faz a requisição PUT para o endpoint e valida o status e o corpo da resposta
+        mockMvc.perform(put("/hosted/update-socials/" + hostedId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonDto))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.message").value("Registro atualizado"));
+
+        // Verifica que o serviço foi chamado corretamente
+        verify(hostedService, times(1)).updateSocialPrograms(eq(hostedId), any(SocialProgramsDTO.class));
+    }
+
+    @Test
+    public void testUpdateSocialProgramsEndpoint_HostedNotFound() throws Exception {
+        UUID hostedId = UUID.randomUUID();
+        String jsonDto = "{"
+                + "\"hasPasseDeficiente\":true,"
+                + "\"hasPasseIdoso\":false,"
+                + "\"hasRendaCidada\":true,"
+                + "\"hasAcaoJovem\":false,"
+                + "\"hasVivaLeite\":true,"
+                + "\"hasBPC_LOAS\":false,"
+                + "\"hasBolsaFamilia\":true,"
+                + "\"hasPETI\":false,"
+                + "\"others\":\"Nenhum\","
+                + "\"howLong\":5,"
+                + "\"wage\":1000.00"
+                + "}";
+
+        // Simula a exceção lançada pelo serviço
+        when(hostedService.updateSocialPrograms(eq(hostedId), any(SocialProgramsDTO.class)))
+                .thenThrow(new NoSuchElementException("Acolhido não existe"));
+        String expectedResponse = "Acolhido não existe";
+
+        // Faz a requisição PUT para o endpoint e valida o status e o corpo da resposta
+        mockMvc.perform(put("/hosted/update-socials/" + hostedId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonDto))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(expectedResponse));
+        // Verifica que o serviço foi chamado corretamente
+        verify(hostedService, times(1)).updateSocialPrograms(eq(hostedId), any(SocialProgramsDTO.class));
+    }
+
+    @Test
+    public void testUpdateMedicalRecord_Success() {
+        UUID hostedId = UUID.randomUUID();
+        MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO("Dor nas costas");
+        HostedResponseUpdatedDTO responseDto = new HostedResponseUpdatedDTO("Registro atualizado");
+
+        // Simula o comportamento do serviço
+        when(hostedService.updateMedicalRecord(eq(hostedId), eq(medicalRecordDTO))).thenReturn(responseDto);
+
+        // Faz a chamada ao controlador
+        ResponseEntity<HostedResponseUpdatedDTO> response = hostedController.updateHostedMedicalRecord(hostedId, medicalRecordDTO);
+
+        // Verifica se o status retornado é 201 Created e se a mensagem é "Registro atualizado"
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals("Registro atualizado", response.getBody().message());
+
+        // Verifica que o serviço foi chamado uma vez com os parâmetros corretos
+        verify(hostedService, times(1)).updateMedicalRecord(eq(hostedId), eq(medicalRecordDTO));
+    }
+
+    @Test
+    public void testUpdateMedicalRecord_Fail_HostedNotFound() {
+        UUID hostedId = UUID.randomUUID();
+        MedicalRecordDTO medicalRecordDTO = new MedicalRecordDTO("Dor nas costas");
+
+        // Simula o comportamento do serviço quando o acolhido não é encontrado
+        when(hostedService.updateMedicalRecord(eq(hostedId), eq(medicalRecordDTO)))
+                .thenThrow(new NoSuchElementException("Acolhido não existe"));
+
+        // Faz a chamada ao controlador e captura a exceção
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
+            hostedController.updateHostedMedicalRecord(hostedId, medicalRecordDTO);
+        });
+
+        // Verifica se a mensagem de erro está correta
+        assertEquals("Acolhido não existe", exception.getMessage());
+
+        // Verifica que o serviço foi chamado uma vez
+        verify(hostedService, times(1)).updateMedicalRecord(eq(hostedId), eq(medicalRecordDTO));
+    }
+
+    @Test
+    public void testUpdateMedicalRecordEndpoint_Success() throws Exception {
+        UUID hostedId = UUID.randomUUID();
+        String jsonDto = "{"
+                + "\"complaints\":\"Dor nas costas\""
+                + "}";
+
+        HostedResponseUpdatedDTO responseDto = new HostedResponseUpdatedDTO("Registro atualizado");
+
+        // Simula o comportamento do serviço
+        when(hostedService.updateMedicalRecord(eq(hostedId), any(MedicalRecordDTO.class))).thenReturn(responseDto);
+
+        // Faz a requisição PUT para o endpoint e valida o status e o corpo da resposta
+        mockMvc.perform(put("/hosted/update-medical-record/" + hostedId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonDto))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.message").value("Registro atualizado"));
+
+        // Verifica que o serviço foi chamado corretamente
+        verify(hostedService, times(1)).updateMedicalRecord(eq(hostedId), any(MedicalRecordDTO.class));
+    }
+
+    @Test
+    public void testUpdateMedicalRecordEndpoint_HostedNotFound() throws Exception {
+        UUID hostedId = UUID.randomUUID();
+        String jsonDto = "{"
+                + "\"complaints\":\"Dor nas costas\""
+                + "}";
+
+        // Simula a exceção lançada pelo serviço
+        when(hostedService.updateMedicalRecord(eq(hostedId), any(MedicalRecordDTO.class)))
+                .thenThrow(new NoSuchElementException("Acolhido não existe"));
+
+        String expectedResponse = "Acolhido não existe";
+
+        // Faz a requisição PUT para o endpoint e valida o status e o corpo da resposta
+        mockMvc.perform(put("/hosted/update-medical-record/" + hostedId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonDto))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(expectedResponse));
+
+        // Verifica que o serviço foi chamado corretamente
+        verify(hostedService, times(1)).updateMedicalRecord(eq(hostedId), any(MedicalRecordDTO.class));
+    }
+
+    @Test
+    public void testUpdateCustomTreatments_Success() {
+        UUID hostedId = UUID.randomUUID();
+        CustomTreatmentsDTO dto = new CustomTreatmentsDTO("Tratamento psicológico");
+        HostedResponseUpdatedDTO responseDto = new HostedResponseUpdatedDTO("Registro atualizado");
+
+        when(hostedService.updateCustomTreatments(hostedId, dto)).thenReturn(responseDto);
+
+        ResponseEntity<HostedResponseUpdatedDTO> response = hostedController.updateHostedCustomTreatments(hostedId, dto);
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals("Registro atualizado", response.getBody().message());
+        verify(hostedService, times(1)).updateCustomTreatments(hostedId, dto);
+    }
+
+    @Test
+    public void testUpdateCustomTreatments_FailHostedNotFound() {
+        UUID hostedId = UUID.randomUUID();
+        CustomTreatmentsDTO dto = new CustomTreatmentsDTO("Tratamento psicológico");
+
+        when(hostedService.updateCustomTreatments(hostedId, dto)).thenThrow(new NoSuchElementException("Acolhido não existe"));
+
+        NoSuchElementException thrown = assertThrows(NoSuchElementException.class, () -> {
+            hostedController.updateHostedCustomTreatments(hostedId, dto);
+        });
+
+        assertEquals("Acolhido não existe", thrown.getMessage());
+        verify(hostedService, times(1)).updateCustomTreatments(hostedId, dto);
+    }
+
+    @Test
+    public void testUpdateCustomTreatmentsEndpoint_Success() throws Exception {
+        UUID hostedId = UUID.randomUUID();
+        CustomTreatmentsDTO dto = new CustomTreatmentsDTO("Tratamento psicológico");
+        HostedResponseUpdatedDTO responseDto = new HostedResponseUpdatedDTO("Registro atualizado");
+
+        String jsonDto = "{\"procedure\":\"Tratamento psicológico\"}";
+        String expectedJson = "{\"message\":\"Registro atualizado\"}";
+
+        when(hostedService.updateCustomTreatments(hostedId, dto)).thenReturn(responseDto);
+
+        mockMvc.perform(put("/hosted/update-treatments/" + hostedId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonDto))
+                .andExpect(status().isCreated())
+                .andExpect(content().json(expectedJson));
+    }
+
+    @Test
+    public void testUpdateCustomTreatmentsEndpoint_FailHostedNotFound() throws Exception {
+        UUID hostedId = UUID.randomUUID();
+        CustomTreatmentsDTO dto = new CustomTreatmentsDTO("Tratamento psicológico");
+
+        String jsonDto = "{\"procedure\":\"Tratamento psicológico\"}";
+        String expectedJson = "Acolhido não existe";
+
+        when(hostedService.updateCustomTreatments(hostedId, dto)).thenThrow(new NoSuchElementException("Acolhido não existe"));
+
+        mockMvc.perform(put("/hosted/update-treatments/" + hostedId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonDto))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(expectedJson));
+    }
 
 
 

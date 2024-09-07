@@ -1,6 +1,9 @@
 package org.felipe.gestaoacolhidos.model.domain.entity.NightStand;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Hosted;
 
 import java.time.LocalDate;
@@ -9,6 +12,9 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "db_acolhimento")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class NightStand {
 
     @Id
@@ -20,4 +26,5 @@ public class NightStand {
     @Column(nullable = false, name = "acolhidos_dia")
     @OneToMany
     private List<Hosted> hosteds;
+
 }

@@ -1,4 +1,4 @@
-package org.felipe.gestaoacolhidos.model.domain.service.UserDetails;
+package org.felipe.gestaoacolhidos.model.domain.service.User.UserDetails;
 
 import org.felipe.gestaoacolhidos.model.domain.entity.User.User;
 import org.felipe.gestaoacolhidos.model.repository.user.UserRepository;

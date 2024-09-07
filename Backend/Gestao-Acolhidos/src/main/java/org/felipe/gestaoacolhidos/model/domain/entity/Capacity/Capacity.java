@@ -1,4 +1,4 @@
-package org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Attendance;
+package org.felipe.gestaoacolhidos.model.domain.entity.Capacity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,15 +12,19 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "db_estadia")
+@Table(name = "db_capacidade")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Attendance {
+public class Capacity {
 
     @Id
     private UUID id;
 
-    @Column(name = "data_estadia")
-    private LocalDate date;
+    @Column(nullable = false, name = "max_capacidade")
+    private int maxCapacity;
+
+    @Column(nullable = false, name = "updated_at")
+    private LocalDate updatedAt;
+
 }
