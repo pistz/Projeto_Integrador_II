@@ -21,6 +21,10 @@ public class Attendance {
     @Id
     private UUID id;
 
-    @Column(name = "data_estadia")
+    @Column(name = "estadia_id", nullable = false)
+    private UUID nightReceptionId;
+
+    @Column(name = "data_estadia", unique = true, nullable = false)
     private LocalDate date;
+
 }

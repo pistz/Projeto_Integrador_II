@@ -1,4 +1,4 @@
-package org.felipe.gestaoacolhidos.model.domain.entity.NightStand;
+package org.felipe.gestaoacolhidos.model.domain.entity.NightReception;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,15 +15,17 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class NightStand {
+public class NightReception {
 
     @Id
     private UUID id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private LocalDate eventDate;
 
-    @Column(nullable = false, name = "acolhidos_dia")
+    @Column(nullable = false, name = "updated_by")
+    private String updatedBy;
+
     @OneToMany
     private List<Hosted> hosteds;
 
