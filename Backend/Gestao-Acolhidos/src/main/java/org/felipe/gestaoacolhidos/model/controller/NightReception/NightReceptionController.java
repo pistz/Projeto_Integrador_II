@@ -77,6 +77,30 @@ public class NightReceptionController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @GetMapping("/find/month-year")
+    @Operation(description = "Busca todos os eventos de um mês específico", method = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Eventos recuperados com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Não há um eventos neste mês"),
+            @ApiResponse(responseCode = "401", description = "Não autorizado")
+    })
+    public ResponseEntity<List<NightReceptionDTO>> getAllEventsByMonthAndYear(@RequestParam int month, @RequestParam int year){
+        List<NightReceptionDTO> response = nightReceptionService.findAllEventsByMonthAndYear(month, year);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/find/year")
+    @Operation(description = "Busca todos os eventos de um ano específico", method = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Eventos recuperados com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Não há um eventos neste mês"),
+            @ApiResponse(responseCode = "401", description = "Não autorizado")
+    })
+    public ResponseEntity<List<NightReceptionDTO>> getAllEventsByYear(@RequestParam int year){
+        List<NightReceptionDTO> response = nightReceptionService.findAllEventsByYear(year);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
     @DeleteMapping("/delete/{id}")
     @Operation(description = "Apaga um evento registrado por seu Id", method = "DELETE")
     @ApiResponses(value = {

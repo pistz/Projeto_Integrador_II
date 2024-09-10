@@ -45,13 +45,7 @@ public class NightReceptionServiceImpl implements NightReceptionService {
         if(dateIsRepeated(dto.date())){
             throw new IllegalArgumentException("Já foi criado um evento para esta data");
         }
-        if(dto == null){
-            throw new NoSuchElementException("Dados inexistentes");
-        }
-        int currentCapacity = capacityReposity.findCurrentMaxCapacity().get();
-        if(dto.hostedList().size() > currentCapacity){
-            throw new IllegalArgumentException("A quantidade de acolhidos é maior do que a capacidade do albergue");
-        }
+        checkRequestValidity(dto);
         NightReception nightReception = new NightReception();
         nightReception.setId(UUID.randomUUID());
         nightReception.setEventDate(dto.date());
@@ -86,15 +80,8 @@ public class NightReceptionServiceImpl implements NightReceptionService {
                 throw new IllegalArgumentException("Já foi criado um evento para esta data");
             }
         }
-        if(dto == null){
-            throw new NoSuchElementException("Dados inexistentes");
-        }
-        int currentCapacity = capacityReposity.findCurrentMaxCapacity().get();
-        if(dto.hostedList().size() > currentCapacity){
-            throw new IllegalArgumentException("A quantidade de acolhidos é maior do que a capacidade do albergue");
-        }
+        checkRequestValidity(dto);
         NightReception nightReception = event.get();
-
         List<Hosted> newHostedList = convertHostedDtoToHosted(dto);
         List<Hosted> mutableHosteds = new ArrayList<>(nightReception.getHosteds());
         mutableHosteds.clear();
@@ -121,6 +108,22 @@ public class NightReceptionServiceImpl implements NightReceptionService {
     }
 
     @Override
+    public List<NightReceptionDTO> findAllEventsByMonthAndYear(int month, int year) {
+        List<NightReception> query = nightReceptionRepository.findByMonthAndYear(month, year);
+        return query.stream()
+                .map(this::extractNightReceptionDTO)
+                .toList();
+    }
+
+    @Override
+    public List<NightReceptionDTO> findAllEventsByYear(int year) {
+        List<NightReception> query = nightReceptionRepository.findByYear(year);
+        return query.stream()
+                .map(this::extractNightReceptionDTO)
+                .toList();
+    }
+
+    @Override
     public NightReceptionDTO findById(UUID id) {
         NightReception query = nightReceptionRepository.findById(id).orElseThrow(NoSuchElementException::new);
         return extractNightReceptionDTO(query);
@@ -143,6 +146,15 @@ public class NightReceptionServiceImpl implements NightReceptionService {
         );
     }
 
+    private void checkRequestValidity(NightReceptionCreateDTO dto){
+        if(dto == null){
+            throw new NoSuchElementException("Dados inexistentes");
+        }
+        int currentCapacity = capacityReposity.findCurrentMaxCapacity().get();
+        if(dto.hostedList().size() > currentCapacity){
+            throw new IllegalArgumentException("A quantidade de acolhidos é maior do que a capacidade do albergue");
+        }
+    }
 
     private List<Hosted> convertHostedDtoToHosted(NightReceptionCreateDTO dto){
         return dto.hostedList().stream()

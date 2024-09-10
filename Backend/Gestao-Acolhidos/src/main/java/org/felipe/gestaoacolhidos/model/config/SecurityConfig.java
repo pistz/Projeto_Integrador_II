@@ -2,7 +2,6 @@ package org.felipe.gestaoacolhidos.model.config;
 
 import org.felipe.gestaoacolhidos.model.domain.enums.role.Role;
 import org.felipe.gestaoacolhidos.model.security.JwtAuthenticationFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

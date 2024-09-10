@@ -15,6 +15,8 @@ public interface NightReceptionService {
     NightReceptionResponseDTO updateEvent(UUID id, NightReceptionCreateDTO dto);
     List<NightReceptionDTO> findAll();
     NightReceptionDTO findByEventDate(LocalDate date);
+    List<NightReceptionDTO> findAllEventsByMonthAndYear(int month, int year);
+    List<NightReceptionDTO> findAllEventsByYear(int year);
     NightReceptionDTO findById(UUID uuid);
 
 
