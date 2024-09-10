@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Hosted;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,6 +33,6 @@ public class NightReception {
             joinColumns = @JoinColumn(name = "night_reception_id"),
             inverseJoinColumns = @JoinColumn(name = "hosteds_id")
     )
-    private List<Hosted> hosteds;
+    private List<Hosted> hosteds = new ArrayList<>();
 
 }

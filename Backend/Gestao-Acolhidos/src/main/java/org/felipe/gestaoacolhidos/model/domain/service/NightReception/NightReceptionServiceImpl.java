@@ -4,7 +4,6 @@ import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.HostedResumedDTO;
 import org.felipe.gestaoacolhidos.model.domain.dto.NightReception.NightReceptionCreateDTO;
 import org.felipe.gestaoacolhidos.model.domain.dto.NightReception.NightReceptionDTO;
 import org.felipe.gestaoacolhidos.model.domain.dto.NightReception.NightReceptionResponseDTO;
-import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Attendance.Attendance;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Hosted;
 import org.felipe.gestaoacolhidos.model.domain.entity.NightReception.NightReception;
 import org.felipe.gestaoacolhidos.model.logs.UserLoggingInterceptor;
@@ -12,9 +11,11 @@ import org.felipe.gestaoacolhidos.model.repository.capacity.CapacityReposity;
 import org.felipe.gestaoacolhidos.model.repository.hosted.HostedRepository;
 import org.felipe.gestaoacolhidos.model.repository.nightReception.NightReceptionRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -39,6 +40,7 @@ public class NightReceptionServiceImpl implements NightReceptionService {
     }
 
     @Override
+    @Transactional
     public NightReceptionResponseDTO createEvent(NightReceptionCreateDTO dto){
         if(dateIsRepeated(dto.date())){
             throw new IllegalArgumentException("Já foi criado um evento para esta data");
@@ -56,24 +58,28 @@ public class NightReceptionServiceImpl implements NightReceptionService {
         List<Hosted> hostedList = convertHostedDtoToHosted(dto);
         nightReception.setHosteds(hostedList);
         nightReception.setUpdatedBy(userLoggingInterceptor.getRegisteredUser());
-        setHostedAttendance(hostedList, nightReception);
         nightReceptionRepository.save(nightReception);
         return new NightReceptionResponseDTO("Evento criado com sucesso!");
     }
 
     @Override
+    @Transactional
     public NightReceptionResponseDTO deleteEvent(UUID eventId) {
         if(eventId == null){
             throw new NoSuchElementException("Dados inexistentes");
         }
         NightReception nightReception = nightReceptionRepository.findById(eventId).orElseThrow(NoSuchElementException::new);
-        removeHostedAttendance(nightReception);
         nightReceptionRepository.delete(nightReception);
         return new NightReceptionResponseDTO("Evento removido com sucesso!");
     }
 
     @Override
+    @Transactional
     public NightReceptionResponseDTO updateEvent(UUID eventId, NightReceptionCreateDTO dto) {
+        Optional<NightReception> event = nightReceptionRepository.findById(eventId);
+        if(event.isEmpty()){
+            throw new NoSuchElementException("Evento inexistente");
+        }
         if(dateIsRepeated(dto.date())){
             var result = this.findByEventDate(dto.date());
             if(result.receptionId() != eventId){
@@ -87,11 +93,15 @@ public class NightReceptionServiceImpl implements NightReceptionService {
         if(dto.hostedList().size() > currentCapacity){
             throw new IllegalArgumentException("A quantidade de acolhidos é maior do que a capacidade do albergue");
         }
-        NightReception nightReception = nightReceptionRepository.findById(eventId).orElseThrow(NoSuchElementException::new);
-        removeHostedAttendance(nightReception);
-        List<Hosted> hostedList = convertHostedDtoToHosted(dto);
-        nightReception.setHosteds(hostedList);
-        setHostedAttendance(hostedList, nightReception);
+        NightReception nightReception = event.get();
+
+        List<Hosted> newHostedList = convertHostedDtoToHosted(dto);
+        List<Hosted> mutableHosteds = new ArrayList<>(nightReception.getHosteds());
+        mutableHosteds.clear();
+        mutableHosteds.addAll(newHostedList);
+        nightReception.setHosteds(mutableHosteds);;
+
+        nightReception.setUpdatedBy(userLoggingInterceptor.getRegisteredUser());
         nightReceptionRepository.save(nightReception);
         return new NightReceptionResponseDTO("Evento atualizado com sucesso!");
     }
@@ -117,41 +127,22 @@ public class NightReceptionServiceImpl implements NightReceptionService {
     }
 
     private NightReceptionDTO extractNightReceptionDTO(NightReception nightReception) {
-        List<HostedResumedDTO> hostedList = new ArrayList<>();
-        nightReception.getHosteds()
-                .forEach(hosted ->{
-                    HostedResumedDTO dto = new HostedResumedDTO(hosted.getId(),
-                            hosted.getFirstName(),
-                            hosted.getLastName(),
-                            hosted.getSocialSecurityNumber());
-                    hostedList.add(dto);
-                });
-        return new NightReceptionDTO(nightReception.getId(), nightReception.getEventDate(),hostedList);
+        List<HostedResumedDTO> hostedList = nightReception.getHosteds().stream()
+                .map(hosted -> new HostedResumedDTO(
+                        hosted.getId(),
+                        hosted.getFirstName(),
+                        hosted.getLastName(),
+                        hosted.getSocialSecurityNumber()
+                ))
+                .collect(Collectors.toList());
+
+        return new NightReceptionDTO(
+                nightReception.getId(),
+                nightReception.getEventDate(),
+                hostedList
+        );
     }
 
-    private void setHostedAttendance(List<Hosted> hostedList, NightReception nightReception){
-        hostedList.stream()
-                .peek(hosted -> {
-                    List<Attendance> attendanceList = hosted.getAttendance();
-                    if (attendanceList == null) {
-                        attendanceList = new ArrayList<>();
-                    }
-                    Attendance newAttendance = new Attendance();
-                    newAttendance.setId(UUID.randomUUID());
-                    newAttendance.setNightReceptionId(nightReception.getId());
-                    newAttendance.setDate(nightReception.getEventDate());
-                    attendanceList.add(newAttendance);
-                    hosted.setAttendance(attendanceList);
-                })
-                .forEach(hostedRepository::save);
-    }
-
-    private void removeHostedAttendance(NightReception nightReception){
-        nightReception.getHosteds().forEach(hosted -> {
-            hosted.getAttendance().removeIf(attendance -> attendance.getNightReceptionId().equals(nightReception.getId()));
-            hostedRepository.save(hosted);
-        });
-    }
 
     private List<Hosted> convertHostedDtoToHosted(NightReceptionCreateDTO dto){
         return dto.hostedList().stream()

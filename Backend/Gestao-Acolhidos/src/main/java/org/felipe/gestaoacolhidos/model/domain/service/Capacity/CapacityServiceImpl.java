@@ -3,6 +3,7 @@ package org.felipe.gestaoacolhidos.model.domain.service.Capacity;
 import org.felipe.gestaoacolhidos.model.domain.entity.Capacity.Capacity;
 import org.felipe.gestaoacolhidos.model.repository.capacity.CapacityReposity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -23,6 +24,7 @@ public class CapacityServiceImpl implements CapacityService{
     }
 
     @Override
+    @Transactional
     public void updateCapacity(int capacity) {
         Capacity currentCapacity = checkExists();
         if(currentCapacity == null) {

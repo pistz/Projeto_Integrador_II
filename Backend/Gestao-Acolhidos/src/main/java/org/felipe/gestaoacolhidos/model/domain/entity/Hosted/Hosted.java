@@ -3,7 +3,6 @@ package org.felipe.gestaoacolhidos.model.domain.entity.Hosted;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Attendance.Attendance;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.CustomTreatments.CustomTreatments;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.Documents.Documents;
 import org.felipe.gestaoacolhidos.model.domain.entity.Hosted.FamilyComposition.FamilyComposition;
@@ -100,9 +99,6 @@ public class Hosted {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<FamilyTable> familyTable;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Attendance> attendance;
 
     //Informativos
 

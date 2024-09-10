@@ -24,6 +24,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,6 +56,19 @@ public class HostedController {
         var hosted = hostedService.findById(id);
         return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(hosted);
     }
+
+    @GetMapping("/night-receptions/{id}")
+    @Operation(description = "Retorna a lista com as datas em que o acolhido dormiu no albergue", method = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista recuperada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Id não existente")
+    })
+    public ResponseEntity<List<LocalDate>> findNigthReceptions(@PathVariable UUID id){
+        var hosted = hostedService.findAllNightReceptions(id);
+        return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(hosted);
+    }
+
+
 
     @PostMapping("/create")
     @Operation(description = "Cria e registra um Acolhido", method = "POST")

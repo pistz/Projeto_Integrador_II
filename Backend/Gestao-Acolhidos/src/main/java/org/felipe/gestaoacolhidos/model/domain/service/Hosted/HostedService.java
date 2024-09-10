@@ -15,6 +15,7 @@ import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.ReferenceAddress.Refer
 import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.SituationalRisk.SituationalRiskUpdateDTO;
 import org.felipe.gestaoacolhidos.model.domain.dto.Hosted.SocialPrograms.SocialProgramsDTO;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,6 +26,7 @@ public interface HostedService {
     HostedResponseDeletedDTO delete(UUID id);
     Hosted findById(UUID id);
     List<Hosted> findAll();
+    List<LocalDate> findAllNightReceptions(UUID id);
 
     HostedResponseUpdatedDTO updateDocuments(UUID hostedId, DocumentsUpdateDTO documents);
     HostedResponseUpdatedDTO updateSituationalRisk(UUID hostedId, SituationalRiskUpdateDTO dto);

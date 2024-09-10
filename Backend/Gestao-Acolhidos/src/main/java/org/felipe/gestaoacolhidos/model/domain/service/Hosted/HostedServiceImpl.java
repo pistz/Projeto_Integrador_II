@@ -29,6 +29,7 @@ import org.felipe.gestaoacolhidos.model.logs.UserLoggingInterceptor;
 import org.felipe.gestaoacolhidos.model.repository.hosted.HostedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
@@ -45,6 +46,7 @@ public class HostedServiceImpl implements HostedService {
     private UserLoggingInterceptor interceptor;
 
     @Override
+    @Transactional
     public HostedResponseCreatedDTO create(HostedCreateNewDTO hosted) {
         validateCPF(hosted.socialSecurityNumber());
         var exists = hostedRepository.existsBySocialSecurityNumber(hosted.socialSecurityNumber());
@@ -71,6 +73,7 @@ public class HostedServiceImpl implements HostedService {
     }
 
     @Override
+    @Transactional
     public HostedResponseDeletedDTO delete(UUID id) {
         var exists = hostedRepository.existsById(id);
         if(exists) {
@@ -91,6 +94,12 @@ public class HostedServiceImpl implements HostedService {
     }
 
     @Override
+    public List<LocalDate> findAllNightReceptions(UUID id) {
+        return hostedRepository.queryHostedByNighReception(id);
+    }
+
+    @Override
+    @Transactional
     public HostedResponseUpdatedDTO updateIdentification(UUID id, HostedCreateNewDTO dto) {
         Optional<Hosted> registeredHosted = checkHostedExistence(id);
         Hosted updateHost = registeredHosted.get();
@@ -117,6 +126,7 @@ public class HostedServiceImpl implements HostedService {
     }
 
     @Override
+    @Transactional
     public HostedResponseUpdatedDTO updateDocuments(UUID hostedId, DocumentsUpdateDTO dto) {
         Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
         Hosted updateHostedDocuments = registeredHosted.get();
@@ -157,6 +167,7 @@ public class HostedServiceImpl implements HostedService {
     }
 
     @Override
+    @Transactional
     public HostedResponseUpdatedDTO updateSituationalRisk(UUID hostedId, SituationalRiskUpdateDTO dto) {
         Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
         Hosted updateHostedSituacionalRisk = registeredHosted.get();
@@ -186,6 +197,7 @@ public class HostedServiceImpl implements HostedService {
     }
 
     @Override
+    @Transactional
     public HostedResponseUpdatedDTO updateHasFamily(UUID hostedId, FamilyCompositionDTO dto) {
         Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
         Hosted updateHostedFamilyComposition = registeredHosted.get();
@@ -212,6 +224,7 @@ public class HostedServiceImpl implements HostedService {
     }
 
     @Override
+    @Transactional
     public HostedResponseUpdatedDTO updateFamilyTable(UUID hostedId, List<FamilyTableMemberDTO> memberListDto) {
         Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
         Hosted updateHostedFamilyTable = registeredHosted.get();
@@ -243,6 +256,7 @@ public class HostedServiceImpl implements HostedService {
     }
 
     @Override
+    @Transactional
     public HostedResponseUpdatedDTO updatePoliceReport(UUID hostedId, PoliceReportDTO dto) {
         Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
         Hosted updateHostedPoliceReport = registeredHosted.get();
@@ -275,6 +289,7 @@ public class HostedServiceImpl implements HostedService {
     }
 
     @Override
+    @Transactional
     public HostedResponseUpdatedDTO updateReferenceAddress(UUID hostedId, ReferenceAddressDTO dto) {
         Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
         Hosted updatedHostedReferenceAddress = registeredHosted.get();
@@ -306,6 +321,7 @@ public class HostedServiceImpl implements HostedService {
     }
 
     @Override
+    @Transactional
     public HostedResponseUpdatedDTO updateSocialPrograms(UUID hostedId, SocialProgramsDTO dto) {
         Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
         Hosted updateHostedSocialPrograms = registeredHosted.get();
@@ -343,6 +359,7 @@ public class HostedServiceImpl implements HostedService {
     }
 
     @Override
+    @Transactional
     public HostedResponseUpdatedDTO updateMedicalRecord(UUID hostedId, MedicalRecordDTO dto) {
         Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
         Hosted updateHostedMedicalRecord = registeredHosted.get();
@@ -370,6 +387,7 @@ public class HostedServiceImpl implements HostedService {
     }
 
     @Override
+    @Transactional
     public HostedResponseUpdatedDTO updateCustomTreatments(UUID hostedId, CustomTreatmentsDTO dto) {
         Optional<Hosted> registeredHosted = checkHostedExistence(hostedId);
         Hosted updateHostedCustomProcedures = registeredHosted.get();

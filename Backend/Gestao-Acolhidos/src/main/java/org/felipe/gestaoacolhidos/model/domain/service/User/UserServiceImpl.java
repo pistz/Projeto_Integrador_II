@@ -11,6 +11,7 @@ import org.felipe.gestaoacolhidos.model.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -25,6 +26,7 @@ public class UserServiceImpl implements UserService {
     PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public UserCreatedResponseDTO createUser(UserCreateDTO createUserDTO) {
         if(!validateEmail(createUserDTO.email())) {
             throw new IllegalArgumentException("E-mail inválido");
@@ -44,6 +46,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDeletedDTO deleteUser(UUID userId) {
         if(userId == null){
             throw new IllegalArgumentException("No user selected");
