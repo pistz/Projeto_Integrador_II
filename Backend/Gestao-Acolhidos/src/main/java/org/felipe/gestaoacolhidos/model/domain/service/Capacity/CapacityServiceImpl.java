@@ -26,6 +26,9 @@ public class CapacityServiceImpl implements CapacityService{
     @Override
     @Transactional
     public void updateCapacity(int capacity) {
+        if(capacity <= 0){
+            throw new IllegalArgumentException("O valor deve ser maior que zero.");
+        }
         Capacity currentCapacity = checkExists();
         if(currentCapacity == null) {
             currentCapacity = new Capacity(

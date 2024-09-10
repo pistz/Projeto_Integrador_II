@@ -10,6 +10,7 @@ import org.felipe.gestaoacolhidos.model.logs.UserLoggingInterceptor;
 import org.felipe.gestaoacolhidos.model.repository.capacity.CapacityReposity;
 import org.felipe.gestaoacolhidos.model.repository.hosted.HostedRepository;
 import org.felipe.gestaoacolhidos.model.repository.nightReception.NightReceptionRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -95,7 +96,7 @@ public class NightReceptionServiceImpl implements NightReceptionService {
 
     @Override
     public List<NightReceptionDTO> findAll() {
-        List<NightReception> query = nightReceptionRepository.findAll();
+        List<NightReception> query = nightReceptionRepository.findAll(Sort.by(Sort.Order.desc("eventDate")));
         return query.stream()
                 .map(this::extractNightReceptionDTO)
                 .toList();
@@ -109,6 +110,9 @@ public class NightReceptionServiceImpl implements NightReceptionService {
 
     @Override
     public List<NightReceptionDTO> findAllEventsByMonthAndYear(int month, int year) {
+        if(month < 1 || month > 12){
+            throw new IllegalArgumentException("Mês inválido");
+        }
         List<NightReception> query = nightReceptionRepository.findByMonthAndYear(month, year);
         return query.stream()
                 .map(this::extractNightReceptionDTO)
@@ -117,6 +121,9 @@ public class NightReceptionServiceImpl implements NightReceptionService {
 
     @Override
     public List<NightReceptionDTO> findAllEventsByYear(int year) {
+        if(year < 0){
+            throw new IllegalArgumentException("Ano inválido");
+        }
         List<NightReception> query = nightReceptionRepository.findByYear(year);
         return query.stream()
                 .map(this::extractNightReceptionDTO)
