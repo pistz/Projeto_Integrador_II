@@ -26,7 +26,12 @@ public class NightReception {
     @Column(nullable = false, name = "updated_by")
     private String updatedBy;
 
-    @OneToMany
+    @ManyToMany
+    @JoinTable(
+            name = "db_acolhimento_hosteds",
+            joinColumns = @JoinColumn(name = "night_reception_id"),
+            inverseJoinColumns = @JoinColumn(name = "hosteds_id")
+    )
     private List<Hosted> hosteds;
 
 }
