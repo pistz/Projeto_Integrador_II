@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
-@Tag(name = "Endpoint de Autenticação")
+@Tag(name = "Endpoint de Autenticação e Login")
 public class AuthController {
 
     @Autowired

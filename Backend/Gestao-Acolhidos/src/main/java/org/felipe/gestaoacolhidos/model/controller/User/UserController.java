@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
-@Tag(name = "Endpoints de Usuário")
+@Tag(name = "Endpoints de gerenciamento de Usuários")
 public class UserController {
 
     @Autowired

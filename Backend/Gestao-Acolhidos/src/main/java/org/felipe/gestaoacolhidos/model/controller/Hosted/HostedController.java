@@ -30,7 +30,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/hosted")
-@Tag(name = "Endpoints de Acolhidos")
+@Tag(name = "Endpoints de cadastro de Acolhidos")
 public class HostedController {
 
     @Autowired

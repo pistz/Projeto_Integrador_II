@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/night-reception")
-@Tag(name = "Endpoints de Acolhimentos noturnos")
+@Tag(name = "Endpoints de gerenciamento de acolhimentos noturnos")
 public class NightReceptionController {
 
     private final NightReceptionService nightReceptionService;
