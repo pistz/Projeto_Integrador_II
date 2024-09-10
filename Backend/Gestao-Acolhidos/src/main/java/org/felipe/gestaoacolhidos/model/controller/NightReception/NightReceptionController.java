@@ -1,7 +1,6 @@
 package org.felipe.gestaoacolhidos.model.controller.NightReception;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -112,6 +111,7 @@ public class NightReceptionController {
         NightReceptionResponseDTO response = nightReceptionService.deleteEvent(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
     }
+
     @PutMapping("/update/{id}")
     @Operation(description = "Atualiza um evento registrado por seu Id", method = "PUT")
     @ApiResponses(value = {
