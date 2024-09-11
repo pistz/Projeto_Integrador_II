@@ -2,7 +2,14 @@ import React from 'react';
 import type { FormProps } from 'antd';
 import { Button, Form, Input } from 'antd';
 import {FieldType} from "./types.ts";
-import {MainContainer} from "./styles.ts";
+import {
+    LoginButtonStyle,
+    LoginFormStyle,
+    LoginH2Style,
+    LoginInputStyle,
+    LoginSpanStyle,
+    MainContainer
+} from "./styles.ts";
 import logo from '../../../assets/logo1.jpeg'
 
 
@@ -18,13 +25,14 @@ export const Login:React.FC = () => {
     return (
         <>
             <MainContainer>
-                <img alt={"Logo"} src={logo} style={{width:'15rem', margin:'1rem 1rem'}}/>
+                <h2 style={LoginH2Style}>SISTEMA DE GESTÃO DE ACOLHIDOS</h2>
+                <img alt={"Logo"} src={logo} style={{width: '15rem', margin: '1rem 1rem'}}/>
                 <Form
                     name="basic"
-                    labelCol={{ span: 8 }}
-                    wrapperCol={{ span: 16 }}
-                    style={{ maxWidth: 600 }}
-                    initialValues={{ remember: true }}
+                    labelCol={{span: 8}}
+                    wrapperCol={{span: 16}}
+                    style={LoginFormStyle}
+                    initialValues={{remember: true}}
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
                     autoComplete="off"
@@ -32,27 +40,31 @@ export const Login:React.FC = () => {
                     <Form.Item<FieldType>
                         label="E-mail"
                         name="email"
-                        rules={[{ required: true, message: 'Coloque seu e-mail!' }]}
+                        rules={[{required: true, message: 'Coloque seu e-mail!'}]}
                     >
                         <Input
                             type="email"
+                            style={LoginInputStyle}
                         />
                     </Form.Item>
 
                     <Form.Item<FieldType>
                         label="Senha"
                         name="password"
-                        rules={[{ required: true, message: 'Coloque sua senha!' }]}
+                        rules={[{required: true, message: 'Coloque sua senha!'}]}
                     >
-                        <Input.Password />
+                        <Input.Password
+                            style={LoginInputStyle}
+                        />
                     </Form.Item>
 
-                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                        <Button type="primary" htmlType="submit">
+                    <Form.Item wrapperCol={{offset: 8, span: 16}}>
+                        <Button type="primary" htmlType="submit" style={LoginButtonStyle}>
                             Entrar
                         </Button>
                     </Form.Item>
                 </Form>
+            <span style={LoginSpanStyle}>Versão 1.0 - {new Date().getFullYear()}</span>
             </MainContainer>
         </>
     );
