@@ -1,9 +1,10 @@
 import React from 'react';
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import {Login} from "../components/pages/Login/Login.tsx";
 import {Home} from "../components/pages/Home/Home.tsx";
 import {Structure} from "../components/shared/Structure/Structure.tsx";
 import {Button} from "antd";
+import { useAuth } from '../hooks/useAuth.ts';
 
 export type Router = {
     label:string,
@@ -11,7 +12,7 @@ export type Router = {
     element:React.ReactElement,
     role:string[]
 }
-export const routes:Router[] = [
+const routes:Router[] = [
     {
         label:'Inicio',
         path:"home",
@@ -44,16 +45,19 @@ export const routes:Router[] = [
     },
 ];
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function filteredRoutes(userRole:string):Router[]{
     const filtered:Router[] = routes.filter((e) => e.role.includes(userRole));
     return filtered;
 }
 
-export const RoutesReference:React.FC = () => {
+const RoutesReference:React.FC = () => {
 
-    // const ForbiddenAcces:React.FC =()=>{
-    //     return (<Navigate to='/' />)
-    // }
+    const {signed} = useAuth();
+
+    const ForbiddenAcces:React.FC =()=>{
+        return (<Navigate to='/' />)
+    }
 
     return (
         <BrowserRouter>
@@ -61,10 +65,12 @@ export const RoutesReference:React.FC = () => {
                 <Route path={'/'} element={<Login />}/>
                 <Route path='*' element={<Login />} />
                 <Route path='/login' element={<Login />}/>
-                <Route path='/app' element={<Structure />}>
+                <Route path='/app' element={signed? <Structure /> : <ForbiddenAcces />}>
                     {routes.map((_,index) => <Route path={routes[index].path} element={routes[index].element} key={index} />)}
                 </Route>
             </Routes>
         </BrowserRouter>
     )
 }
+
+export default RoutesReference;

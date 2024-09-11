@@ -1,11 +1,14 @@
-import {RoutesReference} from "./routes/Routes.tsx";
 import './global.css'
+import RoutesReference from "./routes/Routes.tsx";
+import { AuthProvider } from "./context/authContext/authContext.tsx";
 
 function App() {
 
   return (
     <>
-     <RoutesReference />
+    <AuthProvider>
+      <RoutesReference />
+    </AuthProvider>
     </>
   )
 }
