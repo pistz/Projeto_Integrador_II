@@ -16,9 +16,17 @@ export const LoginInputStyle:React.CSSProperties = {
     position:'relative',
     width:'16rem',
 }
+export const loginFormStyles:React.CSSProperties = {
+    display:'flex',
+    flexDirection:'column',
+    margin:'1rem 1rem',
+    position:'relative',
+    alignContent:'center',
+    justifyContent:'center'
+}
 
 export const LoginFormStyle:React.CSSProperties = {
-    maxWidth: 40 ,
+    maxWidth: 60 ,
     display:'flex',
     flexDirection:'column',
     alignItems:'center',
@@ -26,10 +34,27 @@ export const LoginFormStyle:React.CSSProperties = {
     margin:'3rem auto',
 }
 
+
+export const formStyles:React.CSSProperties = {
+    padding:'0 1rem',
+    height:'2rem',
+    width:'20rem',
+}
+
+export const buttonsFormStyles:React.CSSProperties = {
+    display:'flex',
+    flexDirection:"row",
+    alignItems:'center',
+    justifyContent:'center',
+    textAlign:'center',
+}
+
 export const LoginButtonStyle:React.CSSProperties = {
+    margin:'0.5rem 1rem',
+    height:'2rem',
     position:'relative',
-    alignSelf:'center',
-    justifySelf:'center'
+    width:'12rem',
+    backgroundColor:'#272B2A'
 }
 
 export const LoginH2Style:React.CSSProperties = {

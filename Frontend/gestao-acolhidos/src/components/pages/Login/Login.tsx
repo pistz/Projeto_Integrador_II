@@ -3,34 +3,41 @@ import type { FormProps } from 'antd';
 import { Button, Form, Input } from 'antd';
 import {FieldType} from "./types.ts";
 import {
+    buttonsFormStyles,
+    formStyles,
     LoginButtonStyle,
-    LoginFormStyle,
+    LoginFormStyle, loginFormStyles,
     LoginH2Style,
-    LoginInputStyle,
     LoginSpanStyle,
     MainContainer
 } from "./styles.ts";
 import logo from '../../../assets/logo1.jpeg'
+import {NavigateFunction, useNavigate} from "react-router-dom";
 
 
-const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-    console.log('Success:', values);
-};
-
-const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-};
 
 export const Login:React.FC = () => {
+    const navigate:NavigateFunction = useNavigate()
+
+
+    const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+        console.log('Success:', values);
+        navigate('/app/home')
+
+    };
+
+    const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };
+
     return (
         <>
             <MainContainer>
-                <h2 style={LoginH2Style}>SISTEMA DE GESTÃO DE ACOLHIDOS</h2>
-                <img alt={"Logo"} src={logo} style={{width: '15rem', margin: '1rem 1rem'}}/>
+                <h2 style={LoginH2Style}>GESTÃO DE ACOLHIDOS</h2>
+                <img alt={"Logo"} src={logo} style={{width: '15rem', margin: '1rem 1rem', borderRadius:"100% 100%"}}/>
+                <div style={loginFormStyles}>
                 <Form
                     name="basic"
-                    labelCol={{span: 8}}
-                    wrapperCol={{span: 16}}
                     style={LoginFormStyle}
                     initialValues={{remember: true}}
                     onFinish={onFinish}
@@ -44,7 +51,7 @@ export const Login:React.FC = () => {
                     >
                         <Input
                             type="email"
-                            style={LoginInputStyle}
+                            style={formStyles}
                         />
                     </Form.Item>
 
@@ -54,16 +61,17 @@ export const Login:React.FC = () => {
                         rules={[{required: true, message: 'Coloque sua senha!'}]}
                     >
                         <Input.Password
-                            style={LoginInputStyle}
+                            style={formStyles}
                         />
                     </Form.Item>
 
-                    <Form.Item wrapperCol={{offset: 8, span: 16}}>
+                    <Form.Item style={buttonsFormStyles}>
                         <Button type="primary" htmlType="submit" style={LoginButtonStyle}>
                             Entrar
                         </Button>
                     </Form.Item>
                 </Form>
+                </div>
             <span style={LoginSpanStyle}>Versão 1.0 - {new Date().getFullYear()}</span>
             </MainContainer>
         </>
