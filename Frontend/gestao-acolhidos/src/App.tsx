@@ -1,10 +1,11 @@
+import {RoutesReference} from "./routes/Routes.tsx";
+import './global.css'
+
 function App() {
 
   return (
     <>
-      <div>
-        Hello
-      </div>
+     <RoutesReference />
     </>
   )
 }
