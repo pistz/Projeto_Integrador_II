@@ -7,6 +7,7 @@ dotenv.config()
 export default defineConfig({
   plugins: [react()],
   define:{
-    'process.env.BASE_URL':JSON.stringify(process.env.BASE_URL)
+    'process.env.BASE_URL':JSON.stringify(process.env.BASE_URL),
+    'process.env.TOKEN_ID':JSON.stringify(process.env.TOKEN_ID)
   }
 })

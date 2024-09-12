@@ -16,9 +16,12 @@ import {NavigateFunction, useNavigate} from "react-router-dom";
 import { useAuth } from '../../../hooks/useAuth.ts';
 import { AuthRepository } from '../../../repository/Auth/AuthRepository.ts';
 import { UserLoginDTO } from '../../../entity/User/dto/UserLoginDTO.ts';
+import { notifyError } from '../../shared/PopMessage/PopMessage.ts';
+import { log } from 'console';
 
 
 const authenticate = new AuthRepository();
+const tokenId:string = String(process.env.TOKEN_ID);
 
 export const Login:React.FC = () => {
 
@@ -38,19 +41,21 @@ export const Login:React.FC = () => {
             body.email=values.email;
             body.password=values.password
         }
-        await authenticate.authenticateUser(body)
-        .then((e)=>{
-            sessionStorage.setItem("u00300",JSON.stringify(e));
-            setSessionToken(e.toString())
-        });
+        try {
+            await authenticate.authenticateUser(body)
+                .then((e)=>{
+                    sessionStorage.setItem(tokenId,JSON.stringify(e));
+                    setSessionToken(e.toString())
+                });
+        } catch (error) {
+            errorOnFinish(error)
+        }
     };
 
-    const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
-        navigate('/login')
-        setSigned(false)
-        sessionStorage.clear();
-        console.error('Failed:', errorInfo);
-    };
+    const errorOnFinish = (error:unknown) =>{
+        notifyError("Usuário ou senha inválidos");
+        log(error)
+    }
 
 
     useEffect(()=>{        
@@ -93,7 +98,6 @@ export const Login:React.FC = () => {
                     style={LoginFormStyle}
                     initialValues={{remember: true}}
                     onFinish={onFinish}
-                    onFinishFailed={onFinishFailed}
                     autoComplete="off"
                 >
                     <Form.Item<FieldType>
