@@ -38,9 +38,9 @@ const routes:Router[] = [
         role:['ADMIN', 'BOARD', 'SECRETARY']
     },
     {
-        label:'Logout',
+        label:'Sair',
         path:"logout",
-        element:<Button onClick={()=> {sessionStorage.clear(); window.location.reload()}}>Deseja realmente sair?</Button>,
+        element:<Button onClick={()=> {sessionStorage.clear(); window.location.reload()}}>Clique aqui para confirmar a saída</Button>,
         role:['ADMIN', 'BOARD', 'SECRETARY']
     },
 ];

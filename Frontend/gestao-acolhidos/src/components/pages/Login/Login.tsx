@@ -17,7 +17,6 @@ import { useAuth } from '../../../hooks/useAuth.ts';
 import { AuthRepository } from '../../../repository/Auth/AuthRepository.ts';
 import { UserLoginDTO } from '../../../entity/User/dto/UserLoginDTO.ts';
 import { notifyError } from '../../shared/PopMessage/PopMessage.ts';
-import { log } from 'console';
 
 
 const authenticate = new AuthRepository();
@@ -54,7 +53,7 @@ export const Login:React.FC = () => {
 
     const errorOnFinish = (error:unknown) =>{
         notifyError("Usuário ou senha inválidos");
-        log(error)
+        return error;
     }
 
 
