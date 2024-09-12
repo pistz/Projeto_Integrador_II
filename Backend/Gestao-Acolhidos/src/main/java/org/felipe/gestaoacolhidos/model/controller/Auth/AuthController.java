@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.felipe.gestaoacolhidos.model.domain.dto.Auth.AuthDTO;
 import org.felipe.gestaoacolhidos.model.domain.dto.User.UserLoginDTO;
 import org.felipe.gestaoacolhidos.model.domain.service.Auth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,19 @@ public class AuthController {
     })
     public ResponseEntity<String> login(@RequestBody UserLoginDTO dto) {
             var auth = authService.authenticateUser(dto.email(), dto.password());
-            return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(auth.toString());
+            return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(auth);
+    }
+
+    @PostMapping("/validate")
+    @Operation(description = "Realiza a extração do role do usuário e envia ao Front-end", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Autenticação bem sucedida"),
+            @ApiResponse(responseCode = "401", description = "Não autorizado"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    })
+    public ResponseEntity<String> readTokenAndReturnRole(@RequestBody AuthDTO dto){
+        var role = authService.sendUserRole(dto.token());
+        return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(role);
     }
 
 }

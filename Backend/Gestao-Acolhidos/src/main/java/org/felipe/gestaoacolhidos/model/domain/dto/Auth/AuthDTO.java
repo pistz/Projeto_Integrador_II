@@ -1,2 +1,4 @@
-package org.felipe.gestaoacolhidos.model.domain.dto.Auth;public record AuthDTO() {
+package org.felipe.gestaoacolhidos.model.domain.dto.Auth;
+
+public record AuthDTO(String token) {
 }

@@ -29,4 +29,8 @@ public class AuthService {
             throw new IllegalArgumentException("Invalid credentials");
         }
     }
+
+    public String sendUserRole(String token){
+        return jwtUtil.getRoleFromToken(token);
+    }
 }

@@ -26,7 +26,7 @@ export const Login:React.FC = () => {
 
     const navigate:NavigateFunction = useNavigate()
 
-    const {signed, setSigned, setUserRole} = useAuth();
+    const {setSigned, setUserRole} = useAuth();
 
 
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
@@ -78,7 +78,7 @@ export const Login:React.FC = () => {
             }
         }
         authenticateLogin()
-    },[sessionToken, signed])
+    },[sessionToken])
 
 
 

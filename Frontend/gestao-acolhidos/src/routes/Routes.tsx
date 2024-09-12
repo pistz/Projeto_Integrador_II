@@ -40,7 +40,7 @@ const routes:Router[] = [
     {
         label:'Logout',
         path:"logout",
-        element:<Button onClick={()=> {sessionStorage.clear(); window.location.reload()}}>Confirma?</Button>,
+        element:<Button onClick={()=> {sessionStorage.clear(); window.location.reload()}}>Deseja realmente sair?</Button>,
         role:['ADMIN', 'BOARD', 'SECRETARY']
     },
 ];

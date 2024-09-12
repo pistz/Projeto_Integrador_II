@@ -27,7 +27,7 @@ public class JwtUtil {
     @Value("${api.issuer.name}")
     private String jwtIssuer;  // Ler o emissor do arquivo de propriedades
 
-    private long EXPIRADE_TIME = 86400000;// 24 hours
+    private long EXPIRADE_TIME = 43200000;// 12 hours
 
     private SecretKey getJwtSecretKey() {
         if (jwtSecret == null || jwtSecret.isEmpty()) {
@@ -99,6 +99,36 @@ public class JwtUtil {
             throw new RuntimeException("Error while extracting email from JWT", e);
         }
     }
+
+    public String getRoleFromToken(String token) {
+        boolean isValidToken = validateToken(token);
+        if (!isValidToken) {
+            throw new IllegalArgumentException("Invalid JWT");
+        }
+        try {
+            // Create the verifier
+            SecretKey key = getJwtSecretKey();
+            MACVerifier verifier = new MACVerifier(key.getEncoded());
+
+            // Parse the JWT
+            SignedJWT signedJWT = SignedJWT.parse(token);
+
+            // Verify the signature
+            if (!signedJWT.verify(verifier)) {
+                throw new IllegalArgumentException("Invalid JWT signature");
+            }
+
+            // Extract the claims
+            JWTClaimsSet claimsSet = signedJWT.getJWTClaimsSet();
+
+            // Get the subject (email)
+            return claimsSet.getClaim("role").toString();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error while extracting email from JWT", e);
+        }
+    }
+
 
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
