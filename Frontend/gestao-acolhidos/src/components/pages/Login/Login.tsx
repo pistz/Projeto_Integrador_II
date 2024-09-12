@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import type { FormProps } from 'antd';
 import { Button, Form, Input } from 'antd';
 import {FieldType} from "./types.ts";
@@ -13,23 +13,74 @@ import {
 } from "./styles.ts";
 import logo from '../../../assets/logo1.jpeg'
 import {NavigateFunction, useNavigate} from "react-router-dom";
+import { useAuth } from '../../../hooks/useAuth.ts';
+import { AuthRepository } from '../../../repository/Auth/AuthRepository.ts';
+import { UserLoginDTO } from '../../../entity/User/dto/UserLoginDTO.ts';
 
 
+const authenticate = new AuthRepository();
 
 export const Login:React.FC = () => {
-    
+
+    const [sessionToken, setSessionToken] = useState<string>();
+
     const navigate:NavigateFunction = useNavigate()
 
+    const {signed, setSigned, setUserRole} = useAuth();
 
-    const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-        console.log('Success:', values);
-        navigate('/app/home')
 
+    const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+        const body:UserLoginDTO = {
+            email:"",
+            password:""
+        }
+        if(values){
+            body.email=values.email;
+            body.password=values.password
+        }
+        await authenticate.authenticateUser(body)
+        .then((e)=>{
+            sessionStorage.setItem("u00300",JSON.stringify(e));
+            setSessionToken(e.toString())
+        });
     };
 
     const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
-        console.log('Failed:', errorInfo);
+        navigate('/login')
+        setSigned(false)
+        sessionStorage.clear();
+        console.error('Failed:', errorInfo);
     };
+
+
+    useEffect(()=>{        
+        const authenticateLogin = async () =>{
+            const token = authenticate.getTokenFromLocalStorage();
+            if(!token){
+                navigate('/login')
+                setSigned(false)
+                sessionStorage.clear();
+                return;
+            }
+            try {
+                await authenticate.getRoleFromToken(token)
+                .then((res)=>{
+                    const role = String(res);
+                    setUserRole(role)
+                    setSigned(true)
+                    navigate('/app/home');
+                });
+            } catch (error) {
+                console.error(error)
+                setSigned(false)
+                sessionStorage.clear()
+                navigate('/login')
+            }
+        }
+        authenticateLogin()
+    },[sessionToken, signed])
+
+
 
     return (
         <>

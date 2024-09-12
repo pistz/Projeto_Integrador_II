@@ -8,6 +8,7 @@ export const Structure:React.FC = () => {
 
     const {userRole} = useAuth()
     const filteredMenu = filteredRoutes(userRole);
+    console.log(filteredMenu)
 
     return (
         <>

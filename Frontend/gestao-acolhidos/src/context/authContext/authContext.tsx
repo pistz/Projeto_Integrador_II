@@ -11,10 +11,7 @@ export const AuthProvider: React.FC<IChildren> = ({ children }:IChildren) => {
     const [userEmail, setUserEmail] = useState<string>("");
 
     const [userRole, setUserRole] = useState<string>("");
-
-    const [userPassword, setUserPassword] = useState<string>("");
-
-
+    
     return (
     
     <AuthContext.Provider value={{ signed, setSigned,
@@ -22,8 +19,6 @@ export const AuthProvider: React.FC<IChildren> = ({ children }:IChildren) => {
                 setUserEmail, 
                 userRole, 
                 setUserRole, 
-                userPassword, 
-                setUserPassword, 
                 }}>
         {children}
     </AuthContext.Provider>

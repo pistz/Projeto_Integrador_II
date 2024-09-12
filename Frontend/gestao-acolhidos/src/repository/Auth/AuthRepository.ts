@@ -5,6 +5,7 @@ import Repository from "../base/Repository.ts";
 
 
 const loginUrl:string = endpoints.host+endpoints.login;
+const roleUrl:string = endpoints.host+endpoints.userRole;
 export class AuthRepository extends Repository{
 
     authenticateUser = async (user:UserLoginDTO):Promise<string> =>{
@@ -23,8 +24,19 @@ export class AuthRepository extends Repository{
         }
     }
 
+    getRoleFromToken = async (token:string):Promise<string|void> =>{
+        try {
+            const result = await axios.post(roleUrl, {token}, this.authHeader())
+            return result.data;
+
+        } catch (error) {
+            Repository.checkError(error)
+            throw Error("error: " + error);
+        }
+    }
+
     getTokenFromLocalStorage(){
-        const getToken = localStorage.getItem("u00300");
+        const getToken = sessionStorage.getItem("u00300");
         if(getToken){
             const token = JSON.parse(getToken);
             return token;

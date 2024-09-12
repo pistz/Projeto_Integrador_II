@@ -40,7 +40,7 @@ const routes:Router[] = [
     {
         label:'Logout',
         path:"logout",
-        element:<Button>Confirma?</Button>,
+        element:<Button onClick={()=> {sessionStorage.clear(); window.location.reload()}}>Confirma?</Button>,
         role:['ADMIN', 'BOARD', 'SECRETARY']
     },
 ];
@@ -74,3 +74,4 @@ const RoutesReference:React.FC = () => {
 }
 
 export default RoutesReference;
+
