@@ -17,10 +17,11 @@ import { useAuth } from '../../../hooks/useAuth.ts';
 import { AuthRepository } from '../../../repository/Auth/AuthRepository.ts';
 import { UserLoginDTO } from '../../../entity/User/dto/UserLoginDTO.ts';
 import { notifyError } from '../../shared/PopMessage/PopMessage.ts';
+import { getTokenFromLocalStorage, getTokenId } from '../../../services/Token.ts';
 
 
 const authenticate = new AuthRepository();
-const tokenId:string = String(process.env.TOKEN_ID);
+const tokenId:string = getTokenId();
 
 export const Login:React.FC = () => {
 
@@ -59,7 +60,7 @@ export const Login:React.FC = () => {
 
     useEffect(()=>{        
         const authenticateLogin = async () =>{
-            const token = authenticate.getTokenFromLocalStorage();
+            const token = getTokenFromLocalStorage();
             if(!token){
                 navigate('/login')
                 setSigned(false)
