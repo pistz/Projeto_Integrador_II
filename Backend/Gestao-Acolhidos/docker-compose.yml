@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.8'        corsConfiguration.setAllowedOriginPatterns(List.of("https://*.railway.app"));
 
 services:
   app:
