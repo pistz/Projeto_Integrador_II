@@ -6,3 +6,5 @@ services:
     container_name: gestao-acolhidos
     ports:
       - "8080:8080"
+    env_file:
+      - .env
