@@ -35,3 +35,4 @@ build/
 *.sql
 
 .env
+..env.swp
