@@ -3,9 +3,9 @@ import React from "react"
 export const mainDivStyle:React.CSSProperties = {
     display: 'flex',
     flexDirection:'column',
-    justifyContent:'start',
+    justifyContent:'center',
     alignItems:'center',
-    margin:'0 auto',
+    margin:'2rem auto',
     height:'95vh',
     width:'100vh'
 }
@@ -19,4 +19,8 @@ export const subMenuDivStyle:React.CSSProperties = {
     flexDirection:'row', 
     justifyContent:'space-between', 
     alignItems:"center"
+}
+
+export const hostedInputForm:React.CSSProperties = {
+    width:'20rem'
 }

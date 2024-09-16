@@ -22,7 +22,7 @@ export class HostedRepository extends Repository{
 
     create = async(dto:createHostedDto):Promise<void> =>{
         try{
-            await axios.post(createUrl,{dto},authHeader())
+            await axios.post(createUrl,dto,authHeader())
         }catch(error){
             Repository.checkError(error)
             throw Error("error: " + error);

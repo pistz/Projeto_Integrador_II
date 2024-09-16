@@ -5,7 +5,7 @@ import {Home} from "../components/pages/Home/Home.tsx";
 import {Structure} from "../components/shared/Structure/Structure.tsx";
 import {Button} from "antd";
 import { useAuth } from '../hooks/useAuth.ts';
-import { HostedServices } from '../components/pages/Hosted/Hosted.tsx';
+import { HostedServices } from '../components/pages/Hosted/HostedServices.tsx';
 import { Router } from './types.ts';
 import { hosted } from './HostedRoutes/HostedRoutes.tsx';
 import { Config } from '../components/pages/Config/Config.tsx';

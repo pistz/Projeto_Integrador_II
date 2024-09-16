@@ -85,8 +85,6 @@ export const Login:React.FC = () => {
         authenticateLogin()
     },[sessionToken])
 
-
-
     return (
         <>
             <MainContainer>
@@ -94,9 +92,9 @@ export const Login:React.FC = () => {
                 <img alt={"Logo"} src={logo} style={{width: '15rem', margin: '1rem 1rem', borderRadius:"100% 100%"}}/>
                 <div style={loginFormStyles}>
                 <Form
-                    name="basic"
+                    name="login"
                     style={LoginFormStyle}
-                    initialValues={{remember: true}}
+                    initialValues={{remember: false}}
                     onFinish={onFinish}
                     autoComplete="off"
                 >
