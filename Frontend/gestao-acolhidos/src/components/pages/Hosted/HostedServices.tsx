@@ -21,11 +21,9 @@ export const HostedServices:React.FC = () => {
           {hosted.map((_,index) => <Link to={hosted[index].fullpath+hosted[index].path} title={hosted[index].label} key={index}/>)}
         </div>
         <Divider style={{borderColor:"#000"}}/>
-        <div>
           <TableContainer>
             <ListAll listQueryKey={hostedQueryKey} getAllEntities={hosteds.findAll}/>
           </TableContainer>
-        </div>
       </div>
     </>
   )

@@ -8,6 +8,7 @@ import { useAuth } from '../hooks/useAuth.ts';
 import { HostedServices } from '../components/pages/Hosted/Hosted.tsx';
 import { Router } from './types.ts';
 import { hosted } from './HostedRoutes/HostedRoutes.tsx';
+import { Config } from '../components/pages/Config/Config.tsx';
 
 
 const mainRoutes:Router[] = [
@@ -33,7 +34,7 @@ const mainRoutes:Router[] = [
     {
         label:'Configurações',
         path:"config",
-        element:<Home />,
+        element:<Config />,
         role:['ADMIN', 'BOARD', 'SECRETARY']
     },
     {

@@ -9,6 +9,7 @@ import { useTableData } from '../../../../hooks/useTableData';
 
 
 export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>) => {
+    const {hostedTableData, setHostedTableData  } = useTableData();
 
     const columnData:TableColumnsType<Hosted> = [
         {
@@ -16,20 +17,35 @@ export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>
             dataIndex:'firstName',
             key:'fistName',
             width: '30vh',
+            filters: hostedTableData.slice(0,5).map((item) => ({
+                text: item.firstName,
+                value: item.firstName
+            })),
             filterSearch:true,
             onFilter: (value, record) => record.firstName.startsWith(value as string),
-
+            sorter: (a, b) => a.firstName.localeCompare(b.firstName),
         },
         {
             title:'Sobrenome',
             dataIndex:'lastName',
             key:'lastName',
             width: '30vh',
+            filters: hostedTableData.slice(0,5).map((item) => ({
+                text: item.lastName,
+                value: item.lastName
+            })),
+            filterSearch:true,
+            onFilter: (value, record) => record.lastName.startsWith(value as string),
+            sorter: (a, b) => a.lastName.localeCompare(b.lastName),
         },
         {
             title:'CPF',
             dataIndex:'socialSecurityNumber',
             key:'socialSecurityNumber',
+            filters: hostedTableData.slice(0,5).map((item) => ({
+                text: item.socialSecurityNumber,
+                value: item.socialSecurityNumber
+            })),
             filterSearch:true,
             onFilter: (value, record) => record.socialSecurityNumber.startsWith(value as string),
             width: '30vh',
@@ -44,15 +60,16 @@ export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>
             title:'Prontuário',
             dataIndex:'paperTrail',
             key:'paperTrail',
+            filters: hostedTableData.slice(0,5).map((item) => ({
+                text: item.paperTrail,
+                value: item.paperTrail
+            })),
             filterSearch:true,
-            onFilter: (value, record) => record.paperTrail === (value as number),
+            onFilter: (value, record) => record.paperTrail === value,
             width: '10%',
         }
         
     ]
-
-    const {hostedTableData, setHostedTableData  } = useTableData();
-
 
     const { isLoading, isError, error } = useQuery({
         queryKey: [listQueryKey],
@@ -75,10 +92,10 @@ export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>
     const dataColumns:ColumnsType<Hosted> = [
         ...columnData,
         {
-        title: 'Opções',
+        title: 'Registro Completo',
         render: (_,record) => (
             <Space size="small">
-                <Button onClick={()=> console.log(record)}>Tester</Button>
+                <Button onClick={()=> console.log(record)}>Abrir</Button>
             </Space>
         ),
         }

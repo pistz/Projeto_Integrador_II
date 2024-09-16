@@ -13,5 +13,6 @@ export const TableContainerStyle:React.CSSProperties = {
     border:'0.0625rem solid ',
     borderRadius:'0.25rem 0.25rem',
     fontSizeAdjust:'from-font',
+    maxWidth:'100vh',
     width:'100%',
 }
