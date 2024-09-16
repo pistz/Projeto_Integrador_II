@@ -12,7 +12,7 @@ export class HostedRepository extends Repository{
 
     findAll = async():Promise<Hosted[]> =>{
         try {
-            const result = await axios.get(findAllUrl)
+            const result = await axios.get(findAllUrl, authHeader())
             return result.data;
         } catch (error) {
             Repository.checkError(error)

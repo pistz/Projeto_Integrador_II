@@ -5,31 +5,30 @@ import {Home} from "../components/pages/Home/Home.tsx";
 import {Structure} from "../components/shared/Structure/Structure.tsx";
 import {Button} from "antd";
 import { useAuth } from '../hooks/useAuth.ts';
+import { HostedServices } from '../components/pages/Hosted/Hosted.tsx';
+import { Router } from './types.ts';
+import { hosted } from './HostedRoutes/HostedRoutes.tsx';
 
-export type Router = {
-    label:string,
-    path:string,
-    element:React.ReactElement,
-    role:string[]
-}
-const routes:Router[] = [
+
+const mainRoutes:Router[] = [
     {
         label:'Inicio',
         path:"home",
         element:<Home />,
-        role:['ADMIN', 'BOARD', 'SECRETARY']
+        role:['ADMIN', 'BOARD', 'SECRETARY'],
     },
     {
-        label:'Acolhimento Noturno',
+        label:'Pernoite',
         path:"reception",
         element:<Home />,
         role:['ADMIN', 'BOARD', 'SECRETARY']
     },
     {
-        label:'Cadastro do Acolhido',
+        label:'Acolhidos',
         path:"hosted",
-        element:<Home />,
-        role:['ADMIN', 'BOARD', 'SECRETARY']
+        element:<HostedServices />,
+        role:['ADMIN', 'BOARD', 'SECRETARY'],
+
     },
     {
         label:'Configurações',
@@ -45,9 +44,10 @@ const routes:Router[] = [
     },
 ];
 
+
 // eslint-disable-next-line react-refresh/only-export-components
 export function filteredRoutes(userRole:string):Router[]{
-    const filtered:Router[] = routes.filter((e) => e.role.includes(userRole));
+    const filtered:Router[] = mainRoutes.filter((e) => e.role.includes(userRole));
     return filtered;
 }
 
@@ -65,8 +65,10 @@ const RoutesReference:React.FC = () => {
                 <Route path={'/'} element={<Login />}/>
                 <Route path='*' element={<Login />} />
                 <Route path='/login' element={<Login />}/>
-                <Route path='/app' element={signed? <Structure /> : <ForbiddenAcces />}>
-                    {routes.map((_,index) => <Route path={routes[index].path} element={routes[index].element} key={index} />)}
+
+                <Route path='/app/*' element={signed? <Structure /> : <ForbiddenAcces />}>
+                    {mainRoutes.map((_,index) => <Route path={mainRoutes[index].path} element={mainRoutes[index].element} key={index}/>)}
+                    {hosted.map((_,index)=> <Route path={hosted[index].path} element={hosted[index].element} key={index} />)}
                 </Route>
             </Routes>
         </BrowserRouter>

@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-import { AuthContextData, IChildren } from './types';
+import { AuthContextData, IChildren } from '../types';
 
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
