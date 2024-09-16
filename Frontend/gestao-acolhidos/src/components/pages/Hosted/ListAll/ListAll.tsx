@@ -17,7 +17,7 @@ export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>
             dataIndex:'firstName',
             key:'fistName',
             width: '30vh',
-            filters: hostedTableData.slice(0,5).map((item) => ({
+            filters: hostedTableData.map((item) => ({
                 text: item.firstName,
                 value: item.firstName
             })),
@@ -30,7 +30,7 @@ export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>
             dataIndex:'lastName',
             key:'lastName',
             width: '30vh',
-            filters: hostedTableData.slice(0,5).map((item) => ({
+            filters: hostedTableData.map((item) => ({
                 text: item.lastName,
                 value: item.lastName
             })),
@@ -42,7 +42,7 @@ export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>
             title:'CPF',
             dataIndex:'socialSecurityNumber',
             key:'socialSecurityNumber',
-            filters: hostedTableData.slice(0,5).map((item) => ({
+            filters: hostedTableData.map((item) => ({
                 text: item.socialSecurityNumber,
                 value: item.socialSecurityNumber
             })),
@@ -60,7 +60,7 @@ export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>
             title:'Prontuário',
             dataIndex:'paperTrail',
             key:'paperTrail',
-            filters: hostedTableData.slice(0,5).map((item) => ({
+            filters: hostedTableData.map((item) => ({
                 text: item.paperTrail,
                 value: item.paperTrail
             })),
@@ -107,6 +107,7 @@ export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>
                 rowKey="id"
                 dataSource={hostedTableData} 
                 columns={dataColumns}
+                size='small'
         />
         </Spin>
     )

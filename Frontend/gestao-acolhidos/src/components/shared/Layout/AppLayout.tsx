@@ -5,7 +5,8 @@ import Sider from 'antd/es/layout/Sider';
 import { Router } from '../../../routes/types';
 
 interface IAppLayout {
-    menu:Router[]
+    menu:Router[],
+    children:React.ReactNode
 }
 
 
@@ -36,7 +37,7 @@ export const AppLayout:React.FC<IAppLayout> = ({menu}) => {
                     breakpoint='lg'
                     collapsible
                     collapsedWidth='0'
-                    style={{backgroundColor:"#2C3333"}}
+                    style={{backgroundColor:"#2C3333", height:'120wh'}}
             >
                 <Menu
                     triggerSubMenuAction={"click"}

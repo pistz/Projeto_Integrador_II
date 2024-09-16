@@ -8,9 +8,12 @@ import { HostedRepository } from '../../../../repository/Hosted/HostedRepository
 import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessage';
 import { createHostedDto } from '../../../../entity/dto/Hosted/createHostedDto';
 
+
 const hostedRepository = new HostedRepository();
 
 export const CreateHosted:React.FC = () => {
+
+  const [form] = Form.useForm();
 
   const brazilStates = [
     'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 
@@ -25,6 +28,10 @@ export const CreateHosted:React.FC = () => {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
   }
 
+  const clearForm =()=>{
+    form.resetFields()
+  }
+
   
   const onFinish:FormProps<CreateForm>['onFinish'] = async (values:createHostedDto) =>{
     values.firstName = capitalizeFirstLetter(values.firstName);
@@ -37,6 +44,7 @@ export const CreateHosted:React.FC = () => {
       .then(()=>{
         notifySuccess("Cadastro realizado")
       });
+      clearForm();
     } catch (error) {
       errorOnFinish(error)
     }
@@ -53,13 +61,14 @@ export const CreateHosted:React.FC = () => {
   };
 
   return (
+    <>
     <div style={mainDivStyle}>
-
       <Form
+        form={form}
         onFinish={onFinish}
         style={{marginTop:'2rem'}}
         layout='vertical'
-        clearOnDestroy
+        clearOnDestroy={true}
       >
         <h2 style={{padding:'1rem'}}>Cadastro de Novo Acolhido</h2>
         <Form.Item name={['firstName']} label="Nome" 
@@ -123,11 +132,12 @@ export const CreateHosted:React.FC = () => {
           </Select>
         </Form.Item>
 
-        <div style={{display:'flex', flexDirection:'row', alignItems:'stretch', justifyContent:'space-around'}}>
+        <div style={{display:'flex', flexDirection:'row', alignItems:'stretch', justifyContent:'space-around', marginBottom:'3rem'}}>
         <Button type='primary' htmlType='submit'>Salvar</Button>
-        <Button>Cancelar</Button>
+        <Button htmlType='reset'> Cancelar</Button>
         </div>
       </Form>
     </div>
+    </>
   )
 }
