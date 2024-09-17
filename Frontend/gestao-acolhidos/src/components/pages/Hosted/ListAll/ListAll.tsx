@@ -1,21 +1,35 @@
 import { Hosted } from '../../../../entity/Hosted/Hosted'
-import { Button, Space, Spin, Table, TableColumnsType } from 'antd'
+import { Button, Drawer, Space, Spin, Table, TableColumnsType } from 'antd'
 import type { ColumnsType } from 'antd/es/table';
 import IListActionsProps from './types';
 import { useQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { notifyError } from '../../../shared/PopMessage/PopMessage';
 import { useTableData } from '../../../../hooks/useTableData';
+import { Documents } from '../OtherDocuments/Documents';
 
 
 export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>) => {
     const {hostedTableData, setHostedTableData  } = useTableData();
+    
+    const [hosted, setHosted] = useState<Hosted>({}as Hosted)
+
+    const [openDocs, setOpenDocs] = useState<boolean>(false);
+
+    const onOpenDocs = (value:Hosted)=>{
+        setHosted(value)
+        setOpenDocs(true);
+    }
+    const onCloseDocs = () =>{
+        setHosted({} as Hosted)
+        setOpenDocs(false)
+    }
 
     const columnData:TableColumnsType<Hosted> = [
         {
             title:'Nome',
             dataIndex:'firstName',
-            key:'fistName',
+            key:'id',
             width: '13rem',
             filters: hostedTableData.map((item) => ({
                 text: item.firstName,
@@ -92,9 +106,12 @@ export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>
         ...columnData,
         {
             title: 'Registro Completo',
-            render: (_,record) => (
+            render: (value) => (
                 <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
-                    <Button type='primary' onClick={()=> console.log(record)}>Abrir</Button>
+                    <Button type='primary' onClick={()=>onOpenDocs(value)}>Abrir</Button>
+                    <Drawer width={700} height={1000}placement='top' closable={true} onClose={onCloseDocs} open={openDocs}>
+                        <Documents entity={hosted}/>
+                    </Drawer>
                 </Space>
             ),
         },
