@@ -20,7 +20,6 @@ export const HostedServices:React.FC = () => {
         <div style={subMenuDivStyle}>
           {hosted.map((_,index) => <Link to={hosted[index].fullpath+hosted[index].path} title={hosted[index].label} key={index}/>)}
         </div>
-        <Divider style={{borderColor:"#000"}}/>
           <ListAll listQueryKey={hostedQueryKey} getAllEntities={hosteds.findAll}/>
       </div>
     </>

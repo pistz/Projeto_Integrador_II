@@ -95,9 +95,25 @@ export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>
         title: 'Registro Completo',
         render: (_,record) => (
             <Space size="small">
-                <Button onClick={()=> console.log(record)}>Abrir</Button>
+                <Button type='primary' onClick={()=> console.log(record)}>Abrir</Button>
             </Space>
         ),
+        },
+        {
+            title: 'Registro Completo',
+            render: (_,record) => (
+                <Space size="small">
+                    <Button type='link' onClick={()=> console.log(record)}>Abrir</Button>
+                </Space>
+            ),
+        },
+        {
+            title: 'Registro Completo',
+            render: (_,record) => (
+                <Space size="small">
+                    <Button type='dashed' onClick={()=> console.log(record)}>Abrir</Button>
+                </Space>
+            ),
         }
     ]
 
@@ -108,6 +124,8 @@ export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>
                 dataSource={hostedTableData} 
                 columns={dataColumns}
                 size='small'
+                style={{display:'flex', position:"relative"}}
+                tableLayout='auto'
         />
         </Spin>
     )
