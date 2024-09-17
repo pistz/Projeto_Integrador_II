@@ -18,7 +18,7 @@ export const HostedServices:React.FC = () => {
       <div style={mainDivStyle}>
         <Divider>Acolhidos</Divider>
         <div style={subMenuDivStyle}>
-          {hosted.map((_,index) => <Button type='default'><Link to={hosted[index].fullpath+hosted[index].path} title={hosted[index].label} key={index}/> </Button>)}
+          {hosted.map((_,index) => <Button type='default' key={index+2}><Link to={hosted[index].fullpath+hosted[index].path} title={hosted[index].label} key={index}/> </Button>)}
         </div>
         <div>
           <ListAll listQueryKey={hostedQueryKey} getAllEntities={hosteds.findAll}/>

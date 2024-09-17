@@ -16,7 +16,9 @@ export const authRoutes = {
 
 export const hostedRoutes = {
     findAll:endpoints.host+'hosted/find/all',
-    create:endpoints.host+'hosted/create'
+    create:endpoints.host+'hosted/create',
+    edit:endpoints.host+'hosted/update-main-info/',
+    updateDocs:endpoints.host+'hosted/update-docs/'
 }
 
 export const configRoutes = {

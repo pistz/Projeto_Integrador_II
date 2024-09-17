@@ -6,30 +6,30 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { notifyError } from '../../../shared/PopMessage/PopMessage';
 import { useTableData } from '../../../../hooks/useTableData';
-import { Documents } from '../OtherDocuments/Documents';
+import { MainInfo } from '../MainInfo/MainInfo';
 
 
 export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>) => {
     const {hostedTableData, setHostedTableData  } = useTableData();
-    
+
     const [hosted, setHosted] = useState<Hosted>({}as Hosted)
 
-    const [openDocs, setOpenDocs] = useState<boolean>(false);
+    const [openMainInfo, setOpenMainInfo] = useState<boolean>(false);
 
-    const onOpenDocs = (value:Hosted)=>{
+    const onOpenMainInfo = (value:Hosted)=>{
         setHosted(value)
-        setOpenDocs(true);
+        setOpenMainInfo(true);
     }
-    const onCloseDocs = () =>{
+    const onCloseMainInfo = () =>{
         setHosted({} as Hosted)
-        setOpenDocs(false)
+        setOpenMainInfo(false)
     }
 
     const columnData:TableColumnsType<Hosted> = [
         {
             title:'Nome',
             dataIndex:'firstName',
-            key:'id',
+            key:'firstName',
             width: '13rem',
             filters: hostedTableData.map((item) => ({
                 text: item.firstName,
@@ -107,10 +107,10 @@ export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>
         {
             title: 'Registro Completo',
             render: (value) => (
-                <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
-                    <Button type='primary' onClick={()=>onOpenDocs(value)}>Abrir</Button>
-                    <Drawer width={700} height={1000}placement='top' closable={true} onClose={onCloseDocs} open={openDocs}>
-                        <Documents entity={hosted}/>
+                <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}} key={value.id}>
+                    <Button type='primary' onClick={()=>onOpenMainInfo(value)}>Abrir</Button>
+                    <Drawer width={700} height={1000} placement='top' closable={true} onClose={onCloseMainInfo} open={openMainInfo} destroyOnClose>
+                        <MainInfo entity={hosted}/>
                     </Drawer>
                 </Space>
             ),
@@ -160,7 +160,7 @@ export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>
     return (
         <Spin spinning={isLoading}>
             <Table 
-                rowKey="id"
+                rowKey={hosted.id}
                 dataSource={hostedTableData} 
                 columns={actionColumns}
                 size='small'

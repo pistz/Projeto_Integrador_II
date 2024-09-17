@@ -4,6 +4,7 @@ import Repository from "../base/Repository";
 import { hostedRoutes } from "../../routes/endpoints";
 import { createHostedDto } from "../../entity/dto/Hosted/createHostedDto";
 import { authHeader } from "../../services/Token";
+import { updateDocsHostedDto } from "../../entity/dto/Hosted/updateDocsHostedDto";
 
 export class HostedRepository extends Repository{
 
@@ -21,6 +22,24 @@ export class HostedRepository extends Repository{
         try{
             await axios.post(hostedRoutes.create,dto,authHeader())
         }catch(error){
+            Repository.checkError(error)
+            throw Error("error: " + error);
+        }
+    }
+
+    edit = async(dto:createHostedDto, id:string):Promise<void> =>{
+        try {
+            await axios.put(hostedRoutes.edit+id,dto,authHeader())
+        } catch (error) {
+            Repository.checkError(error)
+            throw Error("error: " + error);
+        }
+    }
+
+    updateDocs = async(dto:updateDocsHostedDto, id:string):Promise<void> =>{
+        try {
+            await axios.put(hostedRoutes.updateDocs+id,dto,authHeader())
+        } catch (error) {
             Repository.checkError(error)
             throw Error("error: " + error);
         }
