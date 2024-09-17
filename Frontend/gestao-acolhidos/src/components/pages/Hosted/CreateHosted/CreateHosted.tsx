@@ -1,6 +1,6 @@
 import React from 'react'
 import { hostedInputForm, mainDivStyle } from '../styles'
-import { Button, DatePicker, Form, FormProps, Input, Select } from 'antd'
+import { Button, DatePicker, Form, FormProps, Input, Select, Space } from 'antd'
 import { CreateForm } from './types'
 import locale from 'antd/es/date-picker/locale/pt_BR';
 import dayjs from 'dayjs';
@@ -63,6 +63,7 @@ export const CreateHosted:React.FC = () => {
   return (
     <>
     <div style={mainDivStyle}>
+     <Space>//#region</Space>
       <Form
         form={form}
         onFinish={onFinish}
@@ -137,6 +138,7 @@ export const CreateHosted:React.FC = () => {
         <Button htmlType='reset'> Cancelar</Button>
         </div>
       </Form>
+      <Space></Space>
     </div>
     </>
   )

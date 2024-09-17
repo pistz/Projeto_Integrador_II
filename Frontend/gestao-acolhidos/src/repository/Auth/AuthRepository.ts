@@ -1,4 +1,4 @@
-import {UserLoginDTO} from "../../entity/User/dto/UserLoginDTO.ts";
+import {UserLoginDTO} from "../../entity/dto/User/UserLoginDTO.ts";
 import {authRoutes} from "../../routes/endpoints.ts";
 import axios from "axios";
 import Repository from "../base/Repository.ts";

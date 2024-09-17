@@ -2,6 +2,7 @@ import { Button, Col, Divider, Form, Input, Statistic } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { ConfigRepository } from '../../../repository/Config/ConfigRepository'
 import { notifyError, notifySuccess } from '../../shared/PopMessage/PopMessage'
+import { ManageUsers } from '../SystemUsers/ManageUsers'
 
 const config = new ConfigRepository()
 
@@ -16,7 +17,7 @@ export const Config:React.FC = () => {
       notifyError('O valor inserido não é válido');
       return;
     }
-    console.log(value, ' chegou aqui')
+
     try {
       await config.updateCapacity(value);
       setBeds(value);
@@ -26,6 +27,7 @@ export const Config:React.FC = () => {
       errorOnFinish(error);
     }
   };
+
 
   const errorOnFinish = (error:unknown) =>{
     notifyError("Erro ao realizar cadastro");
@@ -45,10 +47,11 @@ export const Config:React.FC = () => {
 
   return (
     <div style={{display:'flex', flexDirection:"column", alignItems:"center", justifyContent:'start', margin:"0 auto"}}>
+      <div>
       <Divider>Configurações do Sistema</Divider>
       <Divider></Divider>
       <Col span={24}>
-        <Statistic title="Capacidade de acolhimento" value={beds} />
+        <Statistic title="Capacidade de acolhimento" value={`${beds} leitos`} />
         <Form
           form={form}
           onFinish={updateBedValue}
@@ -60,6 +63,10 @@ export const Config:React.FC = () => {
             <Button type='primary' htmlType='submit'>Atualizar capacidade</Button>
         </Form>
       </Col>
+      <div>
+        <ManageUsers />
+      </div>
+      </div>
     </div>
   )
 }

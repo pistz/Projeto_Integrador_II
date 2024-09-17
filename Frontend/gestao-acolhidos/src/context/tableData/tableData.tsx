@@ -1,6 +1,7 @@
 import React, { createContext, useState } from 'react';
 import { IChildren, TablesContextData } from "../types";
 import { Hosted } from '../../entity/Hosted/Hosted';
+import { IUser } from '../../entity/User/IUser';
 
 
 const TableDataContext = createContext<TablesContextData>({} as TablesContextData);
@@ -8,11 +9,14 @@ const TableDataContext = createContext<TablesContextData>({} as TablesContextDat
 export const TableDataProvider: React.FC<IChildren> = ({ children }:IChildren) => {
 
     const [hostedTableData, setHostedTableData] = useState<Hosted[]>([]);
+    const [userTableData, setUserTableData] = useState<IUser[]>([]);
 
     return (
         <TableDataContext.Provider value={{
             hostedTableData,
-            setHostedTableData
+            setHostedTableData,
+            userTableData, 
+            setUserTableData
         }}>
             {children}
         </TableDataContext.Provider>

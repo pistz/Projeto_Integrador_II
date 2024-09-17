@@ -3,6 +3,12 @@ export const endpoints = {
     host:process.env.BASE_URL,
 }
 
+export const userRoutes = {
+    getAll:endpoints.host+'user/find/all',
+    register:endpoints.host+'user/register',
+    delete:endpoints.host+'user/delete/'
+}
+
 export const authRoutes = {
     login:endpoints.host+'auth/login',
     userRole:endpoints.host+'auth/validate'

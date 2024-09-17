@@ -16,7 +16,7 @@ export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>
             title:'Nome',
             dataIndex:'firstName',
             key:'fistName',
-            width: '30vh',
+            width: '13rem',
             filters: hostedTableData.map((item) => ({
                 text: item.firstName,
                 value: item.firstName
@@ -29,7 +29,7 @@ export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>
             title:'Sobrenome',
             dataIndex:'lastName',
             key:'lastName',
-            width: '30vh',
+            width: '13rem',
             filters: hostedTableData.map((item) => ({
                 text: item.lastName,
                 value: item.lastName
@@ -48,7 +48,7 @@ export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>
             })),
             filterSearch:true,
             onFilter: (value, record) => record.socialSecurityNumber.startsWith(value as string),
-            width: '30vh',
+            width: '8rem',
         
         },
         {
@@ -66,7 +66,6 @@ export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>
             })),
             filterSearch:true,
             onFilter: (value, record) => record.paperTrail === value,
-            width: '10%',
         }
         
     ]
@@ -89,29 +88,53 @@ export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>
         },[getAllEntities, setHostedTableData]);
         
 
-    const dataColumns:ColumnsType<Hosted> = [
+    const actionColumns:ColumnsType<Hosted> = [
         ...columnData,
-        {
-        title: 'Registro Completo',
-        render: (_,record) => (
-            <Space size="small">
-                <Button type='primary' onClick={()=> console.log(record)}>Abrir</Button>
-            </Space>
-        ),
-        },
         {
             title: 'Registro Completo',
             render: (_,record) => (
-                <Space size="small">
-                    <Button type='link' onClick={()=> console.log(record)}>Abrir</Button>
+                <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
+                    <Button type='primary' onClick={()=> console.log(record)}>Abrir</Button>
                 </Space>
             ),
         },
         {
-            title: 'Registro Completo',
+            title: 'Situação de Risco',
             render: (_,record) => (
-                <Space size="small">
+                <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
+                    <Button type='default' onClick={()=> console.log(record)}>Abrir</Button>
+                </Space>
+            ),
+        },
+        {
+            title: 'Família',
+            render: (_,record) => (
+                <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
                     <Button type='dashed' onClick={()=> console.log(record)}>Abrir</Button>
+                </Space>
+            ),
+        },
+        {
+            title: 'Programa Social',
+            render: (_,record) => (
+                <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
+                    <Button type='default' onClick={()=> console.log(record)}>Abrir</Button>
+                </Space>
+            ),
+        },
+        {
+            title: 'Saúde',
+            render: (_,record) => (
+                <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
+                    <Button type='default' onClick={()=> console.log(record)}>Abrir</Button>
+                </Space>
+            ),
+        },
+        {
+            title: 'Plano de Atendimento',
+            render: (_,record) => (
+                <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
+                    <Button type='default' onClick={()=> console.log(record)}>Abrir</Button>
                 </Space>
             ),
         }
@@ -122,7 +145,7 @@ export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>
             <Table 
                 rowKey="id"
                 dataSource={hostedTableData} 
-                columns={dataColumns}
+                columns={actionColumns}
                 size='small'
                 style={{display:'flex', position:"relative"}}
                 tableLayout='auto'

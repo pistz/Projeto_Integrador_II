@@ -15,7 +15,7 @@ import logo from '../../../assets/logo1.jpeg'
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import { useAuth } from '../../../hooks/useAuth.ts';
 import { AuthRepository } from '../../../repository/Auth/AuthRepository.ts';
-import { UserLoginDTO } from '../../../entity/User/dto/UserLoginDTO.ts';
+import { UserLoginDTO } from '../../../entity/dto/User/UserLoginDTO.ts';
 import { notifyError } from '../../shared/PopMessage/PopMessage.ts';
 import { getTokenFromLocalStorage, getTokenId } from '../../../services/Token.ts';
 

@@ -2,7 +2,7 @@ import React from 'react'
 import { mainDivStyle, subMenuDivStyle } from './styles'
 import { Link } from '../../shared/Link/Link'
 import { hosted } from '../../../routes/HostedRoutes/HostedRoutes'
-import { Divider } from 'antd'
+import { Button, Divider } from 'antd'
 import { ListAll } from './ListAll/ListAll'
 import { HostedRepository } from '../../../repository/Hosted/HostedRepository'
 
@@ -18,9 +18,11 @@ export const HostedServices:React.FC = () => {
       <div style={mainDivStyle}>
         <Divider>Acolhidos</Divider>
         <div style={subMenuDivStyle}>
-          {hosted.map((_,index) => <Link to={hosted[index].fullpath+hosted[index].path} title={hosted[index].label} key={index}/>)}
+          {hosted.map((_,index) => <Button type='default'><Link to={hosted[index].fullpath+hosted[index].path} title={hosted[index].label} key={index}/> </Button>)}
         </div>
+        <div>
           <ListAll listQueryKey={hostedQueryKey} getAllEntities={hosteds.findAll}/>
+        </div>
       </div>
     </>
   )

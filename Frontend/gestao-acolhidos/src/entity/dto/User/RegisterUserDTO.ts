@@ -1,5 +1,5 @@
 
-import {Role} from "../IUser.ts";
+import {Role} from "../../User/IUser.ts";
 
 export interface RegisterUserDTO{
     email:string,

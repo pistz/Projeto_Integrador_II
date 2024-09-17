@@ -21,10 +21,10 @@ export class ConfigRepository extends Repository{
                 configRoutes.updateCapacity, 
                 value, 
                 {
-                    ...authHeader(), // Inclui o cabeçalho de autenticação
+                    ...authHeader(), 
                     headers: {
-                        'Content-Type': 'application/json',  // Define o Content-Type como JSON
-                        ...authHeader().headers, // Mantém o Authorization
+                        'Content-Type': 'application/json',
+                        ...authHeader().headers, 
                     }
                 }
             );

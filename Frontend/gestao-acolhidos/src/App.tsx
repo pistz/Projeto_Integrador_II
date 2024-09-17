@@ -10,13 +10,13 @@ function App() {
 
   return (
     <>
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <TableDataProvider>
-          <RoutesReference />
-        </TableDataProvider>
-      </AuthProvider>
-    </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <TableDataProvider>
+            <RoutesReference />
+          </TableDataProvider>
+        </AuthProvider>
+      </QueryClientProvider>
     </>
   )
 }

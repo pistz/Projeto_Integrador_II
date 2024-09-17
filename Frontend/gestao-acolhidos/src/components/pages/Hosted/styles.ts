@@ -1,23 +1,23 @@
 import React from "react"
 
 export const mainDivStyle:React.CSSProperties = {
-    display: 'grid',
-    gridColumn:'inherit',
+    display: 'flex',
     justifyContent:'center',
+    flexDirection:'column',
     alignItems:'center',
-    margin:'2rem auto',
+    margin:'1rem auto',
     height:'95vh',
-    width:'80%'
+    width:'100%',
+    scrollBehavior:'smooth'
 }
 
 export const subMenuDivStyle:React.CSSProperties = {
-    border:'1px solid #2C3333', 
-    borderRadius:'1rem 1rem', 
     padding:"1rem 1rem", 
     display:"flex", 
     flexDirection:'row', 
     justifyContent:'center', 
-    alignItems:"center"
+    alignItems:"center",
+    margin:'1rem'
 }
 
 export const hostedInputForm:React.CSSProperties = {

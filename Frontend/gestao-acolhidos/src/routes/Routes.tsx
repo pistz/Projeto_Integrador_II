@@ -10,7 +10,6 @@ import { Router } from './types.ts';
 import { hosted } from './HostedRoutes/HostedRoutes.tsx';
 import { Config } from '../components/pages/Config/Config.tsx';
 
-
 const mainRoutes:Router[] = [
     {
         label:'Inicio',
