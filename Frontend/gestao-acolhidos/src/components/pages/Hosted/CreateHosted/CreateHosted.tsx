@@ -117,12 +117,12 @@ export const CreateHosted:React.FC = () => {
           <Input style={hostedInputForm} type='text'/>
         </Form.Item>
 
-        <Form.Item name={['cityOrigin']} label="Cidade de Origem" 
+        <Form.Item name={['cityOrigin']} label="Cidade de Nascimento" 
             rules={[{ required: false}]}>
           <Input style={hostedInputForm} type='text'/>
         </Form.Item>
 
-        <Form.Item name={['stateOrigin']} label="Estado de Origem" 
+        <Form.Item name={['stateOrigin']} label="Estado" 
             rules={[{ required: false}]}>
           <Select>
             {brazilStates.map(state => (

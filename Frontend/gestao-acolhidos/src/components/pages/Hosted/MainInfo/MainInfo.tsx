@@ -12,23 +12,31 @@ import { OtherDocs } from '../OtherDocs/OtherDocs'
 
 const hostedRepository = new HostedRepository();
 
+const brazilStates = [
+  'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 
+  'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 
+  'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'
+];
+const inputFormat = 'DD/MM/YYYY';
+const dateFormat = 'YYYY-MM-DD';
+
 export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
 
   const {setHostedTableData} = useTableData();
 
   const [openDocs, setOpenDocs] = useState<boolean>(false);
 
+  const [form] = Form.useForm();
+
+  const [edit, setEdit] = useState<boolean>(false);
+
   const onOpenDocs = ()=>{
       setOpenDocs(true);
   }
   const onCloseDocs = () =>{
+      updateData()
       setOpenDocs(false)
   }
-
-
-
-  const inputFormat = 'DD/MM/YYYY'
-  const dateFormat = 'YYYY-MM-DD';
 
   const handleDateChange = (date: string) => {
     if (!date) return '';
@@ -48,29 +56,14 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
     }
   };
 
-  function capitalizeFirstLetter(string:string) {
+  const capitalizeFirstLetter=(string:string)=> {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
   }
-
-  const brazilStates = [
-    'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 
-    'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 
-    'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'
-  ];
-
-
-  const [form] = Form.useForm();
-
-  const [edit, setEdit] = useState<boolean>(false);
-
 
   const handleSwitchChange = () => {
     setEdit(!edit);
   };
 
-  useEffect(() => {
-    form.setFieldsValue({ ...entity });
-  }, [entity, form]);
 
   const handleUpdateMainInfo:FormProps<CreateForm>['onFinish'] = async (values:createHostedDto) =>{
       values.firstName = capitalizeFirstLetter(values.firstName);
@@ -78,23 +71,32 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
       if(values.birthDay){
         values.birthDay = handleDateChange(values.birthDay)
       }
-
       try {
           await hostedRepository.edit(values,entity.id)
             .then(()=>{
               notifySuccess("Atualização realizada")
             })
-          const update = await hostedRepository.findAll();
-          setHostedTableData(update) 
+            handleSwitchChange()
+            updateData()
       } catch (error) {
         errorOnFinish(error)
       }
+  }
+
+  const updateData=async()=>{
+    const update = await hostedRepository.findAll();
+    setHostedTableData(update) 
   }
 
   const errorOnFinish = (error:unknown) =>{
     notifyError("Erro ao realizar cadastro");
     return error;
 }
+
+  useEffect(() => {
+  form.setFieldsValue({ ...entity });
+}, [entity, form]);
+
 
 
   return (
@@ -149,11 +151,11 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
               <Input value={entity.occupation} disabled={!edit} />
             </Form.Item>
 
-            <Form.Item name={['cityOrigin']} label="Cidade de Origem">
+            <Form.Item name={['cityOrigin']} label="Cidade de Nascimento">
               <Input value={entity.cityOrigin} disabled={!edit} />
             </Form.Item>
 
-            <Form.Item name={['stateOrigin']} label="Estado de Origem">
+            <Form.Item name={['stateOrigin']} label="Estado">
               {edit?
               <Select>
                 {brazilStates.map(state => (

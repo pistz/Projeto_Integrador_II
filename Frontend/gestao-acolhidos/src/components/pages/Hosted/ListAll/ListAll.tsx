@@ -105,7 +105,7 @@ export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>
     const actionColumns:ColumnsType<Hosted> = [
         ...columnData,
         {
-            title: 'Registro Completo',
+            title: 'Documentos',
             render: (value) => (
                 <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}} key={value.id}>
                     <Button type='primary' onClick={()=>onOpenMainInfo(value)}>Abrir</Button>

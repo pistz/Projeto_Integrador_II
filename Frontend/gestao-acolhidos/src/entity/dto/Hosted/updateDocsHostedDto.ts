@@ -2,7 +2,6 @@
 export interface updateDocsHostedDto{
     generalRegisterRG:string,
     dateOfIssueRG:string,
-    hasLicense:boolean,
     driversLicenseNumber:string,
     birthCertificate:BirthCert,
 }
