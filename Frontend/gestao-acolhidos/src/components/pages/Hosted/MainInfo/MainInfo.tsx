@@ -9,16 +9,9 @@ import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessag
 import { useTableData } from '../../../../hooks/useTableData'
 import { PlusOutlined } from '@ant-design/icons'
 import { OtherDocs } from '../OtherDocs/OtherDocs'
+import { brazilStates } from '../../../shared/StateList/StateList'
 
 const hostedRepository = new HostedRepository();
-
-const brazilStates = [
-  'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 
-  'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 
-  'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'
-];
-const inputFormat = 'DD/MM/YYYY';
-const dateFormat = 'YYYY-MM-DD';
 
 export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
 
@@ -39,6 +32,8 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
   }
 
   const handleDateChange = (date: string) => {
+    const inputFormat = 'DD/MM/YYYY';
+    const dateFormat = 'YYYY-MM-DD';
     if (!date) return '';
   
     // Regex para verificar o formato YYYY-MM-DD
@@ -168,6 +163,7 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
               <Input value={entity.cityOrigin} disabled={!edit} />
             }
             </Form.Item>
+
             <Button htmlType='submit' type='primary'>Salvar Alterações</Button>
           </Form>
         </Space>

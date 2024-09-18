@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import { HostedRepository } from '../../../../repository/Hosted/HostedRepository';
 import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessage';
 import { createHostedDto } from '../../../../entity/dto/Hosted/createHostedDto';
+import { brazilStates } from '../../../shared/StateList/StateList';
 
 
 const hostedRepository = new HostedRepository();
@@ -14,13 +15,7 @@ const hostedRepository = new HostedRepository();
 export const CreateHosted:React.FC = () => {
 
   const [form] = Form.useForm();
-
-  const brazilStates = [
-    'AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 
-    'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 
-    'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'
-  ];
-
+  
   const inputFormat = 'DD/MM/YYYY'
   const dateFormat = 'YYYY-MM-DD';
 
