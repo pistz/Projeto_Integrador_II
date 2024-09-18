@@ -18,6 +18,7 @@ export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListAction
     const [hosted, setHosted] = useState<Hosted>({}as Hosted)
 
     const [openMainInfo, setOpenMainInfo] = useState<boolean>(false);
+    
 
     const onOpenMainInfo = (value:Hosted)=>{
         setHosted(value)

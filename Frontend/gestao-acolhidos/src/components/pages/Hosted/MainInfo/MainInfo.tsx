@@ -10,18 +10,21 @@ import { useTableData } from '../../../../hooks/useTableData'
 import { PlusOutlined } from '@ant-design/icons'
 import { OtherDocs } from '../OtherDocs/OtherDocs'
 import { brazilStates } from '../../../shared/StateList/StateList'
+import { RefAddress } from '../ReferenceAddress/ReferenceAddress'
 
 const hostedRepository = new HostedRepository();
 
 export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
 
+  //Context 
   const {setHostedTableData} = useTableData();
 
-  const [openDocs, setOpenDocs] = useState<boolean>(false);
-
+  //Form options
+  const [edit, setEdit] = useState<boolean>(false);
   const [form] = Form.useForm();
 
-  const [edit, setEdit] = useState<boolean>(false);
+  //Controle de abertura do drawer de Outros Documentos
+  const [openDocs, setOpenDocs] = useState<boolean>(false);
 
   const onOpenDocs = ()=>{
       setOpenDocs(true);
@@ -30,6 +33,19 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
       updateData()
       setOpenDocs(false)
   }
+  
+    //Controle de abertura do drawer de Endereço de Referência
+  const [openRefAddress, setOpenRefAddress] = useState<boolean>(false);
+
+  const onOpenRefAddress = ()=>{
+    setOpenRefAddress(true);
+  }
+  const onCloseRefAddress = () =>{
+      updateData()
+      setOpenRefAddress(false)
+  }
+
+
 
   const handleDateChange = (date: string) => {
     const inputFormat = 'DD/MM/YYYY';
@@ -98,13 +114,28 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
     <>
         <Space align='start' direction='vertical' style={{display:'flex', flexDirection:'column', margin:'0 3rem'}}>
           <Divider>Dados Principais</Divider>
+
           <Space align='center' direction='vertical' style={{display:'flex', flexDirection:'row'}}>
             <Switch checked={edit} onClick={handleSwitchChange} unCheckedChildren="Editar" checkedChildren="Editar" />
-            <Button style={{margin:"0 6rem"}} type='primary' icon={<PlusOutlined/>} onClick={onOpenDocs}>Mais Documentos</Button>
-            <Drawer placement='right' width={800} closable={true} onClose={onCloseDocs} open={openDocs} destroyOnClose>
-              <OtherDocs entity={entity}></OtherDocs>
-            </Drawer>
+
+            <div className='Options Buttons'>
+              <Button style={{margin:"0 6rem"}} type='primary' icon={<PlusOutlined/>} onClick={onOpenDocs}>Mais Documentos</Button>
+              <Drawer placement='right' width={800} closable={true} onClose={onCloseDocs} open={openDocs} destroyOnClose>
+                <OtherDocs entity={entity}></OtherDocs>
+              </Drawer>
+            </div>
+
+            {/* //TODO adicionar botão para outra função - Reference Address */}
+            <div className='Options Buttons'>
+              <Button style={{margin:"0 1rem"}} type='primary' icon={<PlusOutlined/>} onClick={onOpenRefAddress}>Endereço de Referência</Button>
+              <Drawer placement='right' width={800} closable={true} onClose={onCloseRefAddress} open={openRefAddress} destroyOnClose>
+                <RefAddress entity={entity}></RefAddress>
+              </Drawer>
+            </div>
+
           </Space>
+
+          
           
           <Form
             form={form}

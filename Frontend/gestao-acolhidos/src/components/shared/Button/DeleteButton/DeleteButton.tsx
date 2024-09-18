@@ -13,6 +13,6 @@ export const DeleteButton:React.FC<IRemoveButtonProps> = ({removeMethod}:IRemove
             onConfirm={removeMethod}
             icon={<QuestionCircleOutlined />}
         >
-            <Button danger ghost  icon={<DeleteOutlined/> }>Remover</Button>
+            <Button shape='round' danger ghost  icon={<DeleteOutlined/> }>Remover</Button>
         </Popconfirm>)
 }
