@@ -1,6 +1,6 @@
 import React from 'react'
 import welcome from '../../../assets/logo1.jpeg'
-import { imgStyle, innerDivStyle, mainDivStyle } from './styles.ts'
+import { centerImgStyle, innerDivStyle, mainDivStyle } from './styles.ts'
 
 export const Home:React.FC = () =>{
 
@@ -11,12 +11,16 @@ export const Home:React.FC = () =>{
                     Gestão de Acolhidos
                 </h1>
                 <div style={innerDivStyle}>
-                    <img style={imgStyle} src={welcome} alt="welcome"/>
+                    <img style={centerImgStyle} src={welcome} alt="welcome"/>
                 </div>
-                <p>
-                    versão 1.0
-                </p>
+                <footer style={{marginTop:'4rem'}}>
+                    <p>
+                        versão 1.0
+                    </p>
+                </footer>
+                
             </div>
+            
         </>
     )
 }

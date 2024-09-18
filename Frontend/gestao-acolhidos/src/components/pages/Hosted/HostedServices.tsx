@@ -21,7 +21,7 @@ export const HostedServices:React.FC = () => {
           {hosted.map((_,index) => <Button type='default' key={index+2}><Link to={hosted[index].fullpath+hosted[index].path} title={hosted[index].label} key={index}/> </Button>)}
         </div>
         <div>
-          <ListAll listQueryKey={hostedQueryKey} getAllEntities={hosteds.findAll}/>
+          <ListAll listQueryKey={hostedQueryKey} getAllEntities={hosteds.findAll} deleteEntity={hosteds.deleteHosted}/>
         </div>
       </div>
     </>

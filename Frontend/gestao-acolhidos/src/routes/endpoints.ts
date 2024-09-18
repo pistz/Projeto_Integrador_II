@@ -18,7 +18,8 @@ export const hostedRoutes = {
     findAll:endpoints.host+'hosted/find/all',
     create:endpoints.host+'hosted/create',
     edit:endpoints.host+'hosted/update-main-info/',
-    updateDocs:endpoints.host+'hosted/update-docs/'
+    updateDocs:endpoints.host+'hosted/update-docs/',
+    deleteHosted:endpoints.host+'hosted/delete/'
 }
 
 export const configRoutes = {

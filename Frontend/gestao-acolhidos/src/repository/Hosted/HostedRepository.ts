@@ -45,4 +45,13 @@ export class HostedRepository extends Repository{
         }
     }
 
+    deleteHosted = async(id:string): Promise<void> =>{
+        try {
+            await axios.delete(hostedRoutes.deleteHosted+id, authHeader())
+        } catch (error) {
+            Repository.checkError(error)
+            throw Error("error: " + error);
+        }
+    }
+
 }

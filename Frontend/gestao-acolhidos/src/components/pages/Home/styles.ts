@@ -7,7 +7,7 @@ export const innerDivStyle:React.CSSProperties =  {
     flexDirection:'column'
 }
 
-export const imgStyle:React.CSSProperties = {
+export const centerImgStyle:React.CSSProperties = {
     width: '50%',
     height: 'auto',
     borderRadius:'100% 100%',

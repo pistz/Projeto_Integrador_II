@@ -12,7 +12,7 @@ const userQueryKey = 'userQueryKey'
 export const ManageUsers:React.FC = () => {
     const [form] = Form.useForm()
     const [updated, setUpdated] = useState<boolean>(false);
-    const user = new UserRepository()
+    const userRepository = new UserRepository()
 
     const roleOptions: { label: string; value: Role }[] = [
         { label: 'ADMINISTRADOR', value: 'ADMIN' },
@@ -27,7 +27,7 @@ export const ManageUsers:React.FC = () => {
             role:values.role
         }
         try {
-            await user.register(body);
+            await userRepository.register(body);
             notifySuccess("Registro efetivado")
             setUpdated(true);
             form.resetFields();
@@ -55,9 +55,9 @@ export const ManageUsers:React.FC = () => {
         <div style={mainDivStyle}>
             <Divider>Gestão de Usuários</Divider>
             <UsersTable 
-                deleteEntity={user.delete}
+                deleteEntity={userRepository.delete}
                 listQueryKey={userQueryKey}
-                getAllEntities={user.findAllUsers}
+                getAllEntities={userRepository.findAllUsers}
             />
             <Divider>Criar novo usuário</Divider>
             <Form

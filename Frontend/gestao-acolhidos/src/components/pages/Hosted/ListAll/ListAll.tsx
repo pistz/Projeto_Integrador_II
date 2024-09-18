@@ -2,14 +2,17 @@ import { Hosted } from '../../../../entity/Hosted/Hosted'
 import { Button, Drawer, Space, Spin, Table, TableColumnsType } from 'antd'
 import type { ColumnsType } from 'antd/es/table';
 import IListActionsProps from './types';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { notifyError } from '../../../shared/PopMessage/PopMessage';
+import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessage';
 import { useTableData } from '../../../../hooks/useTableData';
 import { MainInfo } from '../MainInfo/MainInfo';
+import { DeleteButton } from '../../../shared/Button/DeleteButton/DeleteButton';
 
 
-export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>) => {
+export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListActionsProps<Hosted>) => {
+    const queryClient = useQueryClient();
+
     const {hostedTableData, setHostedTableData  } = useTableData();
 
     const [hosted, setHosted] = useState<Hosted>({}as Hosted)
@@ -93,6 +96,21 @@ export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>
         notifyError(`${error}`);
     }
 
+    const removeEntity = useMutation({
+        mutationFn: (entity : Hosted) => {
+        return deleteEntity(entity.id);
+        },
+        onSuccess: async () =>{
+            notifySuccess("Entrada removida")
+            queryClient.invalidateQueries({ queryKey: [listQueryKey] });
+            const tableData:Hosted[] = await getAllEntities();
+            setHostedTableData(tableData)
+        },
+        onError: (error)=>{
+            notifyError(`${error}`);
+        }
+    });
+
     useEffect(()=>{
         const getTableData = async () => {
             const tableData:Hosted[] = await getAllEntities();
@@ -152,6 +170,14 @@ export const ListAll = ({listQueryKey, getAllEntities}:IListActionsProps<Hosted>
             render: (_,record) => (
                 <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
                     <Button type='default' onClick={()=> console.log(record)}>Abrir</Button>
+                </Space>
+            ),
+        },
+        {
+            title: '',
+            render: (_,record) => (
+                <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
+                    <DeleteButton removeMethod={()=> removeEntity.mutate(record)}></DeleteButton>
                 </Space>
             ),
         }

@@ -11,8 +11,8 @@ export const DeleteButton:React.FC<IRemoveButtonProps> = ({removeMethod}:IRemove
             title="Remover Registro"
             description="Deseja realmente remover este registro?"
             onConfirm={removeMethod}
-            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+            icon={<QuestionCircleOutlined />}
         >
-            <Button type='primary' icon={<DeleteOutlined />}>Remover</Button>
+            <Button danger ghost  icon={<DeleteOutlined/> }>Remover</Button>
         </Popconfirm>)
 }
