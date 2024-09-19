@@ -27,7 +27,7 @@ public class ReferenceAddress {
     private String street;
 
     @Column(name = "cidade_referencia")
-    private String cidade;
+    private String city;
 
     @Column(name = "bairro_referencia")
     private String neighborhood;

@@ -5,6 +5,7 @@ import { hostedRoutes } from "../../routes/endpoints";
 import { createHostedDto } from "../../entity/dto/Hosted/createHostedDto";
 import { authHeader } from "../../services/Token";
 import { updateDocsHostedDto } from "../../entity/dto/Hosted/updateDocsHostedDto";
+import { ReferenceAddressDto } from "../../components/pages/Hosted/ReferenceAddress/types";
 
 export class HostedRepository extends Repository{
 
@@ -39,6 +40,15 @@ export class HostedRepository extends Repository{
     updateDocs = async(dto:updateDocsHostedDto, id:string):Promise<void> =>{
         try {
             await axios.put(hostedRoutes.updateDocs+id,dto,authHeader())
+        } catch (error) {
+            Repository.checkError(error)
+            throw Error("error: " + error);
+        }
+    }
+
+    updateRefAddress = async(dto:ReferenceAddressDto, id:string):Promise<void> =>{
+        try {
+            await axios.put(hostedRoutes.updateRefAddress+id,dto,authHeader())
         } catch (error) {
             Repository.checkError(error)
             throw Error("error: " + error);

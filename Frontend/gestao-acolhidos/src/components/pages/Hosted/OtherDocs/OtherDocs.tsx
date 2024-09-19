@@ -16,7 +16,6 @@ export const OtherDocs:React.FC<{entity:Hosted}> = ({entity}) => {
     const [edit, setEdit] = useState<boolean>(false);
 
     const handleDocsUpdate:FormProps<DocsForm>['onFinish'] = async(values:updateDocsHostedDto)=>{
-        //TODO
         values.dateOfIssueRG = handleDateChange(values.dateOfIssueRG)
         try {
             await hostedRepository.updateDocs(values,entity.id)
@@ -70,7 +69,6 @@ export const OtherDocs:React.FC<{entity:Hosted}> = ({entity}) => {
 
   return (
 
-    //TODO
     <Space align='center' direction='vertical' style={{display:'flex', flexDirection:'column', margin:'0 3rem'}}>
         <Divider>Documentos Adicionais</Divider>
         <Space direction='horizontal'>

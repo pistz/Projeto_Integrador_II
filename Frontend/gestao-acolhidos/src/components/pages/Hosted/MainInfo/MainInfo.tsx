@@ -113,7 +113,7 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
   return (
     <>
         <Space align='start' direction='vertical' style={{display:'flex', flexDirection:'column', margin:'0 3rem'}}>
-          <Divider>Dados Principais</Divider>
+          <Divider>Dados Principais e Documentação de Apoio</Divider>
 
           <Space align='center' direction='vertical' style={{display:'flex', flexDirection:'row'}}>
             <Switch checked={edit} onClick={handleSwitchChange} unCheckedChildren="Editar" checkedChildren="Editar" />
@@ -135,8 +135,6 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
 
           </Space>
 
-          
-          
           <Form
             form={form}
             disabled={!edit}

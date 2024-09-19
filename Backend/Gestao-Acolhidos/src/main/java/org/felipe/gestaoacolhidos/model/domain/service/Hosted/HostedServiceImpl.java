@@ -307,7 +307,7 @@ public class HostedServiceImpl implements HostedService {
         updateReferenceAddress.setStreet(dto.street());
         updateReferenceAddress.setNeighborhood(dto.neighborhood());
         updateReferenceAddress.setNumber(dto.number());
-        updateReferenceAddress.setCidade(dto.city());
+        updateReferenceAddress.setCity(dto.city());
         updateReferenceAddress.setCep(dto.cep());
         updateReferenceAddress.setPhoneNumber(dto.phoneNumber());
         updateReferenceAddress.setUpdatedAt(LocalDate.now());

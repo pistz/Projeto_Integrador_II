@@ -1,10 +1,41 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Hosted } from '../../../../entity/Hosted/Hosted'
 import { ReferenceAddressDto } from './types'
+import { FormProps, useForm } from 'antd/es/form/Form';
+import { Button, Divider, Form, Input, Space, Switch } from 'antd';
+import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessage';
+import { HostedRepository } from '../../../../repository/Hosted/HostedRepository';
+
+const hostedRepository = new HostedRepository()
 
 export const RefAddress:React.FC<{entity:Hosted}> = ({entity}) => {
+    const [form] = useForm();
+    const [edit, setEdit] = useState<boolean>(false);
 
-    const dto:ReferenceAddressDto={
+    const handleUpdateRefAddress:FormProps<ReferenceAddressDto>['onFinish'] = async(values:ReferenceAddressDto) =>{
+        console.log(values)
+        try {
+            await hostedRepository.updateRefAddress(values, entity.id)
+            .then(()=>{
+                notifySuccess("Registro Atualizado");
+            });
+            handleSwitchChange();
+        } catch (error) {
+            errorOnFinish(error)
+        }
+    }
+
+    const handleSwitchChange = () => {
+        setEdit(!edit);
+    };
+
+    const errorOnFinish = (error:unknown) =>{
+        notifyError("Erro ao realizar cadastro");
+        return error;
+    }
+
+
+    const initialValues:ReferenceAddressDto={
         cep:'',
         city:'',
         neighborhood:'',
@@ -12,8 +43,47 @@ export const RefAddress:React.FC<{entity:Hosted}> = ({entity}) => {
         phoneNumber:0,
         street:''
     }
-    //TODO - finalizar componente
+
   return (
-    <p>{entity.age}</p>
+    <>
+        <Divider>Referências</Divider>
+        <Space align='center' direction='vertical' style={{display:'flex', flexDirection:'column', margin:'0 3rem'}}>
+            <Switch checked={edit} onClick={handleSwitchChange} unCheckedChildren="Editar" checkedChildren="Editar" />
+            <Form
+                form={form}
+                initialValues={entity.referenceAddress ? entity.referenceAddress : initialValues}
+                onFinish={handleUpdateRefAddress}
+                disabled={!edit}
+                layout='vertical'
+            >
+                <Form.Item name={['referenceAddress','street']} label='Rua' >
+                    <Input value={entity.referenceAddress? entity.referenceAddress.street:initialValues.street} style={{width:'15rem'}}/>
+                </Form.Item>
+
+                <Form.Item name={['referenceAddress','number']} label='Número' >
+                    <Input type='number' value={entity.referenceAddress? entity.referenceAddress.number:initialValues.number} style={{width:'15rem'}}/>
+                </Form.Item>
+
+                <Form.Item name={['referenceAddress','neighborhood']} label='Complemento e Bairro' >
+                    <Input value={entity.referenceAddress? entity.referenceAddress.neighborhood:initialValues.neighborhood} style={{width:'15rem'}}/>
+                </Form.Item>
+
+                <Form.Item name={['referenceAddress','city']} label='Cidade' >
+                    <Input value={entity.referenceAddress? entity.referenceAddress.city:initialValues.city} style={{width:'15rem'}}/>
+                </Form.Item>
+
+                <Form.Item name={['referenceAddress','cep']} label='CEP' rules={[{pattern:/^\d{2}\.\d{3}-\d{3}$/, message:'Coloque o CEP no formato XX.XXX-XXX'}]}>
+                    <Input value={entity.referenceAddress? entity.referenceAddress.cep:initialValues.cep} style={{width:'15rem'}} placeholder='00.000-000'/>
+                </Form.Item>
+                <Divider>Telefone de Referência</Divider>
+                <Form.Item name={['referenceAddress','phoneNumber']} label='Telefone' rules={[{pattern:/^(\d{10}|\d{11})$/, message:'Apenas números com DDD, sem espaços nem traços'}]}>
+                    <Input value={entity.referenceAddress? entity.referenceAddress.phoneNumber:initialValues.phoneNumber} style={{width:'15rem'}}/>
+                </Form.Item>
+
+                <Button htmlType='submit' type='primary'>Salvar</Button>
+            </Form>
+        </Space>
+    </>
+
   )
 }

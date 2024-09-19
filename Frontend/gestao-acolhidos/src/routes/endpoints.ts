@@ -19,6 +19,7 @@ export const hostedRoutes = {
     create:endpoints.host+'hosted/create',
     edit:endpoints.host+'hosted/update-main-info/',
     updateDocs:endpoints.host+'hosted/update-docs/',
+    updateRefAddress:endpoints.host+'hosted/update-ref-address/',
     deleteHosted:endpoints.host+'hosted/delete/'
 }
 
