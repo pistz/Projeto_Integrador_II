@@ -3,14 +3,12 @@ import { Hosted } from '../../../../entity/Hosted/Hosted'
 import { Button, Collapse, Divider, Form, FormProps, Input, InputNumber, Radio, Select, Space, Switch } from 'antd';
 import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessage';
 import { FamilyCompositionForm } from './FamilyCompForm';
-// import { FamilyTableForm } from './FamilyTable/FamilyTableForm';
 import { updateFamilyCompositionDTO } from '../../../../entity/dto/Hosted/updateFamilyCompositionHostedDto';
 import { HostedRepository } from '../../../../repository/Hosted/HostedRepository';
 import { FamilyTable } from '../../../../entity/Hosted/FamilyTable/FamilyTable';
 import dayjs from 'dayjs';
 import { Education, FamilyTableForm, Gender, MaritalStatus } from './FamilyTable/FamilyTableForm';
 import { updateFamilyTableDto } from '../../../../entity/dto/Hosted/updateFamilyTableHostDto';
-// import { updateFamilyTableDto } from '../../../../entity/dto/Hosted/updateFamilyTableHostDto';
 
 const hostedRepository = new HostedRepository()
 
@@ -43,7 +41,7 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
     const [editComposition, setEditComposition] = useState<boolean>(false);
 
     const [memberForm] = Form.useForm();
-    
+
     const [editMember, setEditMember] = useState<boolean>(false);
 
 
@@ -62,12 +60,16 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
     }
 
     const handleFamilyTable:FormProps<FamilyTableForm>['onFinish'] = async(values:updateFamilyTableDto) =>{
-        console.log(values);
-
-        if(!values) clearForm()
+        try {
+            await hostedRepository.updateFamilyTable(values,entity.id)
+                .then(()=>{
+                    notifySuccess("Registro Incluído");
+                });
+                handleSwitchChangeFamilyMember();
+        } catch (error) {
+            errorOnFinish(error)
+        }
     }
-
-
 
     const errorOnFinish = (error:unknown) =>{
         notifyError("Erro ao realizar cadastro");
@@ -118,7 +120,7 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
         maritalStatus:'SOLTEIRO',
         occupation:''
     }
-
+//TODO - verificar erro ao cadastrar familiar
   return (
     <>
     <Divider>Composição Familiar</Divider>
@@ -153,6 +155,8 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
             entity.familyComposition.hasFamily || entity.familyComposition.hasFamilyBond ? 
             <>
                 <Switch checked={editMember} onClick={handleSwitchChangeFamilyMember} unCheckedChildren="Incluir" checkedChildren="Cancelar" />
+                {editMember? 
+                <> 
                 <Form
                     form={memberForm}
                     onFinish={handleFamilyTable}
@@ -205,7 +209,9 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
 
                     <Button htmlType='submit' type='primary'>Salvar</Button>
                 </Form>
-
+                </> 
+                : 
+                <></>}
             </>
             :
             <></>

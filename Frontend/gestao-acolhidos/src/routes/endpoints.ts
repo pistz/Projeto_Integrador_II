@@ -23,7 +23,8 @@ export const hostedRoutes = {
     updateDocs:endpoints.host+'hosted/update-docs/',
     updateRefAddress:endpoints.host+'hosted/update-ref-address/',
     updatePoliceReport:endpoints.host+'hosted/update-police-report/',
-    updateFamilyComposition:endpoints.host+'hosted/update-has-family/'
+    updateFamilyComposition:endpoints.host+'hosted/update-has-family/',
+    updateFamilyTable:endpoints.host+'hosted/update-family-member/',
 }
 
 export const configRoutes = {

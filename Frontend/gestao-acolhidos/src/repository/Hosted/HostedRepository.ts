@@ -8,6 +8,7 @@ import { updateDocsHostedDto } from "../../entity/dto/Hosted/updateDocsHostedDto
 import { updateHostedRefAddressDto } from "../../entity/dto/Hosted/updateRefAddressDto";
 import { updateHostedPoliceReportDto } from "../../entity/dto/Hosted/updatePoliceReportDto";
 import { updateFamilyCompositionDTO } from "../../entity/dto/Hosted/updateFamilyCompositionHostedDto";
+import { updateFamilyTableDto } from "../../entity/dto/Hosted/updateFamilyTableHostDto";
 
 export class HostedRepository extends Repository{
 
@@ -88,6 +89,16 @@ export class HostedRepository extends Repository{
     updateFamilyComposition = async(dto:updateFamilyCompositionDTO, id:string):Promise<void> =>{
         try {
             await axios.put(hostedRoutes.updateFamilyComposition+id,dto,authHeader())
+        } catch (error) {
+            Repository.checkError(error)
+            throw Error("error: " + error);
+        }
+    }
+
+    updateFamilyTable = async(dto:updateFamilyTableDto, id:string):Promise<void> =>{
+        const request = [dto];
+        try {
+            await axios.put(hostedRoutes.updateFamilyTable+id,request,authHeader())
         } catch (error) {
             Repository.checkError(error)
             throw Error("error: " + error);
