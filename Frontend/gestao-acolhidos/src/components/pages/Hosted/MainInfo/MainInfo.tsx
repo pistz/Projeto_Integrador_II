@@ -167,7 +167,7 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
 
             {/* //TODO adicionar botão para outra função - Family Composition */}
             <div className='Options-Buttons'>
-              <Button style={{margin:"0 0 0 1rem"}} type='primary' icon={<PlusOutlined/>} onClick={onOpenFamilyComposition}>Boletim de Ocorrência</Button>
+              <Button style={{margin:"0 0 0 1rem"}} type='primary' icon={<PlusOutlined/>} onClick={onOpenFamilyComposition}>Família</Button>
               <Drawer placement='right' width={800} closable={true} onClose={onCloseFamilyComposition} open={openFamilyComposition} destroyOnClose>
                 <FamilyCompositionComponent entity={entity}></FamilyCompositionComponent>
               </Drawer>

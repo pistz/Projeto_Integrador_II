@@ -5,7 +5,6 @@ import { Divider, Form, FormProps, Radio, Space, Switch } from 'antd';
 import { FamilyCompositionForm } from './FamilyCompForm';
 // import { FamilyTableForm } from './FamilyTable/FamilyTableForm';
 import { updateFamilyCompositionDTO } from '../../../../entity/dto/Hosted/updateFamilyCompositionHostedDto';
-import { FamilyComposition } from '../../../../entity/Hosted/FamilyComposition/FamilyComposition';
 // import { updateFamilyTableDto } from '../../../../entity/dto/Hosted/updateFamilyTableHostDto';
 
 export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) => {
