@@ -6,12 +6,23 @@ import { createHostedDto } from "../../entity/dto/Hosted/createHostedDto";
 import { authHeader } from "../../services/Token";
 import { updateDocsHostedDto } from "../../entity/dto/Hosted/updateDocsHostedDto";
 import { updateHostedRefAddressDto } from "../../entity/dto/Hosted/updateRefAddressDto";
+import { updateHostedPoliceReportDto } from "../../entity/dto/Hosted/updatePoliceReportDto";
 
 export class HostedRepository extends Repository{
 
     findAll = async():Promise<Hosted[]> =>{
         try {
             const result = await axios.get(hostedRoutes.findAll, authHeader())
+            return result.data;
+        } catch (error) {
+            Repository.checkError(error)
+            throw Error("error: " + error);
+        }
+    }
+
+    findById = async(id:string):Promise<Hosted> =>{
+        try {
+            const result = await axios.get(hostedRoutes.findById+id, authHeader())
             return result.data;
         } catch (error) {
             Repository.checkError(error)
@@ -49,6 +60,15 @@ export class HostedRepository extends Repository{
     updateRefAddress = async(dto:updateHostedRefAddressDto, id:string):Promise<void> =>{
         try {
             await axios.put(hostedRoutes.updateRefAddress+id,dto,authHeader())
+        } catch (error) {
+            Repository.checkError(error)
+            throw Error("error: " + error);
+        }
+    }
+
+    updatePoliceReport = async(dto:updateHostedPoliceReportDto, id:string):Promise<void> =>{
+        try {
+            await axios.put(hostedRoutes.updatePoliceReport+id,dto,authHeader())
         } catch (error) {
             Repository.checkError(error)
             throw Error("error: " + error);

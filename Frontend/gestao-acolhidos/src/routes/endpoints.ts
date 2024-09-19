@@ -16,11 +16,13 @@ export const authRoutes = {
 
 export const hostedRoutes = {
     findAll:endpoints.host+'hosted/find/all',
+    findById:endpoints.host+'hosted/find/',
     create:endpoints.host+'hosted/create',
     edit:endpoints.host+'hosted/update-main-info/',
+    deleteHosted:endpoints.host+'hosted/delete/',
     updateDocs:endpoints.host+'hosted/update-docs/',
     updateRefAddress:endpoints.host+'hosted/update-ref-address/',
-    deleteHosted:endpoints.host+'hosted/delete/'
+    updatePoliceReport:endpoints.host+'hosted/update-police-report/'
 }
 
 export const configRoutes = {

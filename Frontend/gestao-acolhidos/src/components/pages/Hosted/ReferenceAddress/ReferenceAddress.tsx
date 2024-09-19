@@ -14,7 +14,6 @@ export const RefAddress:React.FC<{entity:Hosted}> = ({entity}) => {
     const [edit, setEdit] = useState<boolean>(false);
 
     const handleUpdateRefAddress:FormProps<ReferenceAddress>['onFinish'] = async(values:updateHostedRefAddressDto) =>{
-        console.log(values)
         try {
             await hostedRepository.updateRefAddress(values, entity.id)
             .then(()=>{
@@ -78,7 +77,7 @@ export const RefAddress:React.FC<{entity:Hosted}> = ({entity}) => {
                 </Form.Item>
                 <Divider>Telefone de Referência</Divider>
                 <Form.Item name={['phoneNumber']} label='Telefone' rules={[{pattern:/^(\d{10}|\d{11})$/, message:'Apenas números com DDD, sem espaços nem traços'}]}>
-                    <Input value={entity.referenceAddress? entity.referenceAddress.phoneNumber:initialValues.phoneNumber} style={{width:'15rem'}}/>
+                    <Input type='number' value={entity.referenceAddress? entity.referenceAddress.phoneNumber:initialValues.phoneNumber} style={{width:'15rem'}}/>
                 </Form.Item>
 
                 <Button htmlType='submit' type='primary'>Salvar</Button>
