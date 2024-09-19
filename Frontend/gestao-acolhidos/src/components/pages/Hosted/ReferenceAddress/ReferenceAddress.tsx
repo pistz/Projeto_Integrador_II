@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { Hosted } from '../../../../entity/Hosted/Hosted'
-import { ReferenceAddressDto } from './types'
+import { ReferenceAddress } from './types'
 import { FormProps, useForm } from 'antd/es/form/Form';
 import { Button, Divider, Form, Input, Space, Switch } from 'antd';
 import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessage';
 import { HostedRepository } from '../../../../repository/Hosted/HostedRepository';
+import { updateHostedRefAddressDto } from '../../../../entity/dto/Hosted/updateRefAddressDto';
 
 const hostedRepository = new HostedRepository()
 
@@ -12,7 +13,7 @@ export const RefAddress:React.FC<{entity:Hosted}> = ({entity}) => {
     const [form] = useForm();
     const [edit, setEdit] = useState<boolean>(false);
 
-    const handleUpdateRefAddress:FormProps<ReferenceAddressDto>['onFinish'] = async(values:ReferenceAddressDto) =>{
+    const handleUpdateRefAddress:FormProps<ReferenceAddress>['onFinish'] = async(values:updateHostedRefAddressDto) =>{
         console.log(values)
         try {
             await hostedRepository.updateRefAddress(values, entity.id)
@@ -35,7 +36,7 @@ export const RefAddress:React.FC<{entity:Hosted}> = ({entity}) => {
     }
 
 
-    const initialValues:ReferenceAddressDto={
+    const initialValues:updateHostedRefAddressDto={
         cep:'',
         city:'',
         neighborhood:'',
@@ -56,27 +57,27 @@ export const RefAddress:React.FC<{entity:Hosted}> = ({entity}) => {
                 disabled={!edit}
                 layout='vertical'
             >
-                <Form.Item name={['referenceAddress','street']} label='Rua' >
+                <Form.Item name={['street']} label='Rua' >
                     <Input value={entity.referenceAddress? entity.referenceAddress.street:initialValues.street} style={{width:'15rem'}}/>
                 </Form.Item>
 
-                <Form.Item name={['referenceAddress','number']} label='Número' >
+                <Form.Item name={['number']} label='Número' >
                     <Input type='number' value={entity.referenceAddress? entity.referenceAddress.number:initialValues.number} style={{width:'15rem'}}/>
                 </Form.Item>
 
-                <Form.Item name={['referenceAddress','neighborhood']} label='Complemento e Bairro' >
+                <Form.Item name={['neighborhood']} label='Complemento e Bairro' >
                     <Input value={entity.referenceAddress? entity.referenceAddress.neighborhood:initialValues.neighborhood} style={{width:'15rem'}}/>
                 </Form.Item>
 
-                <Form.Item name={['referenceAddress','city']} label='Cidade' >
+                <Form.Item name={['city']} label='Cidade' >
                     <Input value={entity.referenceAddress? entity.referenceAddress.city:initialValues.city} style={{width:'15rem'}}/>
                 </Form.Item>
 
-                <Form.Item name={['referenceAddress','cep']} label='CEP' rules={[{pattern:/^\d{2}\.\d{3}-\d{3}$/, message:'Coloque o CEP no formato XX.XXX-XXX'}]}>
+                <Form.Item name={['cep']} label='CEP' rules={[{pattern:/^\d{2}\.\d{3}-\d{3}$/, message:'Coloque o CEP no formato XX.XXX-XXX'}]}>
                     <Input value={entity.referenceAddress? entity.referenceAddress.cep:initialValues.cep} style={{width:'15rem'}} placeholder='00.000-000'/>
                 </Form.Item>
                 <Divider>Telefone de Referência</Divider>
-                <Form.Item name={['referenceAddress','phoneNumber']} label='Telefone' rules={[{pattern:/^(\d{10}|\d{11})$/, message:'Apenas números com DDD, sem espaços nem traços'}]}>
+                <Form.Item name={['phoneNumber']} label='Telefone' rules={[{pattern:/^(\d{10}|\d{11})$/, message:'Apenas números com DDD, sem espaços nem traços'}]}>
                     <Input value={entity.referenceAddress? entity.referenceAddress.phoneNumber:initialValues.phoneNumber} style={{width:'15rem'}}/>
                 </Form.Item>
 
