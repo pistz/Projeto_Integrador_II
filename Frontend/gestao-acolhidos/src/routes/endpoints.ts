@@ -22,7 +22,8 @@ export const hostedRoutes = {
     deleteHosted:endpoints.host+'hosted/delete/',
     updateDocs:endpoints.host+'hosted/update-docs/',
     updateRefAddress:endpoints.host+'hosted/update-ref-address/',
-    updatePoliceReport:endpoints.host+'hosted/update-police-report/'
+    updatePoliceReport:endpoints.host+'hosted/update-police-report/',
+    updateFamilyComposition:endpoints.host+'hosted/update-has-family/'
 }
 
 export const configRoutes = {

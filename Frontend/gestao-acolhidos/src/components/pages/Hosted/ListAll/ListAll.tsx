@@ -125,6 +125,7 @@ export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListAction
         ...columnData,
         {
             title: 'Cadastro Completo',
+            key:'hostedTable',
             render: (value) => (
                 <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}} key={value.id}>
                     <Button type='primary' onClick={()=>onOpenMainInfo(value)}>Abrir</Button>

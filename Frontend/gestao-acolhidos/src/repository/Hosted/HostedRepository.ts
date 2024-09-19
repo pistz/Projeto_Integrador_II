@@ -7,6 +7,7 @@ import { authHeader } from "../../services/Token";
 import { updateDocsHostedDto } from "../../entity/dto/Hosted/updateDocsHostedDto";
 import { updateHostedRefAddressDto } from "../../entity/dto/Hosted/updateRefAddressDto";
 import { updateHostedPoliceReportDto } from "../../entity/dto/Hosted/updatePoliceReportDto";
+import { updateFamilyCompositionDTO } from "../../entity/dto/Hosted/updateFamilyCompositionHostedDto";
 
 export class HostedRepository extends Repository{
 
@@ -48,6 +49,15 @@ export class HostedRepository extends Repository{
         }
     }
 
+    deleteHosted = async(id:string): Promise<void> =>{
+        try {
+            await axios.delete(hostedRoutes.deleteHosted+id, authHeader())
+        } catch (error) {
+            Repository.checkError(error)
+            throw Error("error: " + error);
+        }
+    }
+
     updateDocs = async(dto:updateDocsHostedDto, id:string):Promise<void> =>{
         try {
             await axios.put(hostedRoutes.updateDocs+id,dto,authHeader())
@@ -75,13 +85,15 @@ export class HostedRepository extends Repository{
         }
     }
 
-    deleteHosted = async(id:string): Promise<void> =>{
+    updateFamilyComposition = async(dto:updateFamilyCompositionDTO, id:string):Promise<void> =>{
         try {
-            await axios.delete(hostedRoutes.deleteHosted+id, authHeader())
+            await axios.put(hostedRoutes.updateFamilyComposition+id,dto,authHeader())
         } catch (error) {
             Repository.checkError(error)
             throw Error("error: " + error);
         }
     }
+
+
 
 }
