@@ -39,7 +39,7 @@ public class ReferenceAddress {
     private String cep;
 
     @Column(name = "telefone_referencia")
-    private int phoneNumber;
+    private long phoneNumber;
 
     @LastModifiedDate
     @Column(name = "updated_at")
