@@ -1,18 +1,20 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Hosted } from '../../../../entity/Hosted/Hosted'
 import { Button, Collapse, Divider, Form, FormProps, Input, InputNumber, Radio, Select, Space, Switch } from 'antd';
 import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessage';
 import { FamilyCompositionForm } from './FamilyCompForm';
 import { updateFamilyCompositionDTO } from '../../../../entity/dto/Hosted/updateFamilyCompositionHostedDto';
 import { HostedRepository } from '../../../../repository/Hosted/HostedRepository';
-import { FamilyTable } from '../../../../entity/Hosted/FamilyTable/FamilyTable';
 import dayjs from 'dayjs';
 import { Education, FamilyTableForm, Gender, MaritalStatus } from './FamilyTable/FamilyTableForm';
 import { updateFamilyTableDto } from '../../../../entity/dto/Hosted/updateFamilyTableHostDto';
+import { useTableData } from '../../../../hooks/useTableData';
 
 const hostedRepository = new HostedRepository()
 
 export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) => {
+
+    const {hostedEntity, setHostedEntity} = useTableData();
 
     const genderOptions: { label: string; value: Gender }[] = [
         { label: 'Homem', value: 'MALE' },
@@ -38,20 +40,19 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
     ];
 
     const [compositionForm] = Form.useForm();
-    const [editComposition, setEditComposition] = useState<boolean>(false);
-
     const [memberForm] = Form.useForm();
 
+    const [editComposition, setEditComposition] = useState<boolean>(false);
     const [editMember, setEditMember] = useState<boolean>(false);
 
-
-    const [familyMembers, setFamilyMembers] = useState<FamilyTable[]>(entity.familyTable);
 
     const handleFamilyComposition:FormProps<FamilyCompositionForm>['onFinish'] = async(values:updateFamilyCompositionDTO) =>{
         try {
             await hostedRepository.updateFamilyComposition(values, entity.id)
-            .then(()=>{
+            .then(async ()=>{
                 notifySuccess("Registro Atualizado");
+                const updatedEntity = await hostedRepository.findById(entity.id);
+                setHostedEntity(updatedEntity);
             })
             handleSwitchChangeComposition();
         } catch (error) {
@@ -62,9 +63,12 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
     const handleFamilyTable:FormProps<FamilyTableForm>['onFinish'] = async(values:updateFamilyTableDto) =>{
         try {
             await hostedRepository.updateFamilyTable(values,entity.id)
-                .then(()=>{
+                .then(async ()=>{
                     notifySuccess("Registro Incluído");
+                    const updatedEntity = await hostedRepository.findById(entity.id);
+                    setHostedEntity(updatedEntity);
                 });
+                
                 handleSwitchChangeFamilyMember();
         } catch (error) {
             errorOnFinish(error)
@@ -95,18 +99,6 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
         return dayjs(date, dateFormat).format(inputFormat);
     };
 
-    const updateData = useCallback(async()=>{
-        const data = await hostedRepository.findById(entity.id)
-        setFamilyMembers(data.familyTable)
-    },[entity.id])
-
-    useEffect(()=>{
-        const loadEntityData = async()=>{
-            updateData()
-        }
-        loadEntityData();
-    },[updateData])
-
     const initialComposition:updateFamilyCompositionDTO = {
         hasFamily:false,
         hasFamilyBond:false
@@ -121,6 +113,13 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
         occupation:''
     }
 
+    useEffect(() => {
+        const update = async () => {
+            const data = await hostedRepository.findById(entity.id);
+            setHostedEntity(data);
+        };
+        update();
+    }, [entity.id, setHostedEntity]);
 
     return (
     <>
@@ -131,7 +130,7 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
             form={compositionForm}
             onFinish={handleFamilyComposition}
             disabled={!editComposition}
-            initialValues={entity.familyComposition ? entity.familyComposition : initialComposition}
+            initialValues={entity.familyComposition ? hostedEntity.familyComposition : initialComposition}
         >
             <Form.Item name={['hasFamily']} label={'Possui Família?'}>
                 <Radio.Group name='hasFamily'>
@@ -152,8 +151,8 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
 
         <Divider>Incluir membro da Família</Divider>
 
-        {entity.familyComposition === null ? <></> :
-            entity.familyComposition.hasFamily || entity.familyComposition.hasFamilyBond ? 
+        {hostedEntity.familyComposition === null ? <></> :
+            hostedEntity.familyComposition.hasFamily || hostedEntity.familyComposition.hasFamilyBond? 
             <>
                 <Switch checked={editMember} onClick={handleSwitchChangeFamilyMember} unCheckedChildren="Incluir" checkedChildren="Cancelar" />
                 {editMember? 
@@ -163,7 +162,7 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
                     onFinish={handleFamilyTable}
                     disabled={!editMember}
                     clearOnDestroy={true}
-                    initialValues={initialMember}
+                    initialValues={entity.familyComposition ?? initialComposition}
                     layout='vertical'
                 >
                     <Form.Item name={['name']} label={'Nome'} rules={[{required:true, message:'Deve possuir nome'}]}>
@@ -218,8 +217,7 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
             <></>
         }
 
-
-        {familyMembers.map((member) =>{
+        {hostedEntity.familyTable.map((member) =>{
                 return (
                 <>
                     <Collapse accordion 

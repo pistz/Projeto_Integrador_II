@@ -62,7 +62,7 @@ export const PoliceReportComponent:React.FC<{entity:Hosted}> = ({entity}) => {
         const inputFormat = 'DD/MM/YYYY';
         const dateFormat = 'YYYY-MM-DD';
         return dayjs(date, dateFormat).format(inputFormat);
-      };
+    };
 
 
 
@@ -108,13 +108,14 @@ export const PoliceReportComponent:React.FC<{entity:Hosted}> = ({entity}) => {
                         style={{width:'30rem'}}
                         key={report.id}
                         items={[{key:report.id, 
-                        label:`Registrado em: ${changeDateFormatVisualization(report.createdAt)}`, 
+                        label:`Boletim nº ${report.reportProtocol}`, 
                         children:(<>
                         <table >
-                            <ul><strong>Nº do BO: </strong>{report.reportProtocol}</ul>
+                            <ul><strong>Nº do B.O: </strong>{report.reportProtocol}</ul>
                             <ul><strong>Delegacia: </strong>{report.policeDepartment}</ul>
                             <ul><strong>Cidade: </strong>{report.city}</ul>
                             <ul><strong>Descrição: </strong>{report.reportInfo}</ul>
+                            <ul><strong>Inclusão no Sistema: </strong>{changeDateFormatVisualization(report.createdAt)}</ul>
                         </table>
                         </>)}]}/>
                 </>

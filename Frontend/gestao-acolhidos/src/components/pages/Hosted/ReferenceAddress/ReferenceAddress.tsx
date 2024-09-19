@@ -44,7 +44,7 @@ export const RefAddress:React.FC<{entity:Hosted}> = ({entity}) => {
         street:''
     }
 
-  return (
+    return (
     <>
         <Divider>Referências</Divider>
         <Space align='center' direction='vertical' style={{display:'flex', flexDirection:'column', margin:'0 3rem'}}>
@@ -76,7 +76,7 @@ export const RefAddress:React.FC<{entity:Hosted}> = ({entity}) => {
                     <Input value={entity.referenceAddress? entity.referenceAddress.cep:initialValues.cep} style={{width:'15rem'}} placeholder='00.000-000'/>
                 </Form.Item>
                 <Divider>Telefone de Referência</Divider>
-                <Form.Item name={['phoneNumber']} label='Telefone' rules={[{pattern:/^(\d{10}|\d{11})$/, message:'Apenas números com DDD, sem espaços nem traços'}]}>
+                <Form.Item name={['phoneNumber']} label='Telefone' rules={[{pattern:/^(\d{11}|\d{12})$/, message:'Apenas números com DDD com o zero, sem espaços nem traços'}]}>
                     <Input type='number' value={entity.referenceAddress? entity.referenceAddress.phoneNumber:initialValues.phoneNumber} style={{width:'15rem'}}/>
                 </Form.Item>
 
@@ -85,5 +85,5 @@ export const RefAddress:React.FC<{entity:Hosted}> = ({entity}) => {
         </Space>
     </>
 
-  )
+    )
 }

@@ -67,8 +67,8 @@ const RoutesReference:React.FC = () => {
                 <Route path='/login' element={<Login />}/>
 
                 <Route path='/app/*' element={signed? <Structure /> : <ForbiddenAcces />}>
-                    {mainRoutes.map((_,index) => <Route path={mainRoutes[index].path} element={mainRoutes[index].element} key={index}/>)}
-                    {hosted.map((_,index)=> <Route path={hosted[index].path} element={hosted[index].element} key={index+100} />)}
+                    {mainRoutes.map((_,index) => <Route path={mainRoutes[index].path} element={mainRoutes[index].element} key={`${index} mainRoute`}/>)}
+                    {hosted.map((_,index)=> <Route path={hosted[index].path} element={hosted[index].element} key={`${index} hostedRoutes`} />)}
                 </Route>
             </Routes>
         </BrowserRouter>

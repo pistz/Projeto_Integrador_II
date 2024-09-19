@@ -9,6 +9,7 @@ const TableDataContext = createContext<TablesContextData>({} as TablesContextDat
 export const TableDataProvider: React.FC<IChildren> = ({ children }:IChildren) => {
 
     const [hostedTableData, setHostedTableData] = useState<Hosted[]>([]);
+    const [hostedEntity, setHostedEntity] = useState<Hosted>({} as Hosted)
     const [userTableData, setUserTableData] = useState<IUser[]>([]);
 
     return (
@@ -16,7 +17,9 @@ export const TableDataProvider: React.FC<IChildren> = ({ children }:IChildren) =
             hostedTableData,
             setHostedTableData,
             userTableData, 
-            setUserTableData
+            setUserTableData,
+            hostedEntity,
+            setHostedEntity,
         }}>
             {children}
         </TableDataContext.Provider>

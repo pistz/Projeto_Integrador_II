@@ -22,8 +22,10 @@ export interface TablesContextData {
 
     hostedTableData:Hosted[]
     userTableData:IUser[]
+    hostedEntity:Hosted
 
     setHostedTableData:Dispatch<SetStateAction<Hosted[]>>
     setUserTableData:Dispatch<SetStateAction<IUser[]>>
+    setHostedEntity:Dispatch<SetStateAction<Hosted>>
 
 }
