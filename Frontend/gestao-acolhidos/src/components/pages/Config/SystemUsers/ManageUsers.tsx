@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { UsersTable } from './UsersTable'
-import { UserRepository } from '../../../repository/User/UserRepository'
+
 import { Button, Divider, Form, Input, Select } from 'antd'
 import { mainDivStyle } from './styles'
-import { RegisterUserDTO } from '../../../entity/dto/User/RegisterUserDTO'
-import { notifyError, notifySuccess } from '../../shared/PopMessage/PopMessage'
-import { Role } from '../../../entity/User/IUser'
+import { UserRepository } from '../../../../repository/User/UserRepository'
+import { Role } from '../../../../entity/User/IUser'
+import { RegisterUserDTO } from '../../../../entity/dto/User/RegisterUserDTO'
+import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessage'
+
 
 const userQueryKey = 'userQueryKey'
 

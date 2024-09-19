@@ -124,7 +124,7 @@ export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListAction
     const actionColumns:ColumnsType<Hosted> = [
         ...columnData,
         {
-            title: 'Documentos',
+            title: 'Cadastro Completo',
             render: (value) => (
                 <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}} key={value.id}>
                     <Button type='primary' onClick={()=>onOpenMainInfo(value)}>Abrir</Button>
@@ -139,14 +139,6 @@ export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListAction
             render: (_,record) => (
                 <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
                     <Button type='default' onClick={()=> console.log(record)}>Abrir</Button>
-                </Space>
-            ),
-        },
-        {
-            title: 'Família',
-            render: (_,record) => (
-                <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
-                    <Button type='dashed' onClick={()=> console.log(record)}>Abrir</Button>
                 </Space>
             ),
         },

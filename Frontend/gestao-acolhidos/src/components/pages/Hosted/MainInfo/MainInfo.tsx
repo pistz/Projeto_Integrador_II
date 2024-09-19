@@ -12,6 +12,7 @@ import { OtherDocs } from '../OtherDocs/OtherDocs'
 import { brazilStates } from '../../../shared/StateList/StateList'
 import { RefAddress } from '../ReferenceAddress/ReferenceAddress'
 import { PoliceReportComponent } from '../PoliceReport/PoliceReport'
+import { FamilyCompositionComponent } from '../FamilyComposition/FamilyCompositionComponent'
 
 const hostedRepository = new HostedRepository();
 
@@ -46,16 +47,27 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
       setOpenRefAddress(false)
   }
 
-      //Controle de abertura do drawer de Police Report
-      const [openPoliceReport, setOpenPoliceReport] = useState<boolean>(false);
+    //Controle de abertura do drawer de Police Report
+    const [openPoliceReport, setOpenPoliceReport] = useState<boolean>(false);
 
-      const onOpenPoliceReport = ()=>{
-        setOpenPoliceReport(true);
-      }
-      const onClosePoliceReport = () =>{
-          updateData()
-          setOpenPoliceReport(false)
-      }
+    const onOpenPoliceReport = ()=>{
+      setOpenPoliceReport(true);
+    }
+    const onClosePoliceReport = () =>{
+        updateData()
+        setOpenPoliceReport(false)
+    }
+
+    //Controle de abertura do drawer de Family Composition
+    const [openFamilyComposition, setOpenFamilyComposition] = useState<boolean>(false);
+
+    const onOpenFamilyComposition = ()=>{
+      setOpenFamilyComposition(true);
+    }
+    const onCloseFamilyComposition = () =>{
+        updateData()
+        setOpenFamilyComposition(false)
+    }
     
 
 
@@ -132,7 +144,7 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
             <Switch checked={edit} onClick={handleSwitchChange} unCheckedChildren="Editar" checkedChildren="Editar" />
 
             <div className='Options-Buttons'>
-              <Button style={{margin:"0 0 0 8rem"}} type='primary' icon={<PlusOutlined/>} onClick={onOpenDocs}>Mais Documentos</Button>
+              <Button style={{margin:"0 0 0 6rem"}} type='primary' icon={<PlusOutlined/>} onClick={onOpenDocs}>Mais Documentos</Button>
               <Drawer placement='right' width={800} closable={true} onClose={onCloseDocs} open={openDocs} destroyOnClose>
                 <OtherDocs entity={entity}></OtherDocs>
               </Drawer>
@@ -146,11 +158,18 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
               </Drawer>
             </div>
 
-            {/* //TODO adicionar botão para outra função - Boletim de Ocorrência */}
             <div className='Options-Buttons'>
               <Button style={{margin:"0 0 0 1rem"}} type='primary' icon={<PlusOutlined/>} onClick={onOpenPoliceReport}>Boletim de Ocorrência</Button>
               <Drawer placement='right' width={800} closable={true} onClose={onClosePoliceReport} open={openPoliceReport} destroyOnClose>
                 <PoliceReportComponent entity={entity}></PoliceReportComponent>
+              </Drawer>
+            </div>
+
+            {/* //TODO adicionar botão para outra função - Family Composition */}
+            <div className='Options-Buttons'>
+              <Button style={{margin:"0 0 0 1rem"}} type='primary' icon={<PlusOutlined/>} onClick={onOpenFamilyComposition}>Boletim de Ocorrência</Button>
+              <Drawer placement='right' width={800} closable={true} onClose={onCloseFamilyComposition} open={openFamilyComposition} destroyOnClose>
+                <FamilyCompositionComponent entity={entity}></FamilyCompositionComponent>
               </Drawer>
             </div>
 

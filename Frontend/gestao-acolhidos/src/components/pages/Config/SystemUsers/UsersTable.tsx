@@ -1,12 +1,16 @@
 import { Button, Space, Spin, Table, TableColumnsType } from 'antd'
-import { IUser } from '../../../entity/User/IUser'
+
 import IListActionsProps from './types'
-import { useTableData } from '../../../hooks/useTableData';
+
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { notifyError, notifySuccess } from '../../shared/PopMessage/PopMessage';
+
 import { ColumnsType } from 'antd/es/table';
 import { useEffect } from 'react';
-import { DeleteButton } from '../../shared/Button/DeleteButton/DeleteButton';
+import { useTableData } from '../../../../hooks/useTableData';
+import { IUser } from '../../../../entity/User/IUser';
+import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessage';
+import { DeleteButton } from '../../../shared/Button/DeleteButton/DeleteButton';
+
 
 export const UsersTable = ({listQueryKey, getAllEntities, deleteEntity}:IListActionsProps<IUser>) => {
     const {userTableData, setUserTableData} = useTableData();
@@ -68,7 +72,6 @@ export const UsersTable = ({listQueryKey, getAllEntities, deleteEntity}:IListAct
                     <Button shape='round' type='default' onClick={()=> console.log(record, ' update btn')}>
                         Alterar Acesso
                     </Button>
-
                     <DeleteButton removeMethod={()=> removeEntity.mutate(record)} />                      
                 </Space>
             )

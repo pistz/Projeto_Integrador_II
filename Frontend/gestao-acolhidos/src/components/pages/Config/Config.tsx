@@ -2,7 +2,7 @@ import { Button, Col, Divider, Form, Input, Statistic } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { ConfigRepository } from '../../../repository/Config/ConfigRepository'
 import { notifyError, notifySuccess } from '../../shared/PopMessage/PopMessage'
-import { ManageUsers } from '../SystemUsers/ManageUsers'
+import { ManageUsers } from './SystemUsers/ManageUsers'
 
 const config = new ConfigRepository()
 

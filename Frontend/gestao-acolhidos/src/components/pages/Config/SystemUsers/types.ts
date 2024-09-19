@@ -1,4 +1,5 @@
-import { IUser } from "../../../entity/User/IUser";
+import { IUser } from "../../../../entity/User/IUser";
+
 
 export default interface IListActionsProps<T extends IUser>{
     listQueryKey:string;
