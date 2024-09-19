@@ -1,4 +1,4 @@
-import { Button, Col, Divider, Form, Input, Statistic } from 'antd'
+import { Button, Col, Divider, Form, InputNumber, Statistic } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { ConfigRepository } from '../../../repository/Config/ConfigRepository'
 import { notifyError, notifySuccess } from '../../shared/PopMessage/PopMessage'
@@ -58,7 +58,7 @@ export const Config:React.FC = () => {
           clearOnDestroy={true}
         >
           <Form.Item name={['update']}>
-            <Input style={{width:'10rem'}} type='number'/>
+            <InputNumber style={{width:'10rem'}}/>
           </Form.Item>
             <Button type='primary' htmlType='submit'>Atualizar capacidade</Button>
         </Form>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Hosted } from '../../../../entity/Hosted/Hosted'
-import { Button, Divider, Drawer, Form, FormProps, Input, Select, Space, Switch } from 'antd'
+import { Button, Divider, Drawer, Form, FormProps, Input, InputNumber, Select, Space, Switch } from 'antd'
 import dayjs from 'dayjs'
 import { CreateForm } from '../CreateHosted/types'
 import { createHostedDto } from '../../../../entity/dto/Hosted/createHostedDto'
@@ -200,7 +200,7 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
             </Form.Item>
 
             <Form.Item name={['paperTrail']} label="Prontuário nº">
-              <Input value={entity.paperTrail} disabled={!edit} />
+              <InputNumber value={entity.paperTrail} disabled={!edit} />
             </Form.Item>
 
             <Form.Item name={['fathersName']} label="Nome do pai">

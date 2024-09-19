@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Hosted } from '../../../../entity/Hosted/Hosted'
-import { Button, Divider, Form, Input, Space, Switch } from 'antd'
+import { Button, Divider, Form, Input, InputNumber, Space, Switch } from 'antd'
 import { FormProps, useForm } from 'antd/es/form/Form'
 import { updateDocsHostedDto } from '../../../../entity/dto/Hosted/updateDocsHostedDto'
 import { DocsForm } from './types'
@@ -100,7 +100,7 @@ export const OtherDocs:React.FC<{entity:Hosted}> = ({entity}) => {
             <Divider>Certidão de Nascimento</Divider>
 
             <Form.Item name={['birthCertificate','certificateNumber']} label='Número da Certidão de Nascimento' >
-                <Input value={entity.otherDocuments? entity.otherDocuments.birthCertificate.certificateNumber:initialValues.birthCertificate.certificateNumber} />
+                <InputNumber value={entity.otherDocuments? entity.otherDocuments.birthCertificate.certificateNumber:initialValues.birthCertificate.certificateNumber} />
             </Form.Item>
 
             <Form.Item name={['birthCertificate','sheets']} label='Folhas nº' >
@@ -108,7 +108,7 @@ export const OtherDocs:React.FC<{entity:Hosted}> = ({entity}) => {
             </Form.Item>
 
             <Form.Item name={['birthCertificate','book']} label='Livro nº' >
-                <Input value={entity.otherDocuments? entity.otherDocuments.birthCertificate.book:initialValues.birthCertificate.book} />
+                <InputNumber value={entity.otherDocuments? entity.otherDocuments.birthCertificate.book:initialValues.birthCertificate.book} />
             </Form.Item>
 
             <Button htmlType='submit' type='primary'>Salvar</Button>
