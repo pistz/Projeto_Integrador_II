@@ -120,8 +120,9 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
         maritalStatus:'SOLTEIRO',
         occupation:''
     }
-//TODO - verificar erro ao cadastrar familiar
-  return (
+
+
+    return (
     <>
     <Divider>Composição Familiar</Divider>
     <Space align='center' direction='vertical' style={{display:'flex', flexDirection:'column', margin:'0 3rem', alignItems:'center', justifyContent:'center'}}>
