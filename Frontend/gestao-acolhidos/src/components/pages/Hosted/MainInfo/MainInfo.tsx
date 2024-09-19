@@ -138,13 +138,13 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
   return (
     <>
         <Space align='start' direction='vertical' style={{display:'flex', flexDirection:'column', margin:'0 3rem'}}>
-          <Divider>Dados Principais e Documentação de Apoio</Divider>
+          <Divider>Dados Principais | Documentação de Apoio | Família | Condição de Vulnerabilidade</Divider>
 
           <Space align='center' direction='vertical' style={{display:'flex', flexDirection:'row'}}>
             <Switch checked={edit} onClick={handleSwitchChange} unCheckedChildren="Editar" checkedChildren="Editar" />
 
             <div className='Options-Buttons'>
-              <Button style={{margin:"0 0 0 6rem"}} type='primary' icon={<PlusOutlined/>} onClick={onOpenDocs}>Mais Documentos</Button>
+              <Button style={{margin:"0 0 0 4rem"}} type='primary' icon={<PlusOutlined/>} onClick={onOpenDocs}>Mais Documentos</Button>
               <Drawer placement='right' width={800} closable={true} onClose={onCloseDocs} open={openDocs} destroyOnClose>
                 <OtherDocs entity={entity}></OtherDocs>
               </Drawer>
