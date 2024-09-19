@@ -964,7 +964,7 @@ public class HostedServiceImplTests {
         assertEquals("Registro atualizado", response.message());
         assertNotNull(hosted.getReferenceAddress());
         assertEquals(dto.street(), hosted.getReferenceAddress().getStreet());
-        assertEquals(dto.city(), hosted.getReferenceAddress().getCidade());
+        assertEquals(dto.city(), hosted.getReferenceAddress().getCity());
         assertEquals(dto.neighborhood(), hosted.getReferenceAddress().getNeighborhood());
         assertEquals(dto.number(), hosted.getReferenceAddress().getNumber());
         assertEquals(dto.cep(), hosted.getReferenceAddress().getCep());
@@ -995,7 +995,7 @@ public class HostedServiceImplTests {
         assertNotNull(response);
         assertEquals("Registro atualizado", response.message());
         assertEquals(dto.street(), hosted.getReferenceAddress().getStreet());
-        assertEquals(dto.city(), hosted.getReferenceAddress().getCidade());
+        assertEquals(dto.city(), hosted.getReferenceAddress().getCity());
         assertEquals(dto.neighborhood(), hosted.getReferenceAddress().getNeighborhood());
         assertEquals(dto.number(), hosted.getReferenceAddress().getNumber());
         assertEquals(dto.cep(), hosted.getReferenceAddress().getCep());
