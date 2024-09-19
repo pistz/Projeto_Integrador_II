@@ -133,14 +133,14 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
             initialValues={entity.familyComposition ? entity.familyComposition : initialComposition}
         >
             <Form.Item name={['hasFamily']} label={'Possui Família?'}>
-                <Radio.Group name='hasFamily' defaultValue={entity.familyComposition ? entity.familyComposition.hasFamily:initialComposition.hasFamily}>
+                <Radio.Group name='hasFamily'>
                     <Radio value={true}>sim</Radio>
                     <Radio value={false}>não</Radio>
                 </Radio.Group>
             </Form.Item>
 
             <Form.Item name={['hasFamilyBond']} label={'Possui Vínculo Familiar?'}>
-            <Radio.Group name='hasFamilyBond' defaultValue={entity.familyComposition ? entity.familyComposition.hasFamilyBond:initialComposition.hasFamilyBond}>
+            <Radio.Group name='hasFamilyBond' >
                     <Radio value={true}>sim</Radio>
                     <Radio value={false}>não</Radio>
                 </Radio.Group>

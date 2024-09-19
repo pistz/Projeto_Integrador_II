@@ -231,10 +231,11 @@ public class HostedServiceImpl implements HostedService {
         if(memberListDto.isEmpty()){
             return new HostedResponseUpdatedDTO("Registro vazio");
         }
-        if(updateHostedFamilyTable.getFamilyComposition() == null ||
-            !updateHostedFamilyTable.getFamilyComposition().isHasFamily() ||
-                !updateHostedFamilyTable.getFamilyComposition().isHasFamilyBond()
-        ){
+        if(updateHostedFamilyTable.getFamilyComposition() == null){
+            throw new NoSuchElementException("Acolhido foi marcado como sem vínculo familiar, atualize a existência de vínculo familiar");
+        }
+        if(updateHostedFamilyTable.getFamilyComposition().isHasFamily()==false &&
+                updateHostedFamilyTable.getFamilyComposition().isHasFamilyBond()==false){
             throw new NoSuchElementException("Acolhido foi marcado como sem vínculo familiar, atualize a existência de vínculo familiar");
         }
         List<FamilyTable> familyTableList;
