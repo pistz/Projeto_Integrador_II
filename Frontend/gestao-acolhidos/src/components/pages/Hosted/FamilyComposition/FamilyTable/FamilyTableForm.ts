@@ -7,6 +7,6 @@ export interface FamilyTableForm{
     occupation:string
 }
 
-type Gender = "MALE"| "FEMALE"| "OTHER"
-type MaritalStatus = "CASADO"| "SOLTEIRO"| "VIUVO"| "DIVORCIADO"| "SEPARADO"| "UNIAO_ESTAVEL"
-type Education =  "ANALFABETO"| "ENSINO_BASICO"| "ENSINO_MEDIO"| "ENSINO_SUPERIOR"| "POS_GRADUACAO" 
+export type Gender = "MALE"| "FEMALE"| "OTHER"
+export type MaritalStatus = "CASADO"| "SOLTEIRO"| "VIUVO"| "DIVORCIADO"| "SEPARADO"| "UNIAO_ESTAVEL"
+export type Education =  "ANALFABETO"| "ENSINO_BASICO"| "ENSINO_MEDIO"| "ENSINO_SUPERIOR"| "POS_GRADUACAO" 
