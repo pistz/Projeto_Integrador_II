@@ -5,6 +5,6 @@ export interface updateSituationalRiskHostedDto{
     homeless:Homeless
 }
 
-type Lookup = "FORMAL"| "ESPONTANEA"| "ABORDAGEM_DE_RUA"
-type Migrant =  "FIXAR_RESIDENCIA"| "PASSAGEM"| "OUTRO"
-type Homeless = "PERNOITE"| "REFEICAO"| "OUTRO" 
+type Lookup = "FORMAL"| "ESPONTANEA"| "ABORDAGEM_DE_RUA" | " "
+type Migrant =  "FIXAR_RESIDENCIA"| "PASSAGEM"| "OUTRO" | " "
+type Homeless = "PERNOITE"| "REFEICAO"| "OUTRO" | " "

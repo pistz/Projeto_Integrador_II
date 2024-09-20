@@ -8,6 +8,7 @@ import { HostedRepository } from '../../../../repository/Hosted/HostedRepository
 import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessage';
 import { createHostedDto } from '../../../../entity/dto/Hosted/createHostedDto';
 import { brazilStates } from '../../../shared/StateList/StateList';
+import { Link } from '../../../shared/Link/Link';
 
 
 const hostedRepository = new HostedRepository();
@@ -130,7 +131,7 @@ export const CreateHosted:React.FC = () => {
 
         <div style={{display:'flex', flexDirection:'row', alignItems:'stretch', justifyContent:'space-around', marginBottom:'3rem'}}>
         <Button type='primary' htmlType='submit'>Salvar</Button>
-        <Button htmlType='reset'> Cancelar</Button>
+        <Button htmlType='reset' danger><Link to={'/app/hosted'} title='Cancelar'/></Button>
         </div>
       </Form>
       <Space></Space>

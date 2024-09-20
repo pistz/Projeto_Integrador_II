@@ -25,6 +25,7 @@ export const hostedRoutes = {
     updatePoliceReport:endpoints.host+'hosted/update-police-report/',
     updateFamilyComposition:endpoints.host+'hosted/update-has-family/',
     updateFamilyTable:endpoints.host+'hosted/update-family-member/',
+    updateSituationalRisk:endpoints.host+'hosted/update-risk/'
 }
 
 export const configRoutes = {

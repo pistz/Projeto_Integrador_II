@@ -1,39 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import { Hosted } from '../../../../entity/Hosted/Hosted'
-import { Button, Collapse, Divider, Form, FormProps, Input, InputNumber, Radio, Select, Space, Spin, Switch } from 'antd';
+import { Button, Divider, Form, FormProps, Input, InputNumber, Radio, Select, Space, Switch } from 'antd';
 import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessage';
 import { FamilyCompositionForm } from './FamilyCompForm';
 import { updateFamilyCompositionDTO } from '../../../../entity/dto/Hosted/updateFamilyCompositionHostedDto';
 import { HostedRepository } from '../../../../repository/Hosted/HostedRepository';
-import dayjs from 'dayjs';
 import { Education, FamilyTableForm, Gender, MaritalStatus } from './FamilyTable/FamilyTableForm';
 import { updateFamilyTableDto } from '../../../../entity/dto/Hosted/updateFamilyTableHostDto';
 import { useTableData } from '../../../../hooks/useTableData';
+import { FamilyTableComponent } from './FamilyTable/FamilyTable';
 
 const hostedRepository = new HostedRepository()
 
 export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) => {
 
     const {hostedEntity, setHostedEntity} = useTableData();
-    const [localHostedEntity, setLocalHostedEntity] = useState<Hosted>(entity); // Estado local
 
     useEffect(() => {
         if (entity) {
-            setLocalHostedEntity(entity);
+            setHostedEntity(entity);
         }
-    }, [entity]);
-
-    useEffect(() => {
-        setHostedEntity(localHostedEntity);
-    }, [localHostedEntity, setHostedEntity]);
-
-    useEffect(() => {
-        const update = async () => {
-            const data = await hostedRepository.findById(entity.id);
-            setLocalHostedEntity(data);
-        };
-        update();
-    }, [entity.id, setHostedEntity]);
+    }, [entity, setHostedEntity]);
 
 
     const genderOptions: { label: string; value: Gender }[] = [
@@ -69,11 +56,11 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
     const handleFamilyComposition:FormProps<FamilyCompositionForm>['onFinish'] = async(values:updateFamilyCompositionDTO) =>{
         try {
             await hostedRepository.updateFamilyComposition(values, entity.id)
-            .then(async ()=>{
+            .then(()=>{
                 notifySuccess("Registro Atualizado");
-                const updatedEntity = await hostedRepository.findById(entity.id);
-                setHostedEntity(updatedEntity);
-            })
+            });
+            await hostedRepository.findById(entity.id)
+            .then(e => setHostedEntity(e))
             handleSwitchChangeComposition();
         } catch (error) {
             errorOnFinish(error)
@@ -83,12 +70,11 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
     const handleFamilyTable:FormProps<FamilyTableForm>['onFinish'] = async(values:updateFamilyTableDto) =>{
         try {
             await hostedRepository.updateFamilyTable(values,entity.id)
-                .then(async ()=>{
+                .then(()=>{
                     notifySuccess("Registro Incluído");
-                    const updatedEntity = await hostedRepository.findById(entity.id);
-                    setHostedEntity(updatedEntity);
                 });
-                
+                await hostedRepository.findById(entity.id)
+                .then(e => setHostedEntity(e));                
                 handleSwitchChangeFamilyMember();
         } catch (error) {
             errorOnFinish(error)
@@ -113,12 +99,6 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
         memberForm.resetFields()
     }
 
-    const changeDateFormatVisualization = (date: string) => {
-        const inputFormat = 'DD/MM/YYYY';
-        const dateFormat = 'YYYY-MM-DD';
-        return dayjs(date, dateFormat).format(inputFormat);
-    };
-
     const initialComposition:updateFamilyCompositionDTO = {
         hasFamily:false,
         hasFamilyBond:false
@@ -133,21 +113,17 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
         occupation:''
     }
 
-    if (!localHostedEntity || !localHostedEntity.familyComposition) {
-        return <Spin>Carregando...</Spin>; 
-    }
-
     return (
     <>
     <Divider>Composição Familiar</Divider>
     <Space align='center' direction='vertical' style={{display:'flex', flexDirection:'column', margin:'0 3rem', alignItems:'center', justifyContent:'center'}}>
         <Switch checked={editComposition} onClick={handleSwitchChangeComposition} unCheckedChildren="Editar" checkedChildren="Cancelar" />
-        {localHostedEntity?(
+
         <Form
             form={compositionForm}
             onFinish={handleFamilyComposition}
             disabled={!editComposition}
-            initialValues={localHostedEntity.familyComposition ? localHostedEntity.familyComposition : initialComposition}
+            initialValues={hostedEntity.familyComposition ? {...hostedEntity.familyComposition} : {initialComposition}}
         >
             <Form.Item name={['hasFamily']} label={'Possui Família?'}>
                 <Radio.Group name='hasFamily'>
@@ -164,14 +140,11 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
             </Form.Item>
 
             <Button htmlType='submit' type='primary'>Salvar</Button>
-        </Form>) : (
-            <Spin>Carregando...</Spin>
-        )}
+        </Form>
 
         <Divider>Incluir membro da Família</Divider>
 
-        {hostedEntity.familyComposition === null ? (<Spin>Carregando...</Spin>) :
-            localHostedEntity.familyComposition.hasFamily || localHostedEntity.familyComposition.hasFamilyBond? 
+        {hostedEntity.familyComposition !== null ? 
             <>
                 <Switch checked={editMember} onClick={handleSwitchChangeFamilyMember} unCheckedChildren="Incluir" checkedChildren="Cancelar" />
                 {editMember? 
@@ -181,7 +154,7 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
                     onFinish={handleFamilyTable}
                     disabled={!editMember}
                     clearOnDestroy={true}
-                    initialValues={entity.familyComposition ?? initialComposition}
+                    initialValues={initialMember}
                     layout='vertical'
                 >
                     <Form.Item name={['name']} label={'Nome'} rules={[{required:true, message:'Deve possuir nome'}]}>
@@ -235,29 +208,7 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
             :
             <></>
         }
-
-        {hostedEntity.familyTable.map((member) =>{
-                return (
-                <>
-                    <Collapse accordion 
-                        style={{width:'30rem'}}
-                        key={member.id}
-                        items={[{key:member.id, 
-                        label:member.name, 
-                        children:(<>
-                        <table key={member.id+'keyId'}>
-                            <ul><strong>Nome: </strong>{member.name}</ul>
-                            <ul><strong>Idade: </strong>{member.age}</ul>
-                            <ul><strong>Sexo: </strong>{member.gender}</ul>
-                            <ul><strong>Estado Civil: </strong>{member.maritalStatus}</ul>
-                            <ul><strong>Escolaridade: </strong>{member.education}</ul>
-                            <ul><strong>Profissão: </strong>{member.occupation}</ul>
-                            <ul><strong>Registrado em: </strong>{changeDateFormatVisualization(member.updatedAt)}</ul>
-                        </table>
-                        </>)}]}/>
-                </>
-                )
-            })}
+        <FamilyTableComponent entity={hostedEntity}/>
 
     </Space>
     </>

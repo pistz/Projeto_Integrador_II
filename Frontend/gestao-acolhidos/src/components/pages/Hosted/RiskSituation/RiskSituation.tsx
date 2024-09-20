@@ -4,11 +4,14 @@ import { useTableData } from '../../../../hooks/useTableData';
 import { Button, Divider, Form, FormProps, Select, Space, Switch } from 'antd';
 import { updateSituationalRiskHostedDto } from '../../../../entity/dto/Hosted/updateSituationalRiskHostedDto';
 import { Homeless, Lookup, Migrant, SituationalRiskForm } from './types';
+import { HostedRepository } from '../../../../repository/Hosted/HostedRepository';
+import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessage';
+
+const hostedRepository = new HostedRepository()
 
 export const RiskSituation:React.FC<{entity:Hosted}> = ({entity}) => {
 
     const {hostedEntity, setHostedEntity} = useTableData();
-    const [localHostedEntity, setLocalHostedEntity] = useState<Hosted>(entity);
 
     const [form] = Form.useForm();
     const [openEdit, setOpenEdit] = useState<boolean>(false);
@@ -33,21 +36,40 @@ export const RiskSituation:React.FC<{entity:Hosted}> = ({entity}) => {
 
     useEffect(() => {
         if (entity) {
-            setLocalHostedEntity(entity);
+            setHostedEntity(entity);
         }
-    }, [entity]);
+    }, [entity, setHostedEntity]);
 
-    useEffect(() => {
-        setHostedEntity(localHostedEntity);
-    }, [localHostedEntity, setHostedEntity]);
 
     const handleSwitch = () => {
         setOpenEdit(!openEdit);
     };
 
     const handleSituationalRisk:FormProps<SituationalRiskForm>['onFinish'] = async(values:updateSituationalRiskHostedDto) =>{
-        console.log(values)
-        handleSwitch()
+        try {
+            await hostedRepository.updateSituationalRisk(values, entity.id)
+            .then(()=>{
+                notifySuccess("Cadastro atualizado")
+            });
+            await hostedRepository.findById(entity.id)
+            .then((e)=>{
+                setHostedEntity(e);
+            })
+            handleSwitch()
+        } catch (error) {
+            errorOnFinish(error)
+        }
+    }
+
+    const errorOnFinish = (error:unknown) =>{
+        notifyError("Erro ao realizar cadastro");
+        return error;
+    }
+
+    const initialValues:SituationalRiskForm= {
+        lookUp:" ",
+        migrant:" ",
+        homeless: " "
     }
 
 
@@ -59,12 +81,14 @@ export const RiskSituation:React.FC<{entity:Hosted}> = ({entity}) => {
             <Switch checked={openEdit} onClick={handleSwitch} unCheckedChildren="Editar" checkedChildren="Cancelar" />
             <Form
                 form={form}
-                initialValues={{...hostedEntity.situationalRisk}}
                 onFinish={handleSituationalRisk}
                 disabled={!openEdit}
                 layout='vertical'
-            >
+                clearOnDestroy
+                initialValues={hostedEntity.situationalRisk ?{...hostedEntity.situationalRisk} :{initialValues}}
+                >
                 <Form.Item name={['lookUp']} label={'Tipo de procura'}>
+                    {openEdit? (<>                    
                     <Select placeholder="Selecione o tipo de procura">
                         {lookUpOptions.map((option) => (
                             <Select.Option key={option.value} value={option.value}>
@@ -72,9 +96,20 @@ export const RiskSituation:React.FC<{entity:Hosted}> = ({entity}) => {
                             </Select.Option>
                         ))}
                     </Select>
+                    </>):(
+                        <>
+                    <p style={{fontWeight:'bold'}}>{lookUpOptions.map((e)=> {
+                        if(e.value === hostedEntity.situationalRisk?.lookUp){
+                            return e.label
+                        }
+                    }) || initialValues.lookUp} </p>
+                    </>
+                )}
                 </Form.Item>
 
-                <Form.Item name={['migrant']} label={'É migrante?'}>
+                <Form.Item name={['migrant']} label={'É migrante?'} >
+                    {openEdit? 
+                    (<>
                     <Select placeholder="Motivo de estar no município">
                         {migranteOptions.map((option) => (
                             <Select.Option key={option.value} value={option.value}>
@@ -82,9 +117,21 @@ export const RiskSituation:React.FC<{entity:Hosted}> = ({entity}) => {
                             </Select.Option>
                         ))}
                     </Select>
+                    </>):
+                    (
+                    <>
+                    <p style={{fontWeight:'bold'}}>{migranteOptions.map((e)=> {
+                        if(e.value === hostedEntity.situationalRisk?.migrant){
+                            return e.label
+                        }
+                    }) || initialValues.migrant} </p>
+                    </>
+                    )    
+                }
                 </Form.Item>
 
                 <Form.Item name={['homeless']} label={'É população de rua?'}>
+                    {openEdit? (<>
                     <Select placeholder="Motivo pelo qual procurou o albergue">
                         {homelessOptions.map((option) => (
                             <Select.Option key={option.value} value={option.value}>
@@ -92,9 +139,17 @@ export const RiskSituation:React.FC<{entity:Hosted}> = ({entity}) => {
                             </Select.Option>
                         ))}
                     </Select>
+                    </>):(<>
+                    <p style={{fontWeight:'bold'}}>{homelessOptions.map((e)=> {
+                        if(e.value === hostedEntity.situationalRisk?.homeless){
+                            return e.label
+                        }
+                    }) || initialValues.homeless} </p>
+                    </>)}
+
                 </Form.Item>
 
-                <Button htmlType='submit'>Salvar</Button>
+                <Button htmlType='submit' type='primary'>Salvar</Button>
             </Form>
         </Space>
     </>
