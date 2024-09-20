@@ -14,6 +14,7 @@ import { RefAddress } from '../ReferenceAddress/ReferenceAddress'
 import { PoliceReportComponent } from '../PoliceReport/PoliceReport'
 import { FamilyCompositionComponent } from '../FamilyComposition/FamilyCompositionComponent'
 import { RiskSituation } from '../RiskSituation/RiskSituation'
+import { SocialProgramComponent } from '../SocialProgram/SocialProgramComponent'
 
 const hostedRepository = new HostedRepository();
 
@@ -30,56 +31,74 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
   const [openDocs, setOpenDocs] = useState<boolean>(false);
 
   const onOpenDocs = ()=>{
-      setOpenDocs(true);
+    updateData()
+    setOpenDocs(true);
   }
   const onCloseDocs = () =>{
-      updateData()
-      setOpenDocs(false)
+    updateData()
+    setOpenDocs(false)
   }
   
     //Controle de abertura do drawer de Endereço de Referência
   const [openRefAddress, setOpenRefAddress] = useState<boolean>(false);
 
   const onOpenRefAddress = ()=>{
+    updateData()
     setOpenRefAddress(true);
   }
   const onCloseRefAddress = () =>{
-      updateData()
-      setOpenRefAddress(false)
+    updateData()
+    setOpenRefAddress(false)
   }
 
     //Controle de abertura do drawer de Police Report
     const [openPoliceReport, setOpenPoliceReport] = useState<boolean>(false);
 
     const onOpenPoliceReport = ()=>{
+      updateData()
       setOpenPoliceReport(true);
     }
     const onClosePoliceReport = () =>{
-        updateData()
-        setOpenPoliceReport(false)
+      updateData()
+      setOpenPoliceReport(false)
     }
 
     //Controle de abertura do drawer de Family Composition
     const [openFamilyComposition, setOpenFamilyComposition] = useState<boolean>(false);
 
     const onOpenFamilyComposition = ()=>{
+      updateData()
       setOpenFamilyComposition(true);
     }
     const onCloseFamilyComposition = () =>{
-        updateData()
-        setOpenFamilyComposition(false)
+      updateData()
+      setOpenFamilyComposition(false)
     }
 
     //Controle de abertura do drawer de Risk Situation
     const [openRiskSituation, setOpenRiskSituation] = useState<boolean>(false);
 
     const onOpenRiskSituation = ()=>{
+      updateData()
       setOpenRiskSituation(true);
     }
     const onCloseRiskSituation = () =>{
-        updateData()
-        setOpenRiskSituation(false)
+      updateData()
+      setOpenRiskSituation(false)
     }
+
+    //Controle de abertura do drawer de Social Program
+    const [openSocialProgram, setOpenSocialProgram] = useState<boolean>(false);
+
+    const onOpenSocialProgram = ()=>{
+      updateData()
+      setOpenSocialProgram(true);
+    }
+    const onCloseSocialProgram = () =>{
+      updateData()
+      setOpenSocialProgram(false)
+    }
+    
     
     
 
@@ -151,13 +170,12 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
   return (
     <>
         <Space align='start' direction='vertical' style={{display:'flex', flexDirection:'column', margin:'0 3rem'}}>
-          <Divider>Dados Principais | Documentação de Apoio | Família | Condição de Vulnerabilidade</Divider>
+          <Divider>Documentação de Apoio | Família | Condição de Vulnerabilidade</Divider>
 
-          <Space align='center' direction='vertical' style={{display:'flex', flexDirection:'row'}}>
-            <Switch checked={edit} onClick={handleSwitchChange} unCheckedChildren="Editar" checkedChildren="Editar" />
+          <Space align='center' direction='vertical' style={{display:'flex', flexDirection:'row', marginBottom:'1.5rem'}}>
 
             <div className='Options-Buttons'>
-              <Button style={{margin:"0 0 0 4rem"}} type='primary' icon={<PlusOutlined/>} onClick={onOpenDocs}>Mais Documentos</Button>
+              <Button style={{margin:"0 0 0 1rem"}} type='primary' icon={<PlusOutlined/>} onClick={onOpenDocs}>Mais Documentos</Button>
               <Drawer placement='right' width={800} closable={true} onClose={onCloseDocs} open={openDocs} destroyOnClose>
                 <OtherDocs entity={entity}></OtherDocs>
               </Drawer>
@@ -185,7 +203,6 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
               </Drawer>
             </div>
 
-            {/* //TODO adicionar botão para outra função - Situação de Risco */}
             <div className='Options-Buttons'>
               <Button style={{margin:"0 0 0 1rem"}} type='primary' icon={<PlusOutlined/>} onClick={onOpenRiskSituation}>Situação de Risco</Button>
               <Drawer placement='right' width={800} closable={true} onClose={onCloseRiskSituation} open={openRiskSituation} destroyOnClose>
@@ -193,8 +210,19 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
               </Drawer>
             </div>
 
+            {/* //TODO adicionar botão para outra função - Programa Social */}
+            <div className='Options-Buttons'>
+              <Button style={{margin:"0 0 0 1rem"}} type='primary' icon={<PlusOutlined/>} onClick={onOpenSocialProgram}>Programas Sociais</Button>
+              <Drawer placement='right' width={800} closable={true} onClose={onCloseSocialProgram} open={openSocialProgram} destroyOnClose>
+                <SocialProgramComponent entity={entity}></SocialProgramComponent>
+              </Drawer>
+            </div>
+          </Space>
 
+          <Divider>Dados Principais</Divider>
 
+          <Space align='baseline' direction='vertical'>
+            <Switch checked={edit} onClick={handleSwitchChange} unCheckedChildren="Editar" checkedChildren="Editar" />
           </Space>
 
           <Form
