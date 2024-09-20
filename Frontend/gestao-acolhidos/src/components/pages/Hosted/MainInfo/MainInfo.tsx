@@ -13,12 +13,13 @@ import { brazilStates } from '../../../shared/StateList/StateList'
 import { RefAddress } from '../ReferenceAddress/ReferenceAddress'
 import { PoliceReportComponent } from '../PoliceReport/PoliceReport'
 import { FamilyCompositionComponent } from '../FamilyComposition/FamilyCompositionComponent'
+import { RiskSituation } from '../RiskSituation/RiskSituation'
 
 const hostedRepository = new HostedRepository();
 
 export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
 
-  //Context 
+  //Contexto geral
   const {setHostedTableData} = useTableData();
 
   //Form options
@@ -68,6 +69,18 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
         updateData()
         setOpenFamilyComposition(false)
     }
+
+    //Controle de abertura do drawer de Risk Situation
+    const [openRiskSituation, setOpenRiskSituation] = useState<boolean>(false);
+
+    const onOpenRiskSituation = ()=>{
+      setOpenRiskSituation(true);
+    }
+    const onCloseRiskSituation = () =>{
+        updateData()
+        setOpenRiskSituation(false)
+    }
+    
     
 
 
@@ -165,13 +178,22 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
               </Drawer>
             </div>
 
-            {/* //TODO adicionar botão para outra função - Family Composition */}
             <div className='Options-Buttons'>
               <Button style={{margin:"0 0 0 1rem"}} type='primary' icon={<PlusOutlined/>} onClick={onOpenFamilyComposition}>Família</Button>
               <Drawer placement='right' width={800} closable={true} onClose={onCloseFamilyComposition} open={openFamilyComposition} destroyOnClose>
                 <FamilyCompositionComponent entity={entity}></FamilyCompositionComponent>
               </Drawer>
             </div>
+
+            {/* //TODO adicionar botão para outra função - Situação de Risco */}
+            <div className='Options-Buttons'>
+              <Button style={{margin:"0 0 0 1rem"}} type='primary' icon={<PlusOutlined/>} onClick={onOpenRiskSituation}>Situação de Risco</Button>
+              <Drawer placement='right' width={800} closable={true} onClose={onCloseRiskSituation} open={openRiskSituation} destroyOnClose>
+                <RiskSituation entity={entity}></RiskSituation>
+              </Drawer>
+            </div>
+
+
 
           </Space>
 

@@ -129,17 +129,9 @@ export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListAction
             render: (value) => (
                 <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}} key={value.id}>
                     <Button type='primary' onClick={()=>onOpenMainInfo(value)}>Abrir</Button>
-                    <Drawer width={700} height={1000} placement='top' closable={true} onClose={onCloseMainInfo} open={openMainInfo} destroyOnClose>
+                    <Drawer width={1300} height={700} placement='right' closable={true} onClose={onCloseMainInfo} open={openMainInfo} destroyOnClose>
                         <MainInfo entity={hosted}/>
                     </Drawer>
-                </Space>
-            ),
-        },
-        {
-            title: 'Situação de Risco',
-            render: (_,record) => (
-                <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
-                    <Button type='default' onClick={()=> console.log(record)}>Abrir</Button>
                 </Space>
             ),
         },
@@ -180,7 +172,7 @@ export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListAction
     return (
         <Spin spinning={isLoading}>
             <Table 
-                rowKey={hosted.id}
+                rowKey={(e) => e.id}
                 dataSource={hostedTableData} 
                 columns={actionColumns}
                 size='small'

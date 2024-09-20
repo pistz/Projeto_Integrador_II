@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Hosted } from '../../../../entity/Hosted/Hosted'
-import { Button, Collapse, Divider, Form, FormProps, Input, InputNumber, Radio, Select, Space, Switch } from 'antd';
+import { Button, Collapse, Divider, Form, FormProps, Input, InputNumber, Radio, Select, Space, Spin, Switch } from 'antd';
 import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessage';
 import { FamilyCompositionForm } from './FamilyCompForm';
 import { updateFamilyCompositionDTO } from '../../../../entity/dto/Hosted/updateFamilyCompositionHostedDto';
@@ -15,6 +15,27 @@ const hostedRepository = new HostedRepository()
 export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) => {
 
     const {hostedEntity, setHostedEntity} = useTableData();
+    const [localHostedEntity, setLocalHostedEntity] = useState<Hosted>(entity); // Estado local
+
+    useEffect(() => {
+        // Inicializa o estado com base no entity recebido
+        if (entity) {
+            setLocalHostedEntity(entity);
+        }
+    }, [entity]);
+
+    useEffect(() => {
+        setHostedEntity(localHostedEntity);
+    }, [localHostedEntity, setHostedEntity]);
+
+    useEffect(() => {
+        const update = async () => {
+            const data = await hostedRepository.findById(entity.id);
+            setLocalHostedEntity(data);
+        };
+        update();
+    }, [entity.id, setHostedEntity]);
+
 
     const genderOptions: { label: string; value: Gender }[] = [
         { label: 'Homem', value: 'MALE' },
@@ -113,24 +134,21 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
         occupation:''
     }
 
-    useEffect(() => {
-        const update = async () => {
-            const data = await hostedRepository.findById(entity.id);
-            setHostedEntity(data);
-        };
-        update();
-    }, [entity.id, setHostedEntity]);
+    if (!localHostedEntity || !localHostedEntity.familyComposition) {
+        return <Spin>Carregando...</Spin>; 
+    }
 
     return (
     <>
     <Divider>Composição Familiar</Divider>
     <Space align='center' direction='vertical' style={{display:'flex', flexDirection:'column', margin:'0 3rem', alignItems:'center', justifyContent:'center'}}>
         <Switch checked={editComposition} onClick={handleSwitchChangeComposition} unCheckedChildren="Editar" checkedChildren="Cancelar" />
+        {localHostedEntity?(
         <Form
             form={compositionForm}
             onFinish={handleFamilyComposition}
             disabled={!editComposition}
-            initialValues={entity.familyComposition ? hostedEntity.familyComposition : initialComposition}
+            initialValues={localHostedEntity.familyComposition ? localHostedEntity.familyComposition : initialComposition}
         >
             <Form.Item name={['hasFamily']} label={'Possui Família?'}>
                 <Radio.Group name='hasFamily'>
@@ -147,12 +165,14 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
             </Form.Item>
 
             <Button htmlType='submit' type='primary'>Salvar</Button>
-        </Form>
+        </Form>) : (
+            <Spin>Carregando...</Spin>
+        )}
 
         <Divider>Incluir membro da Família</Divider>
 
-        {hostedEntity.familyComposition === null ? <></> :
-            hostedEntity.familyComposition.hasFamily || hostedEntity.familyComposition.hasFamilyBond? 
+        {hostedEntity.familyComposition === null ? (<Spin>Carregando...</Spin>) :
+            localHostedEntity.familyComposition.hasFamily || localHostedEntity.familyComposition.hasFamilyBond? 
             <>
                 <Switch checked={editMember} onClick={handleSwitchChangeFamilyMember} unCheckedChildren="Incluir" checkedChildren="Cancelar" />
                 {editMember? 
@@ -226,7 +246,7 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
                         items={[{key:member.id, 
                         label:member.name, 
                         children:(<>
-                        <table >
+                        <table key={member.id+'keyId'}>
                             <ul><strong>Nome: </strong>{member.name}</ul>
                             <ul><strong>Idade: </strong>{member.age}</ul>
                             <ul><strong>Sexo: </strong>{member.gender}</ul>
