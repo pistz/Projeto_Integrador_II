@@ -18,7 +18,6 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
     const [localHostedEntity, setLocalHostedEntity] = useState<Hosted>(entity); // Estado local
 
     useEffect(() => {
-        // Inicializa o estado com base no entity recebido
         if (entity) {
             setLocalHostedEntity(entity);
         }
