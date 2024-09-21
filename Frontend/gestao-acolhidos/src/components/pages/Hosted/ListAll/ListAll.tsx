@@ -8,8 +8,9 @@ import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessag
 import { useTableData } from '../../../../hooks/useTableData';
 import { MainInfo } from '../MainInfo/MainInfo';
 import { DeleteButton } from '../../../shared/Button/DeleteButton/DeleteButton';
-import { DoubleLeftOutlined} from '@ant-design/icons';
+import { DoubleLeftOutlined, HeartOutlined, SolutionOutlined} from '@ant-design/icons';
 import { MedicalRecordComponent } from '../MedicalRecord/MedicalRecordComponent';
+import { TreatmentsComponent } from '../Treatments/TreatmentsComponent';
 
 
 export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListActionsProps<Hosted>) => {
@@ -22,6 +23,8 @@ export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListAction
     const [openMainInfo, setOpenMainInfo] = useState<boolean>(false);
 
     const [openMedicalRecords, setOpenMedicalRecords] = useState<boolean>(false)
+
+    const [openCustomTreatments, setOpenCustomTreatments] = useState<boolean>(false)
     
 
     //Atua no menu de Cadastro Completo
@@ -42,6 +45,16 @@ export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListAction
     const onCloseMedicalRecord = () =>{
         setHosted({} as Hosted)
         setOpenMedicalRecords(false)
+    }
+
+    //Atua no menu de Plano de Atendimentos
+    const onOpenCustomTreatments = (value:Hosted)=>{
+        setHosted(value)
+        setOpenCustomTreatments(true);
+    }
+    const onCloseCustomTreatments = () =>{
+        setHosted({} as Hosted)
+        setOpenCustomTreatments(false)
     }
 
     const columnData:TableColumnsType<Hosted> = [
@@ -151,10 +164,10 @@ export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListAction
             ),
         },
         {
-            title: 'Saúde',
+            title: 'Histórico de Saúde',
             render: (record) => (
                 <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
-                    <Button type='default' onClick={()=> onOpenMedicalRecord(record)}>Abrir</Button>
+                    <Button type='dashed' danger size='middle' icon={<HeartOutlined />} onClick={()=> onOpenMedicalRecord(record)} />
                     <Drawer width={1800} height={700} placement='right' closable={true} onClose={onCloseMedicalRecord} open={openMedicalRecords} destroyOnClose>
                         <MedicalRecordComponent entity={hosted}/>
                     </Drawer>
@@ -165,12 +178,15 @@ export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListAction
             title: 'Plano de Atendimento',
             render: (_,record) => (
                 <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
-                    <Button type='default' onClick={()=> console.log(record)}>Abrir</Button>
+                    <Button type='dashed' onClick={()=> onOpenCustomTreatments(record)} icon={<SolutionOutlined />}/>
+                    <Drawer width={1800} height={700} placement='right' closable={true} onClose={onCloseCustomTreatments} open={openCustomTreatments} destroyOnClose>
+                        <TreatmentsComponent entity={hosted}/>
+                    </Drawer>
                 </Space>
             ),
         },
         {
-            title: '',
+            title: 'Apagar',
             render: (_,record) => (
                 <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
                     <DeleteButton removeMethod={()=> removeEntity.mutate(record)}></DeleteButton>

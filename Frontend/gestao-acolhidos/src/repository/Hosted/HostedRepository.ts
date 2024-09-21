@@ -12,6 +12,7 @@ import { updateFamilyTableDto } from "../../entity/dto/Hosted/updateFamilyTableH
 import { updateSituationalRiskHostedDto } from "../../entity/dto/Hosted/updateSituationalRiskHostedDto";
 import { updateSocialProgramHostedDto } from "../../entity/dto/Hosted/updateSocialProgramHostedDto";
 import { createMedicalRecordDto } from "../../entity/dto/Hosted/createMedicalRecordHostedDto";
+import { updateCustomTreatmentsDto } from "../../entity/dto/Hosted/updateCustomTreatmentsHostedDto";
 
 export class HostedRepository extends Repository{
 
@@ -128,15 +129,19 @@ export class HostedRepository extends Repository{
 
     updateMedicalRecord = async(dto:createMedicalRecordDto, id:string):Promise<void> =>{
         try {
-            await axios.put(hostedRoutes.createMedicalRecord+id,dto,authHeader())
+            await axios.put(hostedRoutes.updateMedicalRecord+id,dto,authHeader())
         } catch (error) {
             Repository.checkError(error)
             throw Error("error: " + error);
         }
     }
 
-
-
-
-
+    updateCustomTreatments = async(dto:updateCustomTreatmentsDto, id:string):Promise<void> =>{
+        try {
+            await axios.put(hostedRoutes.updateCustomTreatments+id,dto,authHeader())
+        } catch (error) {
+            Repository.checkError(error)
+            throw Error("error: " + error);
+        }
+    }
 }

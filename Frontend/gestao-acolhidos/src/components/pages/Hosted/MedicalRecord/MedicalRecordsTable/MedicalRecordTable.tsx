@@ -29,7 +29,7 @@ export const MedicalRecordTable:React.FC<{entity:Hosted}> = ({entity}) => {
                     label:`Queixa registrada em ${changeDateFormatVisualization(member.createdAt)}`, 
                     children:(<>
                     <table key={'tableId'+member.id}>
-                        <ul><strong>Nome: </strong>{member.complaints}</ul>
+                        <ul>{member.complaints}</ul>
                     </table>
                     </>)}]}/>
             </>)}):(<></>)}

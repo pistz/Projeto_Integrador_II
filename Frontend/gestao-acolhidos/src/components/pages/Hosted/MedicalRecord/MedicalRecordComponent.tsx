@@ -56,7 +56,7 @@ export const MedicalRecordComponent:React.FC<{entity:Hosted}> = ({entity}) => {
   return (
 
     <>
-        <Divider>Queixas apresentadas com relação à saúde</Divider>
+        <Divider>Saúde do Acolhido</Divider>
         <Space align='center' direction='vertical' style={{display:'flex', flexDirection:'column', margin:'0 3rem', alignItems:'center', justifyContent:'center'}}>
             <Switch checked={openEdit} onClick={handleSwitch} unCheckedChildren="Incluir" checkedChildren="Cancelar" />
             {openEdit? 
