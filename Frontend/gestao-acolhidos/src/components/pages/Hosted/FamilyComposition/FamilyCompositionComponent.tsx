@@ -133,7 +133,7 @@ export const FamilyCompositionComponent:React.FC<{entity:Hosted}> = ({entity}) =
             </Form.Item>
 
             <Form.Item name={['hasFamilyBond']} label={'Possui Vínculo Familiar?'}>
-            <Radio.Group name='hasFamilyBond' >
+                <Radio.Group name='hasFamilyBond' >
                     <Radio value={true}>sim</Radio>
                     <Radio value={false}>não</Radio>
                 </Radio.Group>

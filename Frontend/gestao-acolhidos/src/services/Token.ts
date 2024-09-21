@@ -1,3 +1,4 @@
+import { jwtDecode, JwtPayload } from "jwt-decode";
 const tokenId:string = String(process.env.TOKEN_ID);
 
 export const getTokenFromLocalStorage = () =>{
@@ -20,4 +21,20 @@ export const authHeader = () => {
 
 export const getTokenId = () =>{
     return tokenId;
+}
+
+export const isTokenExpired = async () =>{
+    const token = getTokenFromLocalStorage();
+    if(token){
+        const decoded = jwtDecode<JwtPayload>(token)
+        const expired:number = Number(decoded.exp);
+        const currentTime = Date.now() / 1000
+
+        if(expired < currentTime){
+            alert("Sessão expirada, faça login novamente")
+            sessionStorage.clear()
+            window.location.reload()
+        }
+
+    }
 }

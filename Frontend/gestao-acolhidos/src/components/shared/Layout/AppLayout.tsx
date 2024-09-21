@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {Layout, Menu} from "antd";
 import {NavigateFunction, Outlet, useNavigate} from "react-router-dom";
 import Sider from 'antd/es/layout/Sider';
 import { Router } from '../../../routes/types';
+import { authHeader, isTokenExpired } from '../../../services/Token';
 
 interface IAppLayout {
     menu:Router[],
@@ -29,6 +30,10 @@ export const AppLayout:React.FC<IAppLayout> = ({menu}) => {
         return menu.map((value,index) => value.path === 'logout' ? index.toString() : '0')
             .filter(e => e !== '0')
     }
+
+    useEffect(() => {
+        isTokenExpired();
+    }, [authHeader()]);
 
     return (
         <>
