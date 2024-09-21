@@ -7,7 +7,7 @@ import { createHostedDto } from '../../../../entity/dto/Hosted/createHostedDto'
 import { HostedRepository } from '../../../../repository/Hosted/HostedRepository'
 import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessage'
 import { useTableData } from '../../../../hooks/useTableData'
-import { PlusOutlined } from '@ant-design/icons'
+import { AlertOutlined, DollarOutlined, FlagOutlined, HomeOutlined, PlusOutlined, TeamOutlined } from '@ant-design/icons'
 import { OtherDocs } from '../OtherDocs/OtherDocs'
 import { brazilStates } from '../../../shared/StateList/StateList'
 import { RefAddress } from '../ReferenceAddress/ReferenceAddress'
@@ -99,11 +99,6 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
       setOpenSocialProgram(false)
     }
     
-    
-    
-
-
-
   const handleDateChange = (date: string) => {
     const inputFormat = 'DD/MM/YYYY';
     const dateFormat = 'YYYY-MM-DD';
@@ -183,36 +178,36 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
 
             
             <div className='Options-Buttons'>
-              <Button style={{margin:"0 0 0 1rem"}} type='primary' icon={<PlusOutlined/>} onClick={onOpenRefAddress}>Endereço de Referência</Button>
+              <Button style={{margin:"0 0 0 1rem"}} type='primary' ghost icon={<HomeOutlined/>} onClick={onOpenRefAddress}>Endereço de Referência</Button>
               <Drawer placement='right' width={800} closable={true} onClose={onCloseRefAddress} open={openRefAddress} destroyOnClose>
                 <RefAddress entity={entity}></RefAddress>
               </Drawer>
             </div>
 
             <div className='Options-Buttons'>
-              <Button style={{margin:"0 0 0 1rem"}} type='primary' icon={<PlusOutlined/>} onClick={onOpenPoliceReport}>Boletim de Ocorrência</Button>
+              <Button style={{margin:"0 0 0 1rem"}} type='primary' ghost icon={<AlertOutlined/>} onClick={onOpenPoliceReport}>Boletim de Ocorrência</Button>
               <Drawer placement='right' width={800} closable={true} onClose={onClosePoliceReport} open={openPoliceReport} destroyOnClose>
                 <PoliceReportComponent entity={entity}></PoliceReportComponent>
               </Drawer>
             </div>
 
             <div className='Options-Buttons'>
-              <Button style={{margin:"0 0 0 1rem"}} type='primary' icon={<PlusOutlined/>} onClick={onOpenFamilyComposition}>Família</Button>
+              <Button style={{margin:"0 0 0 1rem"}} type='primary' ghost icon={<TeamOutlined/>} onClick={onOpenFamilyComposition}>Família</Button>
               <Drawer placement='right' width={800} closable={true} onClose={onCloseFamilyComposition} open={openFamilyComposition} destroyOnClose>
                 <FamilyCompositionComponent entity={entity}></FamilyCompositionComponent>
               </Drawer>
             </div>
 
             <div className='Options-Buttons'>
-              <Button style={{margin:"0 0 0 1rem"}} type='primary' icon={<PlusOutlined/>} onClick={onOpenRiskSituation}>Situação de Risco</Button>
+              <Button style={{margin:"0 0 0 1rem"}} type='primary' ghost icon={<FlagOutlined/>} onClick={onOpenRiskSituation}>Situação de Risco</Button>
               <Drawer placement='right' width={800} closable={true} onClose={onCloseRiskSituation} open={openRiskSituation} destroyOnClose>
                 <RiskSituation entity={entity}></RiskSituation>
               </Drawer>
             </div>
 
-            {/* //TODO adicionar botão para outra função - Programa Social */}
+
             <div className='Options-Buttons'>
-              <Button style={{margin:"0 0 0 1rem"}} type='primary' icon={<PlusOutlined/>} onClick={onOpenSocialProgram}>Programas Sociais</Button>
+              <Button style={{margin:"0 0 0 1rem"}} type='primary' ghost icon={<DollarOutlined/>} onClick={onOpenSocialProgram}>Programas Sociais</Button>
               <Drawer placement='right' width={800} closable={true} onClose={onCloseSocialProgram} open={openSocialProgram} destroyOnClose>
                 <SocialProgramComponent entity={entity}></SocialProgramComponent>
               </Drawer>

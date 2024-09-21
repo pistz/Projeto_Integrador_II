@@ -168,7 +168,6 @@ export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListAction
                 dataSource={hostedTableData} 
                 columns={actionColumns}
                 size='small'
-                style={{display:'flex', position:"relative"}}
                 tableLayout='auto'
         />
         </Spin>

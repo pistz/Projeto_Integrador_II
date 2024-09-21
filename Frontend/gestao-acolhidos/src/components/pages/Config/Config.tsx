@@ -50,7 +50,7 @@ export const Config:React.FC = () => {
       <div>
       <Divider>Configurações do Sistema</Divider>
       <Divider></Divider>
-      <Col span={24}>
+      <Col span={24} style={{display:"flex", flexDirection:'column', alignItems:"center", justifyContent:'center'}}>
         <Statistic title="Capacidade de acolhimento" value={`${beds} leitos`} />
         <Form
           form={form}
@@ -63,7 +63,7 @@ export const Config:React.FC = () => {
             <Button type='primary' htmlType='submit'>Atualizar capacidade</Button>
         </Form>
       </Col>
-      <div>
+      <div style={{display:'flex', flexDirection:"column"}}>
         <ManageUsers />
       </div>
       </div>

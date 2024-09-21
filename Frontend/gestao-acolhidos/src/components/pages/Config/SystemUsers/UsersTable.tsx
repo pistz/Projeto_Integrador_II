@@ -81,11 +81,10 @@ export const UsersTable = ({listQueryKey, getAllEntities, deleteEntity}:IListAct
     return (
         <Spin spinning={isLoading}>
             <Table 
-                rowKey="id"
+                rowKey={(e) => e.id}
                 dataSource={userTableData} 
                 columns={actionColumns}
                 size='small'
-                style={{display:'flex', position:"relative"}}
                 tableLayout='auto'
             />
         </Spin>

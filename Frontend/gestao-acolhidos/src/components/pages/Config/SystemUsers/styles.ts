@@ -5,5 +5,6 @@ export const mainDivStyle:React.CSSProperties = {
     alignItems:'center',
     margin:'2rem auto',
     height:'95vh',
-    width:'100%'
+    width:'100%',
+    scrollBehavior:'smooth'
 }

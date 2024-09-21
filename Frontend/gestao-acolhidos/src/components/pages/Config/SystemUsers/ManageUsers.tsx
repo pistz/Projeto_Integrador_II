@@ -7,6 +7,7 @@ import { UserRepository } from '../../../../repository/User/UserRepository'
 import { Role } from '../../../../entity/User/IUser'
 import { RegisterUserDTO } from '../../../../entity/dto/User/RegisterUserDTO'
 import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessage'
+import { tableContainer } from '../styles'
 
 
 const userQueryKey = 'userQueryKey'
@@ -56,11 +57,13 @@ export const ManageUsers:React.FC = () => {
     <>
         <div style={mainDivStyle}>
             <Divider>Gestão de Usuários</Divider>
+            <div style={tableContainer}>
             <UsersTable 
                 deleteEntity={userRepository.delete}
                 listQueryKey={userQueryKey}
                 getAllEntities={userRepository.findAllUsers}
             />
+            </div>
             <Divider>Criar novo usuário</Divider>
             <Form
                 form={form}

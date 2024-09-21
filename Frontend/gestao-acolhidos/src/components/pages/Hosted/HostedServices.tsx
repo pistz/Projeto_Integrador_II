@@ -1,5 +1,5 @@
 import React from 'react'
-import { mainDivStyle, subMenuDivStyle } from './styles'
+import { mainDivStyle, subMenuDivStyle, tableContainer } from './styles'
 import { Link } from '../../shared/Link/Link'
 import { hosted } from '../../../routes/HostedRoutes/HostedRoutes'
 import { Button, Divider } from 'antd'
@@ -20,7 +20,7 @@ export const HostedServices:React.FC = () => {
         <div style={subMenuDivStyle}>
           {hosted.map((_,index) => <Button type='default' key={index+2}><Link to={hosted[index].fullpath+hosted[index].path} title={hosted[index].label} key={index}/> </Button>)}
         </div>
-        <div>
+        <div style={tableContainer}>
           <ListAll listQueryKey={hostedQueryKey} getAllEntities={hosteds.findAll} deleteEntity={hosteds.deleteHosted}/>
         </div>
       </div>

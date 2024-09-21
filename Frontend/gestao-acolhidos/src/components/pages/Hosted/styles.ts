@@ -11,6 +11,17 @@ export const mainDivStyle:React.CSSProperties = {
     scrollBehavior:'smooth'
 }
 
+export const tableContainer:React.CSSProperties = {
+    display:'flex', 
+    flexDirection:'column',
+    flexWrap:'wrap', 
+    width:'100%', 
+    alignItems:'center', 
+    justifyContent:'center', 
+    overflow:'auto', 
+    position:"relative"
+}
+
 export const subMenuDivStyle:React.CSSProperties = {
     padding:"1rem 1rem", 
     display:"flex", 
