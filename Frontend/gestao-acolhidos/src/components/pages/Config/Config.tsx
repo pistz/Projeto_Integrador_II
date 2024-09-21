@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { ConfigRepository } from '../../../repository/Config/ConfigRepository'
 import { notifyError, notifySuccess } from '../../shared/PopMessage/PopMessage'
 import { ManageUsers } from './SystemUsers/ManageUsers'
+import { CheckOutlined } from '@ant-design/icons'
 
 const config = new ConfigRepository()
 
@@ -60,7 +61,7 @@ export const Config:React.FC = () => {
           <Form.Item name={['update']}>
             <InputNumber style={{width:'10rem'}}/>
           </Form.Item>
-            <Button type='primary' htmlType='submit'>Atualizar capacidade</Button>
+            <Button type='primary' htmlType='submit' icon={<CheckOutlined/>}>Atualizar capacidade</Button>
         </Form>
       </Col>
       <div style={{display:'flex', flexDirection:"column"}}>

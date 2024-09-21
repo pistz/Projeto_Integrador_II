@@ -8,6 +8,7 @@ import { Role } from '../../../../entity/User/IUser'
 import { RegisterUserDTO } from '../../../../entity/dto/User/RegisterUserDTO'
 import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessage'
 import { tableContainer } from '../styles'
+import { CheckOutlined } from '@ant-design/icons'
 
 
 const userQueryKey = 'userQueryKey'
@@ -87,7 +88,7 @@ export const ManageUsers:React.FC = () => {
                 </Select>
                 </Form.Item>
 
-                <Button type='primary' htmlType='submit'>Salvar</Button>
+                <Button type='primary' htmlType='submit' icon={<CheckOutlined />}>Salvar</Button>
             </Form>
         </div>
     </>

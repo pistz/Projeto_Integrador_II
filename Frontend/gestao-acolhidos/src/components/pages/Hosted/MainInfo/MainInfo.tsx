@@ -7,7 +7,7 @@ import { createHostedDto } from '../../../../entity/dto/Hosted/createHostedDto'
 import { HostedRepository } from '../../../../repository/Hosted/HostedRepository'
 import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessage'
 import { useTableData } from '../../../../hooks/useTableData'
-import { AlertOutlined, DollarOutlined, FlagOutlined, HomeOutlined, PlusOutlined, TeamOutlined } from '@ant-design/icons'
+import { AlertOutlined, CheckOutlined, DollarOutlined, FlagOutlined, HomeOutlined, PlusOutlined, TeamOutlined } from '@ant-design/icons'
 import { OtherDocs } from '../OtherDocs/OtherDocs'
 import { brazilStates } from '../../../shared/StateList/StateList'
 import { RefAddress } from '../ReferenceAddress/ReferenceAddress'
@@ -278,7 +278,7 @@ export const MainInfo:React.FC<{entity:Hosted}> = ({entity}) => {
             }
             </Form.Item>
 
-            <Button htmlType='submit' type='primary'>Salvar Alterações</Button>
+            <Button htmlType='submit' type='primary' icon={<CheckOutlined />}>Salvar</Button>
           </Form>
         </Space>
     </>

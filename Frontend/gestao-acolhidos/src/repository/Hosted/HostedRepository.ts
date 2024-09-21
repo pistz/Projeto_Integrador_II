@@ -11,6 +11,7 @@ import { updateFamilyCompositionDTO } from "../../entity/dto/Hosted/updateFamily
 import { updateFamilyTableDto } from "../../entity/dto/Hosted/updateFamilyTableHostDto";
 import { updateSituationalRiskHostedDto } from "../../entity/dto/Hosted/updateSituationalRiskHostedDto";
 import { updateSocialProgramHostedDto } from "../../entity/dto/Hosted/updateSocialProgramHostedDto";
+import { createMedicalRecordDto } from "../../entity/dto/Hosted/createMedicalRecordHostedDto";
 
 export class HostedRepository extends Repository{
 
@@ -124,6 +125,16 @@ export class HostedRepository extends Repository{
             throw Error("error: " + error);
         }
     }
+
+    updateMedicalRecord = async(dto:createMedicalRecordDto, id:string):Promise<void> =>{
+        try {
+            await axios.put(hostedRoutes.createMedicalRecord+id,dto,authHeader())
+        } catch (error) {
+            Repository.checkError(error)
+            throw Error("error: " + error);
+        }
+    }
+
 
 
 

@@ -6,6 +6,7 @@ import { Button, Divider, Form, Input, Space, Switch } from 'antd';
 import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessage';
 import { HostedRepository } from '../../../../repository/Hosted/HostedRepository';
 import { updateHostedRefAddressDto } from '../../../../entity/dto/Hosted/updateRefAddressDto';
+import { CheckOutlined } from '@ant-design/icons';
 
 const hostedRepository = new HostedRepository()
 
@@ -80,7 +81,8 @@ export const RefAddress:React.FC<{entity:Hosted}> = ({entity}) => {
                     <Input type='number' value={entity.referenceAddress? entity.referenceAddress.phoneNumber:initialValues.phoneNumber} style={{width:'15rem'}}/>
                 </Form.Item>
 
-                <Button htmlType='submit' type='primary'>Salvar</Button>
+                
+                <Button htmlType='submit' type='primary' danger icon={<CheckOutlined/>}>Salvar</Button>
             </Form>
         </Space>
     </>
