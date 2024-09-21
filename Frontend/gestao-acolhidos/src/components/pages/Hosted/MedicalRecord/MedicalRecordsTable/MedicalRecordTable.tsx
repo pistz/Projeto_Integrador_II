@@ -28,9 +28,9 @@ export const MedicalRecordTable:React.FC<{entity:Hosted}> = ({entity}) => {
                     items={[{key:'itemId'+member.id, 
                     label:`Queixa registrada em ${changeDateFormatVisualization(member.createdAt)}`, 
                     children:(<>
-                    <table key={'tableId'+member.id}>
-                        <ul>{member.complaints}</ul>
-                    </table>
+                    <dl key={'tableId'+member.id}>
+                      <li>{member.complaints}</li>
+                    </dl>
                     </>)}]}/>
             </>)}):(<></>)}
         </>

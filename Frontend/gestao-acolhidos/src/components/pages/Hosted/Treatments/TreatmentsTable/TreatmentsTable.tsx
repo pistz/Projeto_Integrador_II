@@ -28,9 +28,9 @@ export const TreatmentsTable:React.FC<{entity:Hosted}> = ({entity}) => {
                     items={[{key:'itemId'+member.id, 
                     label:`Procedimento registrado em:  ${changeDateFormatVisualization(member.createdAt)}`, 
                     children:(<>
-                    <table key={'tableId'+member.id}>
-                        <ul>{member.procedure}</ul>
-                    </table>
+                    <dl key={'tableId'+member.id}>
+                        <li>{member.procedure}</li>
+                    </dl>
                     </>)}]}/>
             </>)}):(<></>)}
         </>

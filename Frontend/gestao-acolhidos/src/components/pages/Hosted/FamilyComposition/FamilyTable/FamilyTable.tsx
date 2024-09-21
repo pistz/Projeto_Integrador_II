@@ -32,15 +32,15 @@ return (
                 items={[{key:'itemId'+member.id, 
                 label:member.name, 
                 children:(<>
-                <table key={'tableId'+member.id}>
-                    <ul><strong>Nome: </strong>{member.name}</ul>
-                    <ul><strong>Idade: </strong>{member.age}</ul>
-                    <ul><strong>Sexo: </strong>{member.gender}</ul>
-                    <ul><strong>Estado Civil: </strong>{member.maritalStatus}</ul>
-                    <ul><strong>Escolaridade: </strong>{member.education}</ul>
-                    <ul><strong>Profissão: </strong>{member.occupation}</ul>
-                    <ul><strong>Registrado em: </strong>{changeDateFormatVisualization(member.updatedAt)}</ul>
-                </table>
+                <ul key={'tableId'+member.id}>
+                    <li><strong>Nome: </strong>{member.name}</li>
+                    <li><strong>Idade: </strong>{member.age}</li>
+                    <li><strong>Sexo: </strong>{member.gender}</li>
+                    <li><strong>Estado Civil: </strong>{member.maritalStatus}</li>
+                    <li><strong>Escolaridade: </strong>{member.education}</li>
+                    <li><strong>Profissão: </strong>{member.occupation}</li>
+                    <li><strong>Registrado em: </strong>{changeDateFormatVisualization(member.updatedAt)}</li>
+                </ul>
                 </>)}]}/>
         </>)}):(<></>)}
     </>
