@@ -3,12 +3,13 @@ import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import {Login} from "../components/pages/Login/Login.tsx";
 import {Home} from "../components/pages/Home/Home.tsx";
 import {Structure} from "../components/shared/Structure/Structure.tsx";
-import {Button} from "antd";
 import { useAuth } from '../hooks/useAuth.ts';
 import { HostedServices } from '../components/pages/Hosted/HostedServices.tsx';
 import { Router } from './types.ts';
 import { hosted } from './HostedRoutes/HostedRoutes.tsx';
 import { Config } from '../components/pages/Config/Config.tsx';
+import { Reception } from '../components/pages/Reception/Reception.tsx';
+import { Logout } from '../components/pages/Logout/Logout.tsx';
 
 const mainRoutes:Router[] = [
     {
@@ -20,7 +21,7 @@ const mainRoutes:Router[] = [
     {
         label:'Pernoite',
         path:"reception",
-        element:<Home />,
+        element:<Reception />,
         role:['ADMIN', 'BOARD', 'SECRETARY']
     },
     {
@@ -39,7 +40,7 @@ const mainRoutes:Router[] = [
     {
         label:'Sair',
         path:"logout",
-        element:<Button onClick={()=> {sessionStorage.clear(); window.location.reload()}}>Clique aqui para confirmar a saída</Button>,
+        element:<Logout />,
         role:['ADMIN', 'BOARD', 'SECRETARY']
     },
 ];
