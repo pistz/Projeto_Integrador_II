@@ -35,3 +35,9 @@ export const configRoutes = {
     getCapacity:endpoints.host+'capacity/get',
     updateCapacity:endpoints.host+'capacity/update'
 }
+
+export const receptionRoutes = {
+    getAll:endpoints.host+'night-recepion/find/all',
+    createReception:endpoints.host+'night-reception/create',
+    deleteReception:endpoints.host+'night-reception/delete/',
+}

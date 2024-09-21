@@ -1,4 +1,4 @@
-import { Button, Space, Spin, Table, TableColumnsType } from 'antd'
+import { Space, Spin, Table, TableColumnsType } from 'antd'
 
 import IListActionsProps from './types'
 
@@ -69,9 +69,6 @@ export const UsersTable = ({listQueryKey, getAllEntities, deleteEntity}:IListAct
             title:'Opções',
             render:(_,record) => (
                 <Space size={'small'}>
-                    <Button shape='round' type='default' onClick={()=> console.log(record, ' update btn')}>
-                        Alterar Acesso
-                    </Button>
                     <DeleteButton removeMethod={()=> removeEntity.mutate(record)} />                      
                 </Space>
             )
