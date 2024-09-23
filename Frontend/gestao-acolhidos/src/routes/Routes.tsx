@@ -8,7 +8,7 @@ import { HostedServices } from '../components/pages/Hosted/HostedServices.tsx';
 import { Router } from './types.ts';
 import { hosted } from './HostedRoutes/HostedRoutes.tsx';
 import { Config } from '../components/pages/Config/Config.tsx';
-import { Reception } from '../components/pages/Reception/Reception.tsx';
+import {  ReceptionComponent } from '../components/pages/Reception/Reception.tsx';
 import { Logout } from '../components/pages/Logout/Logout.tsx';
 
 const mainRoutes:Router[] = [
@@ -21,7 +21,7 @@ const mainRoutes:Router[] = [
     {
         label:'Pernoite',
         path:"reception",
-        element:<Reception />,
+        element:<ReceptionComponent />,
         role:['ADMIN', 'BOARD', 'SECRETARY']
     },
     {

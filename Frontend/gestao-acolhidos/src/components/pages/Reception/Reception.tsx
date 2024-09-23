@@ -1,5 +1,5 @@
 import { Button, Divider, Modal, Space } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { mainDivStyle } from './styles'
 import { FileOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import { NewList } from './NewList/NewList'
@@ -13,12 +13,12 @@ const hostedRepository = new HostedRepository()
 const capacity = new ConfigRepository();
 const reception = new ReceptionRepository();
 
-export const Reception:React.FC = () => {
+export const ReceptionComponent:React.FC = () => {
 
   const [openNewList, setOpenNewList] = useState(false);
   const [bedCapacity, setBedCapacity] = useState(0);
   
-  const {hostedTableData, setHostedTableData} = useTableData();
+  const {hostedTableData, setHostedTableData, setReceptionTableData} = useTableData();
 
   const openNewListModal = async()=>{
     await capacity.getCapacity()
@@ -30,6 +30,19 @@ export const Reception:React.FC = () => {
     });
   }
 
+  const closeNewListModal = async()=>{
+      setOpenNewList(false)
+  }
+
+  useEffect(() =>{
+    const update = async() =>{
+      await reception.findAll()
+      .then(e => setReceptionTableData(e))
+    }
+    update()
+  },[setReceptionTableData])
+
+
 
   return (
     <div style={mainDivStyle}>
@@ -39,7 +52,7 @@ export const Reception:React.FC = () => {
           <Modal
               open={openNewList} 
               width={1500}
-              onCancel={()=> setOpenNewList(false)} 
+              onCancel={closeNewListModal} 
               footer={false} 
               destroyOnClose
               >
