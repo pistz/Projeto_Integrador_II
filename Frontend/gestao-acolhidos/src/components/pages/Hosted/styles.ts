@@ -5,7 +5,7 @@ export const mainDivStyle:React.CSSProperties = {
     justifyContent:'center',
     flexDirection:'column',
     alignItems:'center',
-    margin:'1rem auto',
+    margin:'3rem auto',
     height:'95vh',
     width:'100%',
     scrollBehavior:'smooth'

@@ -36,6 +36,16 @@ export class HostedRepository extends Repository{
         }
     }
 
+    getReceptionList = async(id:string):Promise<string[]> =>{
+        try {
+            const result = await axios.get(hostedRoutes.getReceptionList+id, authHeader())
+            return result.data;
+        } catch (error) {
+            Repository.checkError(error)
+            throw Error("error: " + error);
+        }
+    }
+
     create = async(dto:createHostedDto):Promise<void> =>{
         try{
             await axios.post(hostedRoutes.create,dto,authHeader())

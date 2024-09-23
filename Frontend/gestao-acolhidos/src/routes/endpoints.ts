@@ -17,6 +17,7 @@ export const authRoutes = {
 export const hostedRoutes = {
     findAll:endpoints.host+'hosted/find/all',
     findById:endpoints.host+'hosted/find/',
+    getReceptionList:endpoints.host+'hosted/night-receptions/',
     create:endpoints.host+'hosted/create',
     edit:endpoints.host+'hosted/update-main-info/',
     deleteHosted:endpoints.host+'hosted/delete/',
@@ -37,7 +38,7 @@ export const configRoutes = {
 }
 
 export const receptionRoutes = {
-    getAll:endpoints.host+'night-recepion/find/all',
+    findAll:endpoints.host+'night-reception/find/all',
     createReception:endpoints.host+'night-reception/create',
     deleteReception:endpoints.host+'night-reception/delete/',
 }
