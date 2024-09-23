@@ -84,16 +84,19 @@ public class HostedServiceImpl implements HostedService {
     }
 
     @Override
+    @Transactional
     public Hosted findById(UUID id) {
         return hostedRepository.findById(id).orElseThrow();
     }
 
     @Override
+    @Transactional
     public List<Hosted> findAll() {
         return hostedRepository.findAll();
     }
 
     @Override
+    @Transactional
     public List<LocalDate> findAllNightReceptions(UUID id) {
         return hostedRepository.queryHostedByNighReception(id);
     }

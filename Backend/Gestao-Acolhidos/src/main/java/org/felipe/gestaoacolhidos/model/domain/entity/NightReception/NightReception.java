@@ -27,7 +27,7 @@ public class NightReception {
     @Column(nullable = false, name = "updated_by")
     private String updatedBy;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "db_acolhimento_hosteds",
             joinColumns = @JoinColumn(name = "night_reception_id"),

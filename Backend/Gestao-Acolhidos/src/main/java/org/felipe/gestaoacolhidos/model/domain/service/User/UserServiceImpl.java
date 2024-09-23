@@ -60,6 +60,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public List<UserResponseDTO> findAll() {
         List<UserResponseDTO> users = new ArrayList<>();
         userRepository.findAll().forEach(user -> {
@@ -70,6 +71,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserResponseDTO findById(UUID id) {
         var exists = userRepository.findById(id);
         if(exists.isEmpty()) {
