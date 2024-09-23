@@ -28,7 +28,7 @@ export class ReceptionRepository extends Repository{
 
     delete = async(id:string):Promise<void> =>{
         try{
-            await axios.post(receptionRoutes.deleteReception+id,authHeader())
+            await axios.delete(receptionRoutes.deleteReception+id,authHeader())
         }catch(error){
             Repository.checkError(error)
             throw Error("error: " + error);

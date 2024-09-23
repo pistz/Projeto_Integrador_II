@@ -10,7 +10,7 @@ import { DeleteButton } from '../../../shared/Button/DeleteButton/DeleteButton';
 import { UpCircleFilled } from '@ant-design/icons';
 import { useTableData } from '../../../../hooks/useTableData';
 
-export const ReceptionTableList = ({listQueryKey, getAllEntities, deleteEntity}:IListActionsProps<Reception>) =>{
+export const ReceptionTableList = ({listQueryKey, getAllEntities, deleteEntity, allEntities}:IListActionsProps<Reception>) =>{
 
     const queryClient = useQueryClient();
     const {receptionTableData, setReceptionTableData} = useTableData();
@@ -69,17 +69,16 @@ export const ReceptionTableList = ({listQueryKey, getAllEntities, deleteEntity}:
 
     useEffect(()=>{
         const getTableData = async () => {
-            const tableData:Reception[] = await getAllEntities();
-            if(tableData) setReceptionTableData(tableData)
+            if(allEntities) setReceptionTableData(allEntities)
         }
             getTableData();
-        },[getAllEntities, setReceptionTableData]);
+        },[setReceptionTableData, allEntities]);
 
         const actionColumns:ColumnsType<Reception> = [
             ...columnData,
             {
                 title: 'Lista Completa',
-                render: (_,record) => (
+                render: (record) => (
                     <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
                         <Button type='primary' icon={<UpCircleFilled />} onClick={() => console.log(record.hostedList)}/>
                     </Space>
@@ -87,7 +86,7 @@ export const ReceptionTableList = ({listQueryKey, getAllEntities, deleteEntity}:
             },
             {
                 title: 'Apagar',
-                render: (_,record) => (
+                render: (record) => (
                     <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
                         <DeleteButton removeMethod={()=> removeEntity.mutate(record)}></DeleteButton>
                     </Space>

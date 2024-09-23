@@ -14,11 +14,13 @@ const capacity = new ConfigRepository();
 const reception = new ReceptionRepository();
 
 export const ReceptionComponent:React.FC = () => {
+  const receptionQueryKey:string = 'receptionQueryKey';
 
   const [openNewList, setOpenNewList] = useState(false);
   const [bedCapacity, setBedCapacity] = useState(0);
   
-  const {hostedTableData, setHostedTableData, setReceptionTableData} = useTableData();
+  const {hostedTableData, setHostedTableData, receptionTableData, setReceptionTableData} = useTableData();
+
 
   const openNewListModal = async()=>{
     await capacity.getCapacity()
@@ -32,17 +34,17 @@ export const ReceptionComponent:React.FC = () => {
 
   const closeNewListModal = async()=>{
       setOpenNewList(false)
-  }
+      const data = await reception.findAll();
+      setReceptionTableData(data);
+    }
 
   useEffect(() =>{
     const update = async() =>{
-      await reception.findAll()
-      .then(e => setReceptionTableData(e))
-    }
+      const data = await reception.findAll();
+      setReceptionTableData(data);
+    };
     update()
   },[setReceptionTableData])
-
-
 
   return (
     <div style={mainDivStyle}>
@@ -63,9 +65,10 @@ export const ReceptionComponent:React.FC = () => {
       <Space style={{margin:'3rem 0'}} align='center' direction='vertical'>
         <Divider>Listagem Completa de Acolhimentos</Divider>
         <ReceptionTableList
+          allEntities={receptionTableData}
           getAllEntities={reception.findAll}
           deleteEntity={reception.delete}
-          listQueryKey='receptionQueryKey'
+          listQueryKey={receptionQueryKey}
         />
       </Space>
     </div>

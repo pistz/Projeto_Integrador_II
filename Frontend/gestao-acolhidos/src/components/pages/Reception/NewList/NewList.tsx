@@ -93,7 +93,7 @@ export const NewList:React.FC<{entity:Hosted[], capacity:number}> = ({entity, ca
             >
             <Divider>Nova Lista</Divider>
             <Form.Item name={['date']} label="Data do Acolhimento" 
-                rules={[{ required: true}]}>
+                rules={[{ required: true, message:'Selecione uma data válida e não repetida'}]}>
                 <DatePicker placeholder='Selecione a data' 
                     locale={locale} 
                     format={inputFormat}
