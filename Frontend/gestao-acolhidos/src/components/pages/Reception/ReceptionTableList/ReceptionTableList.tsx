@@ -1,19 +1,33 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Reception } from '../../../../entity/Reception/Reception'
 import IListActionsProps from './types'
-import { Button, Space, Spin, Table, TableColumnsType } from 'antd';
+import { Button, Drawer, Space, Spin, Table, TableColumnsType } from 'antd';
 import dayjs from 'dayjs';
 import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessage';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ColumnsType } from 'antd/es/table';
 import { DeleteButton } from '../../../shared/Button/DeleteButton/DeleteButton';
-import { UpCircleFilled } from '@ant-design/icons';
+import { DoubleLeftOutlined } from '@ant-design/icons';
 import { useTableData } from '../../../../hooks/useTableData';
+import { ReceptionList } from './ReceptionList/ReceptionList';
 
 export const ReceptionTableList = ({listQueryKey, getAllEntities, deleteEntity, allEntities}:IListActionsProps<Reception>) =>{
 
     const queryClient = useQueryClient();
+
     const {receptionTableData, setReceptionTableData} = useTableData();
+
+    const [openListInfo, setOpenListInfo] = useState<boolean>(false);
+    const [receptionHosted, setReceptionHosted] = useState<Reception>({} as Reception)
+
+    const onOpenListInfo = (value:Reception)=>{
+        setReceptionHosted(value)
+        setOpenListInfo(true)
+    }
+
+    const onCloseListInfo = ()=>{
+        setOpenListInfo(false)
+    }
 
     const changeDateFormatVisualization = (date: string) => {
         const inputFormat = 'DD/MM/YYYY';
@@ -80,7 +94,10 @@ export const ReceptionTableList = ({listQueryKey, getAllEntities, deleteEntity, 
                 title: 'Lista Completa',
                 render: (record) => (
                     <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
-                        <Button type='primary' icon={<UpCircleFilled />} onClick={() => console.log(record.hostedList)}/>
+                        <Button type='primary' icon={<DoubleLeftOutlined />} onClick={() => onOpenListInfo(record)}/>
+                        <Drawer width={800} height={700} placement='right' closable={true} onClose={onCloseListInfo} open={openListInfo} destroyOnClose>
+                            <ReceptionList entity={receptionHosted}/>
+                        </Drawer>
                     </Space>
                 ),
             },
