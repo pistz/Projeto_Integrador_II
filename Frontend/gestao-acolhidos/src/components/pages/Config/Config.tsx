@@ -1,4 +1,4 @@
-import { Button, Col, Divider, Form, InputNumber, Statistic } from 'antd'
+import { Button, Col, Divider, Form, InputNumber, Statistic, Switch } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { ConfigRepository } from '../../../repository/Config/ConfigRepository'
 import { notifyError, notifySuccess } from '../../shared/PopMessage/PopMessage'
@@ -11,6 +11,12 @@ export const Config:React.FC = () => {
   const [form] = Form.useForm();
 
   const [beds, setBeds] = useState<number>(0);
+
+  const [edit, setEdit] = useState<boolean>(false);
+
+  const handleEdit = () =>{
+    setEdit(!edit)
+  }
 
   const updateBedValue = async (values: { update: string }) => {
     const value = parseInt(values.update, 10); // Converte para número
@@ -28,7 +34,6 @@ export const Config:React.FC = () => {
       errorOnFinish(error);
     }
   };
-
 
   const errorOnFinish = (error:unknown) =>{
     notifyError("Erro ao realizar cadastro");
@@ -49,24 +54,25 @@ export const Config:React.FC = () => {
   return (
     <div style={{display:'flex', flexDirection:"column", alignItems:"center", justifyContent:'flex-start', margin:"1rem auto"}}>
       <div>
-      <Divider>Configurações do Sistema</Divider>
-      <Divider></Divider>
-      <Col span={24} style={{display:"flex", flexDirection:'column', alignItems:"center", justifyContent:'center'}}>
-        <Statistic title="Capacidade de acolhimento" value={`${beds} leitos`} />
-        <Form
-          form={form}
-          onFinish={updateBedValue}
-          clearOnDestroy={true}
-        >
-          <Form.Item name={['update']}>
-            <InputNumber style={{width:'10rem'}}/>
-          </Form.Item>
-            <Button type='primary' htmlType='submit' icon={<CheckOutlined/>}>Atualizar capacidade</Button>
-        </Form>
-      </Col>
-      <div style={{display:'flex', flexDirection:"column"}}>
-        <ManageUsers />
-      </div>
+        <Divider>Configurações do Sistema</Divider>
+        <Col span={24} style={{display:"flex", flexDirection:'column', alignItems:"center", justifyContent:'center'}}>
+          <Statistic title="Capacidade de acolhimento" value={`${beds} leitos`} />
+          <Form
+            form={form}
+            onFinish={updateBedValue}
+            clearOnDestroy={true}
+          >
+            <Form.Item name={['update']}>
+              <InputNumber style={{width:'10rem'}}/>
+            </Form.Item>
+              <Button type='primary' htmlType='submit' icon={<CheckOutlined/>}>Atualizar capacidade</Button>
+          </Form>
+        </Col>
+
+        <div style={{display:'flex', flexDirection:"column", alignItems:'center', justifyContent:"center"}}>
+          <Switch checked={edit} onClick={handleEdit} unCheckedChildren="Usuários" checkedChildren="Fechar" style={{margin:'2rem 0', width:'7rem'}} />
+          {edit? <><Divider>Gerir Usuários</Divider><ManageUsers /></> : <><Divider>Gerir Usuários</Divider></>}
+        </div>
       </div>
     </div>
   )

@@ -57,7 +57,6 @@ export const ManageUsers:React.FC = () => {
   return (
     <>
         <div style={mainDivStyle}>
-            <Divider>Gestão de Usuários</Divider>
             <div style={tableContainer}>
             <UsersTable 
                 deleteEntity={userRepository.delete}
