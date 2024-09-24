@@ -25,6 +25,7 @@ const tokenId:string = getTokenId();
 export const Login:React.FC = () => {
 
     const [sessionToken, setSessionToken] = useState<string>();
+    const [loading, setLoading] = useState<boolean>(false)
 
     const navigate:NavigateFunction = useNavigate()
 
@@ -32,6 +33,7 @@ export const Login:React.FC = () => {
 
 
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+        setLoading(true)
         const body:UserLoginDTO = {
             email:"",
             password:""
@@ -118,7 +120,7 @@ export const Login:React.FC = () => {
                     </Form.Item>
 
                     <Form.Item style={buttonsFormStyles}>
-                        <Button type="primary" htmlType="submit" style={LoginButtonStyle}>
+                        <Button type="primary" htmlType="submit" style={LoginButtonStyle} loading={loading}>
                             Entrar
                         </Button>
                     </Form.Item>
