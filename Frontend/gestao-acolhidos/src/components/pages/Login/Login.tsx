@@ -98,6 +98,7 @@ export const Login:React.FC = () => {
                     initialValues={{remember: false}}
                     onFinish={onFinish}
                     autoComplete="off"
+                    layout='vertical'
                 >
                     <Form.Item<FieldType>
                         label="E-mail"
