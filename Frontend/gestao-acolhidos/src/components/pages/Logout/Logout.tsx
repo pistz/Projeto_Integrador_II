@@ -8,7 +8,8 @@ export const Logout:React.FC = () => {
 
     
       const handleOk = () => {
-        sessionStorage.clear(); 
+        sessionStorage.clear();
+        navigate('/');
         window.location.reload()
       };
     

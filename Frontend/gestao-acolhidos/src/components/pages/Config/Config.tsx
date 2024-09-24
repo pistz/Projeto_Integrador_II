@@ -47,7 +47,7 @@ export const Config:React.FC = () => {
 
 
   return (
-    <div style={{display:'flex', flexDirection:"column", alignItems:"center", justifyContent:'start', margin:"0 auto"}}>
+    <div style={{display:'flex', flexDirection:"column", alignItems:"center", justifyContent:'flex-start', margin:"1rem auto"}}>
       <div>
       <Divider>Configurações do Sistema</Divider>
       <Divider></Divider>
