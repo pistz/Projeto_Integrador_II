@@ -2,7 +2,7 @@ import React from "react"
 
 export const mainDivStyle:React.CSSProperties = {
     display: 'flex',
-    justifyContent:'center',
+    justifyContent:'flex-start',
     flexDirection:'column',
     alignItems:'center',
     margin:'3rem auto',
