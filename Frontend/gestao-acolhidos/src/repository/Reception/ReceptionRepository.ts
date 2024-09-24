@@ -4,12 +4,35 @@ import Repository from "../base/Repository";
 import { receptionRoutes } from "../../routes/endpoints";
 import { authHeader } from "../../services/Token";
 import { Reception } from "../../entity/Reception/Reception";
+import { queryReceptionDto } from "../../entity/dto/Reception/queryReceptionDto";
 
 export class ReceptionRepository extends Repository{
 
     findAll = async():Promise<Reception[]> =>{
         try{
             const result = await axios.get(receptionRoutes.findAll,authHeader());
+            return result.data;
+        }catch(error){
+            Repository.checkError(error)
+            throw Error("error: " + error);
+        }
+    }
+
+    findByMonthAndYear = async(dto:queryReceptionDto):Promise<Reception[]>=>{
+        const query = `?month=${dto.month}&year=${dto.year}`
+        try{
+            const result = await axios.get(receptionRoutes.findByMonthAndYear+query,authHeader());
+            return result.data;
+        }catch(error){
+            Repository.checkError(error)
+            throw Error("error: " + error);
+        }
+    }
+
+    findByYear = async(dto:queryReceptionDto):Promise<Reception[]>=>{
+        const query = `?year=${dto.year}`
+        try{
+            const result = await axios.get(receptionRoutes.findByYear+query,authHeader());
             return result.data;
         }catch(error){
             Repository.checkError(error)

@@ -1,4 +1,4 @@
-import { Button, Divider, Modal, Space } from 'antd'
+import { Button, Divider, Drawer, Modal, Space } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { mainDivStyle } from './styles'
 import { FileOutlined, PlusCircleOutlined } from '@ant-design/icons'
@@ -8,6 +8,7 @@ import { HostedRepository } from '../../../repository/Hosted/HostedRepository'
 import { ConfigRepository } from '../../../repository/Config/ConfigRepository'
 import { ReceptionTableList } from './ReceptionTableList/ReceptionTableList'
 import { ReceptionRepository } from '../../../repository/Reception/ReceptionRepository'
+import { Reports } from './Reports/Reports'
 
 const hostedRepository = new HostedRepository()
 const capacity = new ConfigRepository();
@@ -17,6 +18,9 @@ export const ReceptionComponent:React.FC = () => {
   const receptionQueryKey:string = 'receptionQueryKey';
 
   const [openNewList, setOpenNewList] = useState(false);
+  const [openReports, setOpenReports] = useState(false);
+
+
   const [bedCapacity, setBedCapacity] = useState(0);
   
   const {hostedTableData, setHostedTableData, receptionTableData, setReceptionTableData} = useTableData();
@@ -37,6 +41,14 @@ export const ReceptionComponent:React.FC = () => {
       const data = await reception.findAll();
       setReceptionTableData(data);
     }
+
+  const openReportsDrawer =()=>{
+    setOpenReports(true)
+  }
+
+  const closeReportsDrawer =()=>{
+    setOpenReports(false)
+  }
 
   useEffect(() =>{
     const update = async() =>{
@@ -60,7 +72,12 @@ export const ReceptionComponent:React.FC = () => {
               >
             <NewList entity={hostedTableData} capacity={bedCapacity}/>
           </Modal>
-          <Button icon={<FileOutlined />}>Relatórios</Button>
+          <Button icon={<FileOutlined />} onClick={openReportsDrawer}>Relatórios</Button>
+          <Drawer
+            open={openReports} onClose={closeReportsDrawer} destroyOnClose
+          >
+              <Reports />
+          </Drawer>
       </Space>
       <Space style={{margin:'3rem 0'}} align='center' direction='vertical'>
         <Divider>Listagem Completa de Acolhimentos</Divider>

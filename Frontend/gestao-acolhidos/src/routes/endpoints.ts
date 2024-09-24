@@ -39,6 +39,8 @@ export const configRoutes = {
 
 export const receptionRoutes = {
     findAll:endpoints.host+'night-reception/find/all',
+    findByMonthAndYear:endpoints.host+'night-reception/find/month-year',
+    findByYear:endpoints.host+'night-reception/find/year',
     createReception:endpoints.host+'night-reception/create',
     deleteReception:endpoints.host+'night-reception/delete/',
 }
