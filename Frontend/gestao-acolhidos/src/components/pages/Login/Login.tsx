@@ -54,6 +54,7 @@ export const Login:React.FC = () => {
     };
 
     const errorOnFinish = (error:unknown) =>{
+        setLoading(false)
         notifyError("Usuário ou senha inválidos");
         return error;
     }
