@@ -4,6 +4,8 @@ import React from 'react'
 import { queryReceptionDto } from '../../../../entity/dto/Reception/queryReceptionDto';
 import { ReceptionRepository } from '../../../../repository/Reception/ReceptionRepository';
 import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessage';
+import { useTableData } from '../../../../hooks/useTableData';
+import { useNavigate } from 'react-router-dom';
 
 const CURRENT_YEAR = new Date().getFullYear();
 const MINIMUM_YEAR = 1970; // Ano de fundação da instituição
@@ -14,25 +16,32 @@ export const Reports:React.FC = () => {
     const [formMonthAndYear] = Form.useForm();
     const [formYear] = Form.useForm();
 
+    const {setReceptionTableData} = useTableData();
+
+    const navigate = useNavigate();
+
 
     const handleQuery:FormProps<queryReceptionDto>['onFinish'] = async (values:queryReceptionDto) =>{
         try {
             if(values.month){
                 await receptionRepository.findByMonthAndYear(values)
-                .then((e)=> console.log(e));
+                .then((e)=> {
+                    setReceptionTableData(e)
+                    console.log(e)});
+                navigate(`/app/report/generatedValue`)
                 notifySuccess("Relatório Mensal Emitido")
             }else{
                 await receptionRepository.findByYear(values)
-                .then((e)=> console.log(e));
+                .then((e)=> {
+                    setReceptionTableData(e);
+                    console.log(e)});
+                navigate(`/app/report/generatedValue`)
                 notifySuccess("Relatório Anual Emitido")
             }
-
         } catch (error) {
             errorOnFinish(error)
         }
     }
-
-
 
     const errorOnFinish = (error:unknown) =>{
         notifyError("Erro ao realizar busca");
@@ -42,7 +51,7 @@ export const Reports:React.FC = () => {
   return (
     <>
         <Divider>Relatórios de Acolhimento</Divider>
-        
+
         <Space align='center' style={{display:'flex', flexDirection:'column'}}>
             <Divider>Mensal</Divider>
             <Form

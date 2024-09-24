@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import {Login} from "../components/pages/Login/Login.tsx";
 import {Home} from "../components/pages/Home/Home.tsx";
@@ -10,6 +10,9 @@ import { hosted } from './HostedRoutes/HostedRoutes.tsx';
 import { Config } from '../components/pages/Config/Config.tsx';
 import {  ReceptionComponent } from '../components/pages/Reception/Reception.tsx';
 import { Logout } from '../components/pages/Logout/Logout.tsx';
+import { QueryReport } from '../components/pages/Reception/Reports/QueryReports/QueryReport.tsx';
+import { useTableData } from '../hooks/useTableData.ts';
+import { Reception } from '../entity/Reception/Reception.ts';
 
 const mainRoutes:Router[] = [
     {
@@ -55,10 +58,20 @@ export function filteredRoutes(userRole:string):Router[]{
 const RoutesReference:React.FC = () => {
 
     const {signed} = useAuth();
+    const {receptionTableData} = useTableData();
+
+    const [reportData, setReportData] = useState<Reception[]>(receptionTableData)
 
     const ForbiddenAcces:React.FC =()=>{
         return (<Navigate to='/' />)
     }
+
+    useEffect(() =>{
+        if(receptionTableData){
+            setReportData(receptionTableData)
+        }
+    },[setReportData, receptionTableData])
+
 
     return (
         <BrowserRouter>
@@ -70,6 +83,7 @@ const RoutesReference:React.FC = () => {
                 <Route path='/app/*' element={signed? <Structure /> : <ForbiddenAcces />}>
                     {mainRoutes.map((_,index) => <Route path={mainRoutes[index].path} element={mainRoutes[index].element} key={`${index} mainRoute`}/>)}
                     {hosted.map((_,index)=> <Route path={hosted[index].path} element={hosted[index].element} key={`${index} hostedRoutes`} />)}
+                    <Route path='report/generatedValue' element={<QueryReport entity={reportData}/>} key={'receptionTableData'}/>
                 </Route>
             </Routes>
         </BrowserRouter>
