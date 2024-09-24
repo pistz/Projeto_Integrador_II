@@ -69,9 +69,10 @@ export const Config:React.FC = () => {
           </Form>
         </Col>
 
-        <div style={{display:'flex', flexDirection:"column", alignItems:'center', justifyContent:"center"}}>
+        <div style={{display:'flex', flexDirection:"column", alignItems:'center', justifyContent:"center", margin:'3rem'}}>
+          <Divider>Gerir Usuários</Divider>
           <Switch checked={edit} onClick={handleEdit} unCheckedChildren="Usuários" checkedChildren="Fechar" style={{margin:'2rem 0', width:'7rem'}} />
-          {edit? <><Divider>Gerir Usuários</Divider><ManageUsers /></> : <><Divider>Gerir Usuários</Divider></>}
+          {edit? <><ManageUsers /></> : <></>}
         </div>
       </div>
     </div>
