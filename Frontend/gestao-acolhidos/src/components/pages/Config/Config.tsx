@@ -6,7 +6,7 @@ import { ManageUsers } from './SystemUsers/ManageUsers'
 import { CheckOutlined } from '@ant-design/icons'
 
 const config = new ConfigRepository()
-
+const MAX_CAPACITY = 100;
 export const Config:React.FC = () => {
   const [form] = Form.useForm();
 
@@ -56,14 +56,14 @@ export const Config:React.FC = () => {
       <div>
         <Divider>Configurações do Sistema</Divider>
         <Col span={24} style={{display:"flex", flexDirection:'column', alignItems:"center", justifyContent:'center'}}>
-          <Statistic title="Capacidade de acolhimento" value={`${beds} leitos`} />
+          <Statistic title="Capacidade de acolhimento" value={`${beds} leitos`}/>
           <Form
             form={form}
             onFinish={updateBedValue}
             clearOnDestroy={true}
           >
             <Form.Item name={['update']}>
-              <InputNumber style={{width:'10rem'}}/>
+              <InputNumber style={{width:'10rem'}} max={MAX_CAPACITY}/>
             </Form.Item>
               <Button type='primary' htmlType='submit' icon={<CheckOutlined/>}>Atualizar capacidade</Button>
           </Form>
