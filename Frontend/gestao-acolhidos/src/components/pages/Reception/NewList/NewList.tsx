@@ -49,6 +49,7 @@ export const NewList:React.FC<{entity:Hosted[], capacity:number}> = ({entity, ca
             .then(()=>{
                 notifySuccess("Registro Criado")
             });
+            form.resetFields();
         } catch (error) {
             errorOnFinish(error)   
         }

@@ -1,6 +1,6 @@
 import { CheckOutlined } from '@ant-design/icons'
-import { Button, Divider, InputNumber, Space, Form, FormProps} from 'antd'
-import React from 'react'
+import { Button, Divider, InputNumber, Space, Form, FormProps, Switch} from 'antd'
+import React, { useState } from 'react'
 import { queryReceptionDto } from '../../../../entity/dto/Reception/queryReceptionDto';
 import { ReceptionRepository } from '../../../../repository/Reception/ReceptionRepository';
 import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessage';
@@ -19,6 +19,12 @@ export const Reports:React.FC = () => {
     const {setReceptionTableData, setReportReferenceDate} = useTableData();
 
     const navigate = useNavigate();
+
+    const [switchReport, setSwitchReport] = useState<boolean>(true);
+
+    const handleEdit = () =>{
+      setSwitchReport(!switchReport)
+    }
 
 
     const handleQuery:FormProps<queryReceptionDto>['onFinish'] = async (values:queryReceptionDto) =>{
@@ -54,6 +60,14 @@ export const Reports:React.FC = () => {
     <>
         <Divider>Relatórios de Acolhimento</Divider>
 
+        <div style={{display:'flex', flexDirection:"column", alignItems:'center', justifyContent:"center", margin:'3rem'}}>
+
+        <Switch checked={switchReport} onClick={handleEdit} unCheckedChildren="Anual" checkedChildren="Mensal" style={{margin:'2rem 0', width:'5rem'}} 
+            
+        />
+
+        {switchReport? 
+        <>
         <Space align='center' style={{display:'flex', flexDirection:'column'}}>
             <Divider>Mensal</Divider>
             <Form
@@ -73,7 +87,7 @@ export const Reports:React.FC = () => {
                 <Button type='primary' icon={<CheckOutlined />} htmlType='submit'>Gerar</Button>
             </Form>
         </Space>
-
+        </>:<>
         <Space align='center' style={{display:'flex', flexDirection:'column'}}>
             <Divider>Anual</Divider>
             <Form
@@ -89,6 +103,8 @@ export const Reports:React.FC = () => {
                 <Button type='primary' icon={<CheckOutlined />} htmlType='submit'>Gerar</Button>
             </Form>
         </Space>
+        </>}
+        </div>
     </>
   )
 }

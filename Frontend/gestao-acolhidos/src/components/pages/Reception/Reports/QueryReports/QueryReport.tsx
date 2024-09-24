@@ -47,7 +47,7 @@ export const QueryReport:React.FC<{entity:Reception[], referenceDate:queryRecept
             <h3>Total de dias com acolhimento: {getTotalDaysWithReception()}</h3>
             <h3>Total de acolhidos: {getTotalHostedsPerReport()}</h3>
             
-            {report.map((reception) => (
+            {report.sort((a, b)=> a.date.localeCompare(b.date)).map((reception) => (
                 <div key={reception.receptionId} style={{ marginBottom: '2rem', borderBottom: '1px solid #ccc', paddingBottom: '1rem' }}>
                     <h4>Data: {changeDateFormatVisualization(reception.date)}</h4>
                     <p>Total de acolhidos: {reception.hostedList.length}</p>
