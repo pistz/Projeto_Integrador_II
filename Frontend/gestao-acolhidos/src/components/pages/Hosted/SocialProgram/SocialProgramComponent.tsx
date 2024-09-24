@@ -150,8 +150,8 @@ export const SocialProgramComponent:React.FC<{entity:Hosted}> = ({entity}) => {
                         <InputNumber />
                     </Form.Item>
 
-                    <Form.Item name={['wage']} label={'Valor recebido em R$'} rules={[{pattern: /^\d+(,\d{1,2})?$/, message:'Formato decimal aceito: 0000,00'}]}>
-                        <Input style={{width:'13rem'}}/>
+                    <Form.Item name={['wage']} label={'Valor do benefício'} rules={[{pattern: /^\d+(,\d{1,2})?$/, message:'Formato decimal aceito: 0000,00'}]}>
+                        <Input style={{width:'13rem'}} prefix="R$"/>
                     </Form.Item>
 
 

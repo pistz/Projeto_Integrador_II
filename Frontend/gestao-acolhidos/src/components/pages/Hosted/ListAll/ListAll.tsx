@@ -21,6 +21,8 @@ export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListAction
 
     const [hosted, setHosted] = useState<Hosted>({}as Hosted)
 
+    const [hostedId, setHostedId] = useState<string>("");
+
     const [openMainInfo, setOpenMainInfo] = useState<boolean>(false);
 
     const [openMedicalRecords, setOpenMedicalRecords] = useState<boolean>(false)
@@ -61,11 +63,13 @@ export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListAction
     }
 
     //Acolhimentos Individuais
-    const onOpenReceptions = ()=>{
+    const onOpenReceptions = (id:string)=>{
+        setHostedId(id)
         setOpenReceptions(true)
     }
 
     const onCloseReceptions =()=>{
+        setHostedId("")
         setOpenReceptions(false)
     }
 
@@ -208,9 +212,9 @@ export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListAction
             align:'center',
             render: (record) => (
                 <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
-                    <Button type='default' onClick={onOpenReceptions} icon={<CalendarOutlined />}/>
+                    <Button type='default' onClick={()=> onOpenReceptions(record.id)} icon={<CalendarOutlined />}/>
                     <Drawer width={500} placement='right' closable={true} onClose={onCloseReceptions} open={openReceptions} destroyOnClose>
-                        <IndividualReceptions entity={record.id}/>
+                        <IndividualReceptions entity={hostedId}/>
                     </Drawer>
                 </Space>
             ),
