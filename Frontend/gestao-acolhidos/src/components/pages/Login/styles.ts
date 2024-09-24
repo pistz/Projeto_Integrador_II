@@ -54,14 +54,7 @@ export const LoginButtonStyle:React.CSSProperties = {
     height:'2rem',
     position:'relative',
     width:'12rem',
-    backgroundColor:'#272B2A'
-}
-
-export const LoginH2Style:React.CSSProperties = {
-    textOrientation:'inherit',
-    textAlign:'center',
-    fontSize:'x-large',
-    fontWeight:'900'
+    backgroundColor:'#7E7E7E'
 }
 
 export const LoginSpanStyle:React.CSSProperties = {

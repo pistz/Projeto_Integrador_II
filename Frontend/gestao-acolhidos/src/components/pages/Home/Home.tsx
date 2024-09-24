@@ -1,21 +1,20 @@
 import React from 'react'
-import welcome from '../../../assets/logo1.jpeg'
+import welcome from '../../../assets/Designer.jpeg'
 import { centerImgStyle, innerDivStyle, mainDivStyle } from './styles.ts'
+import { Divider } from 'antd'
 
 export const Home:React.FC = () =>{
 
     return (
         <>
             <div style={mainDivStyle}>
-                <h1>
-                    Gestão de Acolhidos
-                </h1>
+                <Divider variant='dotted'>Bem vindo</Divider>
                 <div style={innerDivStyle}>
                     <img style={centerImgStyle} src={welcome} alt="welcome"/>
                 </div>
                 <footer style={{marginTop:'4rem'}}>
                     <p>
-                        versão 1.0
+                        Gestão de Acolhidos - versão 1.0
                     </p>
                 </footer>
                 

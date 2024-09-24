@@ -7,11 +7,10 @@ import {
     formStyles,
     LoginButtonStyle,
     LoginFormStyle, loginFormStyles,
-    LoginH2Style,
     LoginSpanStyle,
     MainContainer
 } from "./styles.ts";
-import logo from '../../../assets/logo1.jpeg'
+import logo from '../../../assets/login-img.png'
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import { useAuth } from '../../../hooks/useAuth.ts';
 import { AuthRepository } from '../../../repository/Auth/AuthRepository.ts';
@@ -88,8 +87,7 @@ export const Login:React.FC = () => {
     return (
         <>
             <MainContainer>
-                <h2 style={LoginH2Style}>GESTÃO DE ACOLHIDOS</h2>
-                <img alt={"Logo"} src={logo} style={{width: '15rem', margin: '1rem 1rem', borderRadius:"100% 100%"}}/>
+                <img alt={"Logo"} src={logo} style={{width: '20rem', margin: '1rem 1rem', borderRadius:"3rem 1rem"}}/>
                 <div style={loginFormStyles}>
                 <Form
                     name="login"

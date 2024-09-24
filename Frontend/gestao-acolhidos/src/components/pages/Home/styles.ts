@@ -3,15 +3,14 @@ export const innerDivStyle:React.CSSProperties =  {
     alignItems: 'center',
     justifyContent: 'center',
     alignContent: 'center',
-    marginTop: '2rem',
     flexDirection:'column'
 }
 
 export const centerImgStyle:React.CSSProperties = {
     width: '50%',
     height: 'auto',
-    borderRadius:'100% 100%',
-    marginTop:'5rem'
+    borderRadius:'3rem 3rem',
+    marginTop:'1rem'
 }
 
 export const mainDivStyle:React.CSSProperties = {

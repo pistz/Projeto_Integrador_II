@@ -18,16 +18,17 @@ export const ReceptionList:React.FC<{entity:Reception}> = ({entity}) => {
             setList(entity)
         }
     },[entity, setList])
-    
+
   return (
     <div>
         <Divider>Lista de {changeDateFormatVisualization(entity.date)}</Divider>
         {list.hostedList.map((hosted)=>{
             return (
                 <>
-                    <dl>
-                        <li>{hosted.hostedId}</li>
-                        <li>{hosted.socialSecurityCPF}</li>
+                    <dl key={hosted.hostedId}>
+                        <dd><strong>Nome Completo: </strong>{`${hosted.firstName} ${hosted.lastName}`}</dd>
+                        <dd><strong>CPF: </strong>{hosted.socialSecurityCPF}</dd>
+                        <br></br>
                     </dl>
                     
                 </>
