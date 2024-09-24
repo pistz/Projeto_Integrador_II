@@ -8,15 +8,16 @@ import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessag
 import { useTableData } from '../../../../hooks/useTableData';
 import { MainInfo } from '../MainInfo/MainInfo';
 import { DeleteButton } from '../../../shared/Button/DeleteButton/DeleteButton';
-import { DoubleLeftOutlined, HeartOutlined, SolutionOutlined} from '@ant-design/icons';
+import { CalendarOutlined, DoubleLeftOutlined, HeartOutlined, SolutionOutlined} from '@ant-design/icons';
 import { MedicalRecordComponent } from '../MedicalRecord/MedicalRecordComponent';
 import { TreatmentsComponent } from '../Treatments/TreatmentsComponent';
+import { IndividualReceptions } from '../IndividualReceptions/IndividualReceptions';
 
 
 export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListActionsProps<Hosted>) => {
     const queryClient = useQueryClient();
 
-    const {hostedTableData, setHostedTableData  } = useTableData();
+    const {hostedTableData, setHostedTableData } = useTableData();
 
     const [hosted, setHosted] = useState<Hosted>({}as Hosted)
 
@@ -25,6 +26,8 @@ export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListAction
     const [openMedicalRecords, setOpenMedicalRecords] = useState<boolean>(false)
 
     const [openCustomTreatments, setOpenCustomTreatments] = useState<boolean>(false)
+
+    const [openReceptions, setOpenReceptions] = useState<boolean>(false)
     
 
     //Atua no menu de Cadastro Completo
@@ -55,6 +58,15 @@ export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListAction
     const onCloseCustomTreatments = () =>{
         setHosted({} as Hosted)
         setOpenCustomTreatments(false)
+    }
+
+    //Acolhimentos Individuais
+    const onOpenReceptions = ()=>{
+        setOpenReceptions(true)
+    }
+
+    const onCloseReceptions =()=>{
+        setOpenReceptions(false)
     }
 
     const columnData:TableColumnsType<Hosted> = [
@@ -88,6 +100,7 @@ export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListAction
             title:'CPF',
             dataIndex:'socialSecurityNumber',
             key:'socialSecurityNumber',
+            align:'center',
             filters: hostedTableData.map((item) => ({
                 text: item.socialSecurityNumber,
                 value: item.socialSecurityNumber
@@ -100,12 +113,14 @@ export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListAction
         {
             title:'Idade',
             dataIndex:'age',
-            key:'age'
+            key:'age',
+            align:'center'
         },
         {
             title:'Prontuário',
             dataIndex:'paperTrail',
             key:'paperTrail',
+            align:'center',
             filters: hostedTableData.map((item) => ({
                 text: item.paperTrail,
                 value: item.paperTrail
@@ -152,8 +167,9 @@ export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListAction
     const actionColumns:ColumnsType<Hosted> = [
         ...columnData,
         {
-            title: 'Cadastro Completo',
+            title: 'Cadastro',
             key:'hostedTable',
+            align:'center',
             render: (record) => (
                 <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}} key={record.id}>
                     <Button type='primary' icon={<DoubleLeftOutlined/>} onClick={()=>onOpenMainInfo(record)} />
@@ -165,6 +181,7 @@ export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListAction
         },
         {
             title: 'Histórico de Saúde',
+            align:'center',
             render: (record) => (
                 <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
                     <Button type='dashed' danger size='middle' icon={<HeartOutlined />} onClick={()=> onOpenMedicalRecord(record)} />
@@ -175,8 +192,9 @@ export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListAction
             ),
         },
         {
-            title: 'Plano de Atendimento',
-            render: (_,record) => (
+            title: 'Plano Personalizado',
+            align:'center',
+            render: (record) => (
                 <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
                     <Button type='dashed' onClick={()=> onOpenCustomTreatments(record)} icon={<SolutionOutlined />}/>
                     <Drawer width={1800} height={700} placement='right' closable={true} onClose={onCloseCustomTreatments} open={openCustomTreatments} destroyOnClose>
@@ -186,9 +204,23 @@ export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListAction
             ),
         },
         {
-            title: 'Apagar',
-            render: (_,record) => (
+            title: 'Acolhimentos',
+            align:'center',
+            render: (record) => (
                 <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'center'}}>
+                    <Button type='default' onClick={onOpenReceptions} icon={<CalendarOutlined />}/>
+                    <Drawer width={500} placement='right' closable={true} onClose={onCloseReceptions} open={openReceptions} destroyOnClose>
+                        <IndividualReceptions entity={record.id}/>
+                    </Drawer>
+                </Space>
+            ),
+        },
+        {
+            title: 'Apagar',
+            width:'10rem',
+            align:'end',
+            render: (record) => (
+                <Space size="small" style={{display:'flex', alignItems:'center', justifyContent:'flex-end'}}>
                     <DeleteButton removeMethod={()=> removeEntity.mutate(record)}></DeleteButton>
                 </Space>
             ),
