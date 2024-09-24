@@ -33,7 +33,7 @@
 
 ## Ideia do projeto
 - Sistema Gerencial Administrativo para o Albergue Noturno de Sertãozinho - SP - "Octávio de Oliveira Campos"
-- Status: *Desenvolvimento do Back-end*
+- Status: *Projeto Finalizado (MVP v.1.0)*
 
 *Descrição do Projeto*
 -   O Albergue Noturno de Sertãozinho acolhe moradores de rua e transeuntes que não têm moradia ou condições de hospedar-se de maneira digna.
@@ -43,4 +43,8 @@
   - Cadastro de Acolhido
   - Lista de acolhimento diário
   - Relatório Mensal
-  - Relatório Anual 
+  - Relatório Anual
+
+*Documentação da API*
+
+  [Swagger](https://app-acolhidos.up.railway.app/swagger-ui/index.html#/)
