@@ -13,6 +13,7 @@ import { Logout } from '../components/pages/Logout/Logout.tsx';
 import { QueryReport } from '../components/pages/Reception/Reports/QueryReports/QueryReport.tsx';
 import { useTableData } from '../hooks/useTableData.ts';
 import { Reception } from '../entity/Reception/Reception.ts';
+import { queryReceptionDto } from '../entity/dto/Reception/queryReceptionDto.ts';
 
 const mainRoutes:Router[] = [
     {
@@ -58,9 +59,10 @@ export function filteredRoutes(userRole:string):Router[]{
 const RoutesReference:React.FC = () => {
 
     const {signed} = useAuth();
-    const {receptionTableData} = useTableData();
+    const {receptionTableData, reportReferenceDate} = useTableData();
 
     const [reportData, setReportData] = useState<Reception[]>(receptionTableData)
+    const [reportDate, setReportDate] = useState<queryReceptionDto>(reportReferenceDate)
 
     const ForbiddenAcces:React.FC =()=>{
         return (<Navigate to='/' />)
@@ -68,9 +70,10 @@ const RoutesReference:React.FC = () => {
 
     useEffect(() =>{
         if(receptionTableData){
+            setReportDate(reportReferenceDate)
             setReportData(receptionTableData)
         }
-    },[setReportData, receptionTableData])
+    },[setReportData, receptionTableData, setReportDate, reportReferenceDate])
 
 
     return (
@@ -83,7 +86,7 @@ const RoutesReference:React.FC = () => {
                 <Route path='/app/*' element={signed? <Structure /> : <ForbiddenAcces />}>
                     {mainRoutes.map((_,index) => <Route path={mainRoutes[index].path} element={mainRoutes[index].element} key={`${index} mainRoute`}/>)}
                     {hosted.map((_,index)=> <Route path={hosted[index].path} element={hosted[index].element} key={`${index} hostedRoutes`} />)}
-                    <Route path='report/generatedValue' element={<QueryReport entity={reportData}/>} key={'receptionTableData'}/>
+                    <Route path='report/generatedValue' element={<QueryReport entity={reportData} referenceDate={reportDate}/>} key={'receptionTableData'}/>
                 </Route>
             </Routes>
         </BrowserRouter>

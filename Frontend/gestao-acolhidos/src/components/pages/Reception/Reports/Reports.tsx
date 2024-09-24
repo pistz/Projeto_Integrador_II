@@ -16,14 +16,16 @@ export const Reports:React.FC = () => {
     const [formMonthAndYear] = Form.useForm();
     const [formYear] = Form.useForm();
 
-    const {setReceptionTableData} = useTableData();
+    const {setReceptionTableData, setReportReferenceDate} = useTableData();
 
     const navigate = useNavigate();
 
 
     const handleQuery:FormProps<queryReceptionDto>['onFinish'] = async (values:queryReceptionDto) =>{
+        setReportReferenceDate(values)
         try {
             if(values.month){
+                
                 await receptionRepository.findByMonthAndYear(values)
                 .then((e)=> {
                     setReceptionTableData(e)
