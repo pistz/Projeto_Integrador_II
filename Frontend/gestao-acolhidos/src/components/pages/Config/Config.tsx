@@ -10,7 +10,7 @@ const config = new ConfigRepository()
 export const Config:React.FC = () => {
   const [form] = Form.useForm();
 
-  const [beds, setBeds] = useState<number>();
+  const [beds, setBeds] = useState<number>(0);
 
   const updateBedValue = async (values: { update: string }) => {
     const value = parseInt(values.update, 10); // Converte para número
