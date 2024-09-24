@@ -1,6 +1,6 @@
 import React from 'react'
 import { hostedInputForm, mainDivStyle } from '../styles'
-import { Button, DatePicker, Form, FormProps, Input, Select, Space } from 'antd'
+import { Button, DatePicker, Form, FormProps, Input, Select } from 'antd'
 import { CreateForm } from './types'
 import locale from 'antd/es/date-picker/locale/pt_BR';
 import dayjs from 'dayjs';
@@ -129,12 +129,11 @@ export const CreateHosted:React.FC = () => {
           </Select>
         </Form.Item>
 
-        <div style={{display:'flex', flexDirection:'row', alignItems:'stretch', justifyContent:'space-around', marginBottom:'3rem'}}>
+        <div style={{display:'flex', flexDirection:'row', alignItems:'stretch', justifyContent:'space-around', marginBottom:'3rem', paddingBottom:'3rem'}}>
         <Button type='primary' htmlType='submit' icon={<CheckOutlined />}>Salvar</Button>
         <Button htmlType='reset' danger icon={<CloseOutlined />}><Link to={'/app/hosted'} title='Cancelar'/></Button>
         </div>
       </Form>
-      <Space></Space>
     </div>
     </>
   )
