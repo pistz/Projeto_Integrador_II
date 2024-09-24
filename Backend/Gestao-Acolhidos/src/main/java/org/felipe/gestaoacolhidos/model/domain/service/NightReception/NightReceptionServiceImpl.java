@@ -64,6 +64,8 @@ public class NightReceptionServiceImpl implements NightReceptionService {
             throw new NoSuchElementException("Dados inexistentes");
         }
         NightReception nightReception = nightReceptionRepository.findById(eventId).orElseThrow(NoSuchElementException::new);
+        nightReception.getHosteds().clear();
+        nightReceptionRepository.save(nightReception);
         nightReceptionRepository.delete(nightReception);
         return new NightReceptionResponseDTO("Evento removido com sucesso!");
     }
@@ -95,6 +97,7 @@ public class NightReceptionServiceImpl implements NightReceptionService {
     }
 
     @Override
+    @Transactional
     public List<NightReceptionDTO> findAll() {
         List<NightReception> query = nightReceptionRepository.findAll(Sort.by(Sort.Order.desc("eventDate")));
         return query.stream()
@@ -103,12 +106,14 @@ public class NightReceptionServiceImpl implements NightReceptionService {
     }
 
     @Override
+    @Transactional
     public NightReceptionDTO findByEventDate(LocalDate date) {
         NightReception query = nightReceptionRepository.findByEventDate(date).orElseThrow(NoSuchElementException::new);
         return extractNightReceptionDTO(query);
     }
 
     @Override
+    @Transactional
     public List<NightReceptionDTO> findAllEventsByMonthAndYear(int month, int year) {
         if(month < 1 || month > 12){
             throw new IllegalArgumentException("Mês inválido");
@@ -120,6 +125,7 @@ public class NightReceptionServiceImpl implements NightReceptionService {
     }
 
     @Override
+    @Transactional
     public List<NightReceptionDTO> findAllEventsByYear(int year) {
         if(year < 0){
             throw new IllegalArgumentException("Ano inválido");
@@ -131,6 +137,7 @@ public class NightReceptionServiceImpl implements NightReceptionService {
     }
 
     @Override
+    @Transactional
     public NightReceptionDTO findById(UUID id) {
         NightReception query = nightReceptionRepository.findById(id).orElseThrow(NoSuchElementException::new);
         return extractNightReceptionDTO(query);

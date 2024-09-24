@@ -6,6 +6,6 @@ public record ReferenceAddressDTO(
         String neighborhood,
         int number,
         String cep,
-        int phoneNumber
+        long phoneNumber
 ) {
 }

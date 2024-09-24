@@ -1,20 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {Layout, Menu} from "antd";
-import {NavigateFunction, useNavigate} from "react-router-dom";
-import {Router} from "../../../routes/Routes.tsx";
+import {NavigateFunction, Outlet, useNavigate} from "react-router-dom";
+import Sider from 'antd/es/layout/Sider';
+import { Router } from '../../../routes/types';
+import { authHeader, isTokenExpired } from '../../../services/Token';
 
 interface IAppLayout {
-    children:React.ReactNode,
-    menu:Router[]
+    menu:Router[],
+    children:React.ReactNode
 }
 
 
-export const AppLayout:React.FC<IAppLayout> = ({children, menu}) => {
+export const AppLayout:React.FC<IAppLayout> = ({menu}) => {
     const navigate:NavigateFunction = useNavigate();
 
-    const menuItems = menu?.map((item: { label: string; }, index:number) =>({
+    const menuItems = menu?.map((item: { label: string}, index:number) =>({
         key:index.toString(),
-        label:`${item?.label}`
+        label:`${item?.label}`,
     }));
 
     const handleRedirect = (pages:Router[], key:string) =>{
@@ -29,21 +31,34 @@ export const AppLayout:React.FC<IAppLayout> = ({children, menu}) => {
             .filter(e => e !== '0')
     }
 
+    useEffect(() => {
+        isTokenExpired();
+    }, [authHeader()]);
+
     return (
-        <Layout >
+        <>
+        <Layout hasSider={true} style={{minHeight:'110vh'}}>
+            <Sider 
+                    breakpoint='lg'
+                    collapsible
+                    collapsedWidth='0'
+                    style={{backgroundColor:"#2C3333", height:'120wh'}}
+            >
                 <Menu
                     triggerSubMenuAction={"click"}
-                    style={{fontWeight:'900', justifyContent:'center', fontSize:'x-large', padding:'1.2rem 0'}}
+                    style={{fontWeight:'700', justifyContent:'center', fontSize:'small', padding:'1.2rem 0', backgroundColor:'#2C3333'}}
                     selectable={false}
                     selectedKeys={selectedLogout(menu)}
-                    mode={"horizontal"}
+                    mode={"vertical"}
                     theme={"dark"}
                     items={menuItems}
                     onClick={(e)=>{
                         handleRedirect(menu, e.key);
                     }}
                 />
-            {children}
+            </Sider>
+            <Outlet />
         </Layout>
+        </>
     );
 };

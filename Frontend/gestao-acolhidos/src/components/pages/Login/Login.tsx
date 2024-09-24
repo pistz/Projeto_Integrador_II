@@ -7,20 +7,20 @@ import {
     formStyles,
     LoginButtonStyle,
     LoginFormStyle, loginFormStyles,
-    LoginH2Style,
     LoginSpanStyle,
     MainContainer
 } from "./styles.ts";
-import logo from '../../../assets/logo1.jpeg'
+import logo from '../../../assets/login-img.png'
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import { useAuth } from '../../../hooks/useAuth.ts';
 import { AuthRepository } from '../../../repository/Auth/AuthRepository.ts';
-import { UserLoginDTO } from '../../../entity/User/dto/UserLoginDTO.ts';
+import { UserLoginDTO } from '../../../entity/dto/User/UserLoginDTO.ts';
 import { notifyError } from '../../shared/PopMessage/PopMessage.ts';
+import { getTokenFromLocalStorage, getTokenId } from '../../../services/Token.ts';
 
 
 const authenticate = new AuthRepository();
-const tokenId:string = String(process.env.TOKEN_ID);
+const tokenId:string = getTokenId();
 
 export const Login:React.FC = () => {
 
@@ -59,7 +59,7 @@ export const Login:React.FC = () => {
 
     useEffect(()=>{        
         const authenticateLogin = async () =>{
-            const token = authenticate.getTokenFromLocalStorage();
+            const token = getTokenFromLocalStorage();
             if(!token){
                 navigate('/login')
                 setSigned(false)
@@ -84,18 +84,15 @@ export const Login:React.FC = () => {
         authenticateLogin()
     },[sessionToken])
 
-
-
     return (
         <>
             <MainContainer>
-                <h2 style={LoginH2Style}>GESTÃO DE ACOLHIDOS</h2>
-                <img alt={"Logo"} src={logo} style={{width: '15rem', margin: '1rem 1rem', borderRadius:"100% 100%"}}/>
+                <img alt={"Logo"} src={logo} style={{width: '20rem', margin: '1rem 1rem', borderRadius:"3rem 1rem"}}/>
                 <div style={loginFormStyles}>
                 <Form
-                    name="basic"
+                    name="login"
                     style={LoginFormStyle}
-                    initialValues={{remember: true}}
+                    initialValues={{remember: false}}
                     onFinish={onFinish}
                     autoComplete="off"
                 >

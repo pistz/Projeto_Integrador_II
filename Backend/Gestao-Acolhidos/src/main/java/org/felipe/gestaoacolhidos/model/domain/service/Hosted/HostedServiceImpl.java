@@ -84,16 +84,19 @@ public class HostedServiceImpl implements HostedService {
     }
 
     @Override
+    @Transactional
     public Hosted findById(UUID id) {
         return hostedRepository.findById(id).orElseThrow();
     }
 
     @Override
+    @Transactional
     public List<Hosted> findAll() {
         return hostedRepository.findAll();
     }
 
     @Override
+    @Transactional
     public List<LocalDate> findAllNightReceptions(UUID id) {
         return hostedRepository.queryHostedByNighReception(id);
     }
@@ -231,10 +234,11 @@ public class HostedServiceImpl implements HostedService {
         if(memberListDto.isEmpty()){
             return new HostedResponseUpdatedDTO("Registro vazio");
         }
-        if(updateHostedFamilyTable.getFamilyComposition() == null ||
-            !updateHostedFamilyTable.getFamilyComposition().isHasFamily() ||
-                !updateHostedFamilyTable.getFamilyComposition().isHasFamilyBond()
-        ){
+        if(updateHostedFamilyTable.getFamilyComposition() == null){
+            throw new NoSuchElementException("Acolhido foi marcado como sem vínculo familiar, atualize a existência de vínculo familiar");
+        }
+        if(updateHostedFamilyTable.getFamilyComposition().isHasFamily()==false &&
+                updateHostedFamilyTable.getFamilyComposition().isHasFamilyBond()==false){
             throw new NoSuchElementException("Acolhido foi marcado como sem vínculo familiar, atualize a existência de vínculo familiar");
         }
         List<FamilyTable> familyTableList;
@@ -307,7 +311,7 @@ public class HostedServiceImpl implements HostedService {
         updateReferenceAddress.setStreet(dto.street());
         updateReferenceAddress.setNeighborhood(dto.neighborhood());
         updateReferenceAddress.setNumber(dto.number());
-        updateReferenceAddress.setCidade(dto.city());
+        updateReferenceAddress.setCity(dto.city());
         updateReferenceAddress.setCep(dto.cep());
         updateReferenceAddress.setPhoneNumber(dto.phoneNumber());
         updateReferenceAddress.setUpdatedAt(LocalDate.now());

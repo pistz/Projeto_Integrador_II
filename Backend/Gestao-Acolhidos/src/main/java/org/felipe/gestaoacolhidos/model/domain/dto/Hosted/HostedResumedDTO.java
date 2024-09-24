@@ -6,6 +6,6 @@ public record HostedResumedDTO(
         UUID hostedId,
         String firstName,
         String lastName,
-        String socialSecutityCPF
+        String socialSecurityCPF
 ) {
 }
