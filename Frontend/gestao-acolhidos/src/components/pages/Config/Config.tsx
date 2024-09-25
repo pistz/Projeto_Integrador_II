@@ -63,7 +63,7 @@ export const Config:React.FC = () => {
             clearOnDestroy={true}
           >
             <Form.Item name={['update']}>
-              <InputNumber style={{width:'10rem'}} max={MAX_CAPACITY}/>
+              <InputNumber style={{width:'10rem'}} min={0} max={MAX_CAPACITY}/>
             </Form.Item>
               <Button type='primary' htmlType='submit' icon={<CheckOutlined/>}>Atualizar capacidade</Button>
           </Form>
