@@ -36,7 +36,7 @@ public class SecurityConfig {
             "/swagger-ui.html"
     };
 
-    private String[] ADMIN_PATHS = {
+    private String[] open_paths = {
             "/user/**",
             "/hosted/**",
             "/capacity/**",
@@ -44,21 +44,6 @@ public class SecurityConfig {
             "/auth/**"
     };
 
-    private String[] BOARD_PATHS = {
-            "/user/**",
-            "/hosted/**",
-            "/capacity/**",
-            "/night-reception/**",
-            "/auth/validate"
-    };
-
-    private String[] SECRETARY_PATHS = {
-            "/user/**",
-            "/hosted/**",
-            "/capacity/**",
-            "/night-reception/**",
-            "/auth/validate"
-    };
 
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
@@ -72,9 +57,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/login").permitAll()
                         .requestMatchers(SWAGGER).permitAll()
-                        .requestMatchers(ADMIN_PATHS).hasAuthority(Role.ADMIN.name())
-                        .requestMatchers(BOARD_PATHS).hasAnyAuthority(Role.ADMIN.name(), Role.BOARD.name())
-                        .requestMatchers(SECRETARY_PATHS).hasAnyAuthority(Role.ADMIN.name(),Role.SECRETARY.name())
+                        .requestMatchers(open_paths).hasAnyAuthority(Role.ADMIN.name(), Role.BOARD.name(),Role.SECRETARY.name())
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())

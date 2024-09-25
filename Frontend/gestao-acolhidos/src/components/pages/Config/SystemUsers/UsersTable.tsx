@@ -13,7 +13,9 @@ import { DeleteButton } from '../../../shared/Button/DeleteButton/DeleteButton';
 
 
 export const UsersTable = ({listQueryKey, getAllEntities, deleteEntity}:IListActionsProps<IUser>) => {
+
     const {userTableData, setUserTableData} = useTableData();
+    
     const queryClient = useQueryClient();
 
 
@@ -55,12 +57,12 @@ export const UsersTable = ({listQueryKey, getAllEntities, deleteEntity}:IListAct
     }
 
     useEffect(()=>{
-        const getTableData = async () => {
-            const tableData:IUser[] = await getAllEntities();
-            if(tableData) setUserTableData(tableData)
-        }
-            getTableData();
-        },[getAllEntities, setUserTableData]);
+            const update = async ()=>{
+                await getAllEntities()
+                .then(e => setUserTableData(e))
+            }
+            update();
+        },[setUserTableData, getAllEntities]);
         
 
     const actionColumns:ColumnsType<IUser> = [

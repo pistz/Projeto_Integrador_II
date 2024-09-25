@@ -5,14 +5,17 @@ import { notifyError, notifySuccess } from '../../shared/PopMessage/PopMessage'
 import { ManageUsers } from './SystemUsers/ManageUsers'
 import { CheckOutlined } from '@ant-design/icons'
 
-const config = new ConfigRepository()
 const MAX_CAPACITY = 100;
+
+const config = new ConfigRepository()
+
 export const Config:React.FC = () => {
   const [form] = Form.useForm();
 
   const [beds, setBeds] = useState<number>(0);
 
   const [edit, setEdit] = useState<boolean>(false);
+
 
   const handleEdit = () =>{
     setEdit(!edit)
@@ -48,7 +51,7 @@ export const Config:React.FC = () => {
       }
     }
     getCapacity();
-  },[]);
+  },[setBeds]);
 
 
   return (

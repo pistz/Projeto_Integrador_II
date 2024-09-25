@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { UsersTable } from './UsersTable'
 
 import { Button, Divider, Form, FormProps, Input, Select } from 'antd'
 import { mainDivStyle } from './styles'
 import { UserRepository } from '../../../../repository/User/UserRepository'
-import { Role } from '../../../../entity/User/IUser'
+import {  Role } from '../../../../entity/User/IUser'
 import { RegisterUserDTO } from '../../../../entity/dto/User/RegisterUserDTO'
 import { notifyError, notifySuccess } from '../../../shared/PopMessage/PopMessage'
 import { tableContainer } from '../styles'
@@ -16,7 +16,6 @@ const userRepository = new UserRepository()
 
 export const ManageUsers:React.FC = () => {
     const [form] = Form.useForm()
-    const [updated, setUpdated] = useState<boolean>(false);
     
 
     const roleOptions: { label: string; value: Role }[] = [
@@ -26,14 +25,13 @@ export const ManageUsers:React.FC = () => {
     ];
 
     const onFinish:FormProps<RegisterUserDTO>['onFinish'] = async (values:RegisterUserDTO) =>{
-        console.log(values)
         try {
             await userRepository.register(values)
             .then(() => notifySuccess("Registro efetivado"));
-            setUpdated(true);
             form.resetFields();
         } catch (error) {
             errorOnFinish(error)
+            form.resetFields();
         }
     }
 
@@ -41,12 +39,6 @@ export const ManageUsers:React.FC = () => {
         notifyError("Erro ao realizar cadastro");
         return error;
     }
-
-    useEffect(()=>{
-            if(updated){
-                setUpdated(false)
-            }
-    },[setUpdated, updated])
 
   return (
     <>
@@ -69,7 +61,7 @@ export const ManageUsers:React.FC = () => {
                     <Input type='text' placeholder='email@email.com'/>
                 </Form.Item>
                 <Form.Item name={['password']} label={'Senha'} rules={[{required:true, message:'senha é obrigatório'}]}>
-                    <Input type='password'/>
+                    <Input.Password />
                 </Form.Item>
                 <Form.Item name={['role']} label={'Nivel de Acesso'} rules={[{required:true, message:'Nível de acesso é obrigatório'}]}>
                 <Select placeholder="Selecione o cargo">
