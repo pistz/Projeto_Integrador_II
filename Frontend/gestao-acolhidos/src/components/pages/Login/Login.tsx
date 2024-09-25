@@ -16,7 +16,7 @@ import { useAuth } from '../../../hooks/useAuth.ts';
 import { AuthRepository } from '../../../repository/Auth/AuthRepository.ts';
 import { UserLoginDTO } from '../../../entity/dto/User/UserLoginDTO.ts';
 import { notifyError } from '../../shared/PopMessage/PopMessage.ts';
-import { getTokenFromLocalStorage, getTokenId } from '../../../services/Token.ts';
+import { getTokenFromSessionStorage, getTokenId } from '../../../services/Token.ts';
 
 
 const authenticate = new AuthRepository();
@@ -62,7 +62,7 @@ export const Login:React.FC = () => {
 
     useEffect(()=>{        
         const authenticateLogin = async () =>{
-            const token = getTokenFromLocalStorage();
+            const token = getTokenFromSessionStorage();
             if(!token){
                 navigate('/login')
                 setSigned(false)

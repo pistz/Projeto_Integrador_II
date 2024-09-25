@@ -14,7 +14,7 @@ import { TreatmentsComponent } from '../Treatments/TreatmentsComponent';
 import { IndividualReceptions } from '../IndividualReceptions/IndividualReceptions';
 
 
-export const ListAll = ({listQueryKey, getAllEntities, deleteEntity}:IListActionsProps<Hosted>) => {
+export const HostedListTable = ({listQueryKey, getAllEntities, deleteEntity}:IListActionsProps<Hosted>) => {
     const queryClient = useQueryClient();
 
     const {hostedTableData, setHostedTableData } = useTableData();

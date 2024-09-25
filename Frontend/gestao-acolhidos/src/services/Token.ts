@@ -1,7 +1,7 @@
 import { jwtDecode, JwtPayload } from "jwt-decode";
 const tokenId:string = String(process.env.TOKEN_ID);
 
-export const getTokenFromLocalStorage = () =>{
+export const getTokenFromSessionStorage = () =>{
     const token_id = getTokenId();
     const getToken = sessionStorage.getItem(token_id);
     if(getToken){
@@ -11,7 +11,7 @@ export const getTokenFromLocalStorage = () =>{
 }
 
 export const authHeader = () => {
-    const token = getTokenFromLocalStorage();
+    const token = getTokenFromSessionStorage();
     return {
         headers: {
             Authorization: "Bearer " + token,
@@ -24,7 +24,7 @@ export const getTokenId = () =>{
 }
 
 export const isTokenExpired = async () =>{
-    const token = getTokenFromLocalStorage();
+    const token = getTokenFromSessionStorage();
     if(token){
         const decoded = jwtDecode<JwtPayload>(token)
         const expired:number = Number(decoded.exp);
