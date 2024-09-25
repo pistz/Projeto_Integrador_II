@@ -25,7 +25,7 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Value("${frontend.path}")
     private String frontEndPath;
@@ -36,7 +36,15 @@ public class SecurityConfig {
             "/swagger-ui.html"
     };
 
-    private static final String[] ADMIN_PATHS = {
+    private String[] ADMIN_PATHS = {
+            "/user/**",
+            "/hosted/**",
+            "/capacity/**",
+            "/night-reception/**",
+            "/auth/**"
+    };
+
+    private String[] BOARD_PATHS = {
             "/user/**",
             "/hosted/**",
             "/capacity/**",
@@ -44,15 +52,7 @@ public class SecurityConfig {
             "/auth/validate"
     };
 
-    private static final String[] BOARD_PATHS = {
-            "/user/**",
-            "/hosted/**",
-            "/capacity/**",
-            "/night-reception/**",
-            "/auth/validate"
-    };
-
-    private static final String[] SECRETARY_PATHS = {
+    private String[] SECRETARY_PATHS = {
             "/user/**",
             "/hosted/**",
             "/capacity/**",
@@ -64,8 +64,6 @@ public class SecurityConfig {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
-
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -75,8 +73,8 @@ public class SecurityConfig {
                         .requestMatchers("/auth/login").permitAll()
                         .requestMatchers(SWAGGER).permitAll()
                         .requestMatchers(ADMIN_PATHS).hasAuthority(Role.ADMIN.name())
-                        .requestMatchers(BOARD_PATHS).hasAuthority(Role.BOARD.name())
-                        .requestMatchers(SECRETARY_PATHS).hasAuthority(Role.SECRETARY.name())
+                        .requestMatchers(BOARD_PATHS).hasAnyAuthority(Role.ADMIN.name(), Role.BOARD.name())
+                        .requestMatchers(SECRETARY_PATHS).hasAnyAuthority(Role.ADMIN.name(),Role.SECRETARY.name())
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
@@ -99,7 +97,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of(frontEndPath));
+        corsConfiguration.setAllowedOriginPatterns(List.of(frontEndPath, "http://localhost:*"));
         corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         corsConfiguration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         corsConfiguration.setAllowCredentials(true);

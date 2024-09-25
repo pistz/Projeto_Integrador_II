@@ -18,8 +18,13 @@ export class UserRepository extends Repository{
     }
 
     register = async (dto:RegisterUserDTO):Promise<void> =>{
+        const body = {
+            email:dto.email,
+            password:dto.password,
+            role:dto.role
+        }
         try {
-            await axios.post(userRoutes.register, dto, authHeader());
+            await axios.post(userRoutes.register, body, authHeader());
         } catch (error) {
             Repository.checkError(error)
             throw Error("error: " + error);

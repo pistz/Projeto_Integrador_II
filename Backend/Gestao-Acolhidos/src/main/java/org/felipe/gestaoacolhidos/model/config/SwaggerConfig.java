@@ -32,7 +32,8 @@ public class SwaggerConfig {
                                 .name("Apache 2.0")
                                 .url("https://www.apache.org/licenses/LICENSE-2.0.html")))
                 .servers(List.of(
-                        new Server().url("https://app-acolhidos.up.railway.app").description("Railway Server") // Defina o URL do servidor com HTTPS
+                        new Server().url("https://app-acolhidos.up.railway.app").description("Railway Server"),
+                        new Server().url("http://localhost:8080").description("Locahost Server")// Defina o URL do servidor com HTTPS
                 ))
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(new Components()

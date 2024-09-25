@@ -25,9 +25,8 @@ export class AuthRepository extends Repository{
 
     getRoleFromToken = async (token:string):Promise<string|void> =>{
         try {
-            const result = await axios.post(roleUrl, {token}, authHeader())
+            const result = await axios.post(roleUrl, {"token":token.trim()}, authHeader())
             return result.data;
-
         } catch (error) {
             Repository.checkError(error)
             throw Error("error: " + error);

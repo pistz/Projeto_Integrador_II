@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { UsersTable } from './UsersTable'
 
-import { Button, Divider, Form, Input, Select } from 'antd'
+import { Button, Divider, Form, FormProps, Input, Select } from 'antd'
 import { mainDivStyle } from './styles'
 import { UserRepository } from '../../../../repository/User/UserRepository'
 import { Role } from '../../../../entity/User/IUser'
@@ -12,27 +12,24 @@ import { CheckOutlined } from '@ant-design/icons'
 
 
 const userQueryKey = 'userQueryKey'
+const userRepository = new UserRepository()
 
 export const ManageUsers:React.FC = () => {
     const [form] = Form.useForm()
     const [updated, setUpdated] = useState<boolean>(false);
-    const userRepository = new UserRepository()
+    
 
     const roleOptions: { label: string; value: Role }[] = [
-        { label: 'ADMINISTRADOR', value: 'ADMIN' },
-        { label: 'SECRETARIA', value: 'SECRETARY' },
-        { label: 'DIRETORIA', value: 'BOARD' },
+        { label: 'ADMINISTRADOR', value:'ADMIN' },
+        { label: 'SECRETARIA', value:'SECRETARY' },
+        { label: 'DIRETORIA', value:'BOARD'},
     ];
 
-    const onFinish = async (values:RegisterUserDTO) =>{
-        const body:RegisterUserDTO = {
-            email:values.email,
-            password:values.password,
-            role:values.role
-        }
+    const onFinish:FormProps<RegisterUserDTO>['onFinish'] = async (values:RegisterUserDTO) =>{
+        console.log(values)
         try {
-            await userRepository.register(body);
-            notifySuccess("Registro efetivado")
+            await userRepository.register(values)
+            .then(() => notifySuccess("Registro efetivado"));
             setUpdated(true);
             form.resetFields();
         } catch (error) {
@@ -46,12 +43,9 @@ export const ManageUsers:React.FC = () => {
     }
 
     useEffect(()=>{
-        const reload = ()=>{
             if(updated){
                 setUpdated(false)
             }
-        }
-        reload();
     },[setUpdated, updated])
 
   return (

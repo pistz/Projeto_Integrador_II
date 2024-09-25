@@ -3,7 +3,6 @@ import type { FormProps } from 'antd';
 import { Button, Form, Input } from 'antd';
 import {FieldType} from "./types.ts";
 import {
-    buttonsFormStyles,
     formStyles,
     LoginButtonStyle,
     LoginFormStyle, loginFormStyles,
@@ -27,23 +26,21 @@ export const Login:React.FC = () => {
     const [sessionToken, setSessionToken] = useState<string>();
     const [loading, setLoading] = useState<boolean>(false)
 
+    const [form] = Form.useForm();
+
     const navigate:NavigateFunction = useNavigate()
 
     const {setSigned, setUserRole} = useAuth();
 
 
-    const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+    const onFinish: FormProps<FieldType>['onFinish'] = async (values:UserLoginDTO) => {
         setLoading(true)
-        const body:UserLoginDTO = {
-            email:"",
-            password:""
-        }
-        if(values){
-            body.email=values.email;
-            body.password=values.password
+        if(!values){
+            notifyError("Usuário ou senha inválidos");
+            setLoading(false)
         }
         try {
-            await authenticate.authenticateUser(body)
+            await authenticate.authenticateUser(values)
                 .then((e)=>{
                     sessionStorage.setItem(tokenId,JSON.stringify(e));
                     setSessionToken(e.toString())
@@ -66,11 +63,13 @@ export const Login:React.FC = () => {
             if(!token){
                 navigate('/login')
                 setSigned(false)
+                setLoading(false)
                 sessionStorage.clear();
                 return;
             }
             try {
-                await authenticate.getRoleFromToken(token)
+                const sessionToken:string = String(token)
+                await authenticate.getRoleFromToken(sessionToken)
                 .then((res)=>{
                     const role = String(res);
                     setUserRole(role)
@@ -81,6 +80,7 @@ export const Login:React.FC = () => {
                 console.error(error)
                 setSigned(false)
                 sessionStorage.clear()
+                errorOnFinish(error)
                 navigate('/login')
             }
         }
@@ -99,10 +99,11 @@ export const Login:React.FC = () => {
                     onFinish={onFinish}
                     autoComplete="off"
                     layout='vertical'
+                    form={form}
                 >
-                    <Form.Item<FieldType>
+                    <Form.Item
                         label="E-mail"
-                        name="email"
+                        name={['email']}
                         rules={[{required: true, message: 'Coloque seu e-mail!'}]}
                     >
                         <Input
@@ -111,9 +112,9 @@ export const Login:React.FC = () => {
                         />
                     </Form.Item>
 
-                    <Form.Item<FieldType>
+                    <Form.Item
                         label="Senha"
-                        name="password"
+                        name={['password']}
                         rules={[{required: true, message: 'Coloque sua senha!'}]}
                     >
                         <Input.Password
@@ -121,11 +122,9 @@ export const Login:React.FC = () => {
                         />
                     </Form.Item>
 
-                    <Form.Item style={buttonsFormStyles}>
-                        <Button type="primary" htmlType="submit" style={LoginButtonStyle} loading={loading}>
-                            Entrar
-                        </Button>
-                    </Form.Item>
+                    <Button type="primary" htmlType="submit" style={LoginButtonStyle} loading={loading}>
+                        Entrar
+                    </Button>
                 </Form>
                 </div>
             <span style={LoginSpanStyle}>Versão 1.0 - {new Date().getFullYear()}</span>
