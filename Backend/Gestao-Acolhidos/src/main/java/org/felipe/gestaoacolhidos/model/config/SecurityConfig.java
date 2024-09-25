@@ -45,11 +45,19 @@ public class SecurityConfig {
     };
 
     private static final String[] BOARD_PATHS = {
-
+            "/user/**",
+            "/hosted/**",
+            "/capacity/**",
+            "/night-reception/**",
+            "/auth/validate"
     };
 
     private static final String[] SECRETARY_PATHS = {
-
+            "/user/**",
+            "/hosted/**",
+            "/capacity/**",
+            "/night-reception/**",
+            "/auth/validate"
     };
 
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
@@ -67,6 +75,8 @@ public class SecurityConfig {
                         .requestMatchers("/auth/login").permitAll()
                         .requestMatchers(SWAGGER).permitAll()
                         .requestMatchers(ADMIN_PATHS).hasAuthority(Role.ADMIN.name())
+                        .requestMatchers(BOARD_PATHS).hasAuthority(Role.BOARD.name())
+                        .requestMatchers(SECRETARY_PATHS).hasAuthority(Role.SECRETARY.name())
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
