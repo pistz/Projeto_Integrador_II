@@ -1,18 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {Layout, Menu} from "antd";
 import {NavigateFunction, Outlet, useNavigate} from "react-router-dom";
 import Sider from 'antd/es/layout/Sider';
 import { Router } from '../../../routes/types';
 import { authHeader, isTokenExpired } from '../../../services/Token';
+import { Alert } from '../Alert/Alert';
 
 interface IAppLayout {
     menu:Router[],
     children:React.ReactNode
 }
 
-
 export const AppLayout:React.FC<IAppLayout> = ({menu}) => {
     const navigate:NavigateFunction = useNavigate();
+    const [expired, setExpired] = useState<boolean>(false)
 
     const menuItems = menu?.map((item: { label: string}, index:number) =>({
         key:index.toString(),
@@ -32,7 +33,8 @@ export const AppLayout:React.FC<IAppLayout> = ({menu}) => {
     }
 
     useEffect(() => {
-        isTokenExpired();
+        const exp:boolean = isTokenExpired();
+        setExpired(exp);
     }, [authHeader()]);
 
     return (
@@ -59,6 +61,7 @@ export const AppLayout:React.FC<IAppLayout> = ({menu}) => {
             </Sider>
             <Outlet />
         </Layout>
+            <Alert expired={expired} />
         </>
     );
 };

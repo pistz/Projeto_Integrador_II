@@ -28,7 +28,7 @@ public class JwtUtil {
     private String jwtIssuer;  // Ler o emissor do arquivo de propriedades
 
     private long EXPIRADE_TIME = 43200000;// 12 hours
-
+    
     private SecretKey getJwtSecretKey() {
         if (jwtSecret == null || jwtSecret.isEmpty()) {
             throw new IllegalStateException("JWT secret key is not configured");
